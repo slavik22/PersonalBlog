@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom: 20px;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">PersonalBlog</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/posts/add" *ngIf="_authService.isLoggedIn()">Add post</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/dashboard" *ngIf="_authService.isLoggedIn()">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/signup" *ngIf="!_authService.isLoggedIn()">Sign up</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/login" *ngIf="!_authService.isLoggedIn()">Log in</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/account" *ngIf="_authService.isLoggedIn()">Account</a>
+        </li>
+        
+        <li class="nav-item">
+          <a (click) = "_authService.signOut()" class="nav-link active" aria-current="page" routerLink="/signup" *ngIf="_authService.isLoggedIn()">Sign out</a>
+        </li>
+
+        </ul>
+      <form [formGroup]="searchForm" class="d-flex" (ngSubmit)="searchPosts()">
+        <input class="form-control me-2" formControlName="searchText" type="search" placeholder="Search" aria-label="Search">
+        <button  class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+
+    </div>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>
+<lib-ng-toast></lib-ng-toast>

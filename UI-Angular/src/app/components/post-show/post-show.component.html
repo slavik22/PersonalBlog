@@ -1,0 +1,141 @@
+      <!-- Jumbotron -->
+    <div id="intro" class="p-5 text-center bg-light">
+        <h1 class="mb-0 h4">{{post.title}}</h1>
+    </div>
+      <!-- Jumbotron -->
+    <!--Main Navigation-->
+  
+    <!--Main layout-->
+    <main class="mt-4 mb-5">
+      <div class="container ">
+        <!--Grid row-->
+        <div class="row d-flex justify-content-center">
+          <!--Grid column-->
+          <div class="col-md-8 mb-4">
+            <!--Section: Post data-mdb-->
+            <section class="border-bottom mb-4">
+              <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(144).jpg"
+                class="img-fluid shadow-2-strong rounded-5 mb-4" alt="" />
+  
+              <div class="row align-items-center mb-4">
+                <div class="col-lg-7 text-center text-lg-start mb-3 m-lg-0">
+                  <img src="https://mdbootstrap.com/img/Photos/Avatars/img (23).jpg" class="rounded-5 shadow-1-strong me-2"
+                    height="35" alt="" loading="lazy" />
+                    by <a href="" class="text-dark">{{post.authorName}}</a> <br> <br>
+                  <span> Published <u>{{post.createdAt.toLocaleString()}}</u> </span> <br>
+                  <span> Updated <u>{{post.updatedAt.toLocaleString()}}</u> </span>
+                  
+                </div>
+  
+                <div class="col-lg-5 text-center text-lg-end">
+                  <button type="button" class="btn btn-primary px-3 me-1" style="background-color: #3b5998;">
+                    <em class="fa fa-facebook-f"></em>
+                  </button>
+                  <button type="button" class="btn btn-primary px-3 me-1" style="background-color: #55acee;">
+                    <em class="fa fa-twitter"></em>
+                  </button>
+                  <button type="button" class="btn btn-primary px-3 me-1" style="background-color: #0082ca;">
+                    <em class="fa fa-linkedin"></em>
+                  </button>
+                  <button type="button" class="btn btn-primary px-3 me-1">
+                    <em class="fa fa-comments"></em>
+                  </button>
+                </div>
+              </div>
+            </section>
+            <!--Section: Post data-mdb-->
+  
+            <!--Section: Text-->
+            <section>
+              <p>
+                {{post.content}}
+              </p>
+            <!--Section: Text-->
+  
+            <!-- Section: Tags -->
+            <section class="text-center border-top border-bottom py-4 mb-4">
+              <p><strong>Tags:</strong></p>
+  
+              <div class="container" *ngFor="let tag of postTags">
+                <a class="link-primary me-1">{{tag.title}}</a>
+              </div>
+            </section>
+
+            <!-- Section: Tags -->
+
+            <!--Section: Share buttons-->
+            <section class="text-center border-top border-bottom py-4 mb-4">
+              <p><strong>Share with your friends:</strong></p>
+  
+              <button type="button" class="btn btn-primary me-1" style="background-color: #3b5998;">
+                <em class="fa fa-facebook-f"></em>
+              </button>
+              <button type="button" class="btn btn-primary me-1" style="background-color: #55acee;">
+                <i class="fa fa-twitter"></i>
+              </button>
+              <button type="button" class="btn btn-primary me-1" style="background-color: #0082ca;">
+                <i class="fa fa-linkedin"></i>
+              </button>
+              <button type="button" class="btn btn-primary me-1">
+                <i class="fa fa-comments me-2"></i>Add comment
+              </button>
+            </section>
+            <!--Section: Share buttons-->
+            
+            <!--Section: Comments-->
+            <section class="border-bottom mb-3">
+              <p class="text-center"><strong>Comments: {{comments.length}}</strong></p>
+              
+              <div class="container" *ngFor="let comment of comments">
+              <!-- Comment -->
+                <div class="row mb-4">
+                  <div class="col-2">
+                    <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(24).jpg"
+                      class="img-fluid shadow-1-strong rounded-5" alt="" />
+                  </div>
+    
+                  <div class="col-10">
+                    <p class="mb-2"><strong>{{comment.authorName}}</strong></p>
+                    <p>{{comment.title}}</p>
+                    <p>
+                      {{comment.content}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </section>
+            <!--Section: Comments-->
+  
+            <!--Section: Reply-->
+            <section *ngIf="authService.isLoggedIn()">
+              <p class="text-center"><strong>Leave a comment</strong></p>
+  
+              <form [formGroup]="commentForm">
+                <!-- Message input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="title">Title</label>
+                  <input type="text" formControlName="title" class="form-control" id="title" />
+                  <div id="passswordHelp" class="form-text text-danger" *ngIf="commentForm.controls['title'].dirty && commentForm.hasError('required','title')">*Title form is required</div>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <label class="form-label" for="form4Example3">Text</label>
+                  <textarea formControlName="text" class="form-control" id="form4Example3" rows="4"></textarea>
+                  <div id="passswordHelp" class="form-text text-danger" *ngIf="commentForm.controls['text'].dirty && commentForm.hasError('required','text')">*Text form is required</div>
+                </div>
+  
+                <!-- Checkbox -->
+                <div class="form-check d-flex  mb-4">
+                  <input class="form-check-input me-2" type="checkbox" value="" id="form4Example4" checked />
+                  <label class="form-check-label" for="form4Example4">
+                    Send me a copy of this comment
+                  </label>
+                </div>
+  
+                <!-- Submit button -->
+                <button (click)="onSubmit()" type="submit" class="btn btn-primary btn-block mb-4">
+                  Publish
+                </button>
+              </form>
+            </section>

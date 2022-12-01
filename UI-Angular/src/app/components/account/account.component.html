@@ -1,0 +1,32 @@
+<div class="container">
+    <form [formGroup]="updateForm"> 
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input formControlName="name" type="text" class="form-control"  id="name" aria-describedby="nameHelp">
+            <div id="nameHelp" class="form-text text-danger" *ngIf="updateForm.controls['name'].dirty && updateForm.hasError('required','name')">*Name form is required</div>
+          </div>
+          <div class="mb-3">
+            <label for="surname" class="form-label">Surname</label>
+            <input formControlName="surname" type="text" class="form-control" id="surname" aria-describedby="surnameHelp">
+            <div id="surnameHelp" class="form-text text-danger" *ngIf="updateForm.controls['surname'].dirty && updateForm.hasError('required','surname')">*Surname form is required</div>
+          </div>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email address</label>
+          <input formControlName="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <div id="emailHelp" class="form-text text-danger" *ngIf="updateForm.controls['email'].dirty && updateForm.hasError('required','email')">*Email form is required</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Current Password</label>
+          <input formControlName="password" type="password" class="form-control" id="password">
+          <div id="passswordHelp" class="form-text text-danger" *ngIf="updateForm.controls['password'].dirty && updateForm.hasError('required','password')">*Password form is required</div>
+
+        </div>
+        <div class="mb-3">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input formControlName="newPassword" type="password" class="form-control" id="newPassword">
+        </div>
+
+        <button (click)="onSubmit()" type="submit" class="btn btn-primary">Submit</button>
+      </form>
+</div>
