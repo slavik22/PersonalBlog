@@ -19,6 +19,7 @@ builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICommentService, CommentService>();
 builder.Services.AddTransient<ITagService, TagService>();
+builder.Services.AddTransient<ICategoryService, CategoryService>();
 
 builder.Services.AddAuthentication(x =>
 {

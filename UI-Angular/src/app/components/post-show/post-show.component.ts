@@ -11,6 +11,9 @@ import { NgToastService } from 'ng-angular-popup';
 import { FormBuilder,FormGroup, Validators } from '@angular/forms';
 import { CommentService } from 'src/app/services/comment.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { TagsService } from 'src/app/services/tags.service';
+import { Category } from 'src/app/models/category.model';
+import { CategoriesService } from 'src/app/services/categories.service';
 @Component({
   selector: 'app-post-show',
   templateUrl: './post-show.component.html',
@@ -19,35 +22,41 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class PostShowComponent implements OnInit {
 
    post : Post = {
-    id: -1,
+    id: 0,
     content: "",
     summary: "",
     title: "",
-    userId: 1,
+    userId: 0,
     authorName: "",
-    postStatus: -1,
+    postStatus: 0,
     createdAt : new Date(),
-    updatedAt : new Date()
+    updatedAt : new Date(),
   };
 
-  postTags:Tag[] = [];
+  author:any = {
+    id: 0,
+    name : "",
+  }
 
+  postTags:Tag[] = [];
+  postCategories:Category[] = [];
   comments:Comment[] = [];
+
   commentForm!:FormGroup;
 
-  authorName:string = "";
-
-
   constructor(private route: ActivatedRoute, private router: Router,
-    private postsService: PostsService, public authService: AuthService,
+    private postsService: PostsService,private tagsService: TagsService, 
+    private categoiriesService: CategoriesService, public authService: AuthService,
     private fb: FormBuilder, private toast: NgToastService,
     private commentService: CommentService) { }
 
   ngOnInit(): void {
     const helper = new JwtHelperService();
     const token: any = this.authService.getToken(); 
-    this.authorName = helper.decodeToken(token).unique_name;
+    const tokenDecoded: any = helper.decodeToken(token);
 
+    this.author.id = tokenDecoded.nameid;
+    this.author.name = tokenDecoded.name;
 
     this.route.url.subscribe( (data)=>{
       this.post.id = +data[1];
@@ -70,10 +79,20 @@ export class PostShowComponent implements OnInit {
       }
     })
 
-    this.postsService.getPostTags(this.post.id).subscribe({
+    this.tagsService.getPostTags(this.post.id)
+    .subscribe({
       next: (tags) => {
         this.postTags = tags
-        console.log(tags);
+      },
+      error: (error) => {
+      this.toast.error({detail: "ERROR", summary: "Tags error", duration: 5000});
+
+      }
+    })
+    this.categoiriesService.getPostCategories(this.post.id)
+    .subscribe({
+      next: (categories) => {
+        this.postCategories = categories
       },
       error: (error) => {
       this.toast.error({detail: "ERROR", summary: "Tags error", duration: 5000});
@@ -88,12 +107,12 @@ export class PostShowComponent implements OnInit {
 
   }
 
-onSubmit(){
+onCommentSubmit(){
   const comment = {
     title: this.commentForm.value.title,
     content: this.commentForm.value.text,
     postId: this.post.id,
-    authorName: this.authorName
+    authorName: this.author.name
   }
 
   this.commentService.addComment(comment)

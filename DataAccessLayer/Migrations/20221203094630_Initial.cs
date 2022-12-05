@@ -104,7 +104,7 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PostCategories",
+                name: "PostCategory",
                 columns: table => new
                 {
                     PostId = table.Column<int>(type: "int", nullable: false),
@@ -112,15 +112,15 @@ namespace DataAccessLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostCategories", x => new { x.PostId, x.CategoryId });
+                    table.PrimaryKey("PK_PostCategory", x => new { x.PostId, x.CategoryId });
                     table.ForeignKey(
-                        name: "FK_PostCategories_Categories_CategoryId",
+                        name: "FK_PostCategory_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PostCategories_Posts_PostId",
+                        name: "FK_PostCategory_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
@@ -128,7 +128,7 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PostTags",
+                name: "PostTag",
                 columns: table => new
                 {
                     PostId = table.Column<int>(type: "int", nullable: false),
@@ -136,15 +136,15 @@ namespace DataAccessLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostTags", x => new { x.PostId, x.TagId });
+                    table.PrimaryKey("PK_PostTag", x => new { x.PostId, x.TagId });
                     table.ForeignKey(
-                        name: "FK_PostTags_Posts_PostId",
+                        name: "FK_PostTag_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PostTags_Tags_TagId",
+                        name: "FK_PostTag_Tags_TagId",
                         column: x => x.TagId,
                         principalTable: "Tags",
                         principalColumn: "Id",
@@ -157,8 +157,8 @@ namespace DataAccessLayer.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostCategories_CategoryId",
-                table: "PostCategories",
+                name: "IX_PostCategory_CategoryId",
+                table: "PostCategory",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
@@ -167,8 +167,8 @@ namespace DataAccessLayer.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostTags_TagId",
-                table: "PostTags",
+                name: "IX_PostTag_TagId",
+                table: "PostTag",
                 column: "TagId");
         }
 
@@ -178,10 +178,10 @@ namespace DataAccessLayer.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "PostCategories");
+                name: "PostCategory");
 
             migrationBuilder.DropTable(
-                name: "PostTags");
+                name: "PostTag");
 
             migrationBuilder.DropTable(
                 name: "Categories");

@@ -11,7 +11,7 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     private GenericRepository<Post>? _postRepository;
     private GenericRepository<Comment>? _commentRepository;
     private GenericRepository<Tag>? _tagRepository;
-   // private GenericRepository<PostTag>? _postTagRepository;
+    private GenericRepository<Category>? _categoryRepository;
     
     public GenericRepository<User> UserRepository
     {
@@ -45,14 +45,14 @@ public class UnitOfWork : IDisposable, IUnitOfWork
             return _tagRepository;
         }
     }
-    /*public GenericRepository<PostTag> PostTagRepository
+    public GenericRepository<Category> CategoryRepository
     {
         get
         {
-            this._postTagRepository ??= new GenericRepository<PostTag>(_context);
-            return _postTagRepository;
+            this._categoryRepository ??= new GenericRepository<Category>(_context);
+            return _categoryRepository;
         }
-    }*/
+    }
     
     public async Task SaveAsync()
     {

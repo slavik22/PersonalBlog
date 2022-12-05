@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { Post } from '../models/post.model';
 import { Observable } from 'rxjs';
 import { Tag } from '../models/tag.model';
+import { Category } from '../models/category.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,11 @@ export class PostsService {
     return this.http.get<Post[]>(this.baseApiUrl + "api/posts/published");
   }
   addPost(addPostRequest: Post): Observable<Post>{
-    return this.http.post<Post>(this.baseApiUrl + "api/posts", addPostRequest);
+    return this.http.post<any>(this.baseApiUrl + "api/posts", addPostRequest);
+  }
+
+  editPost(postId:number, post: Post): Observable<Post>{
+    return this.http.put<Post>(this.baseApiUrl + "api/posts/" + postId, post);
   }
   getPostById(id : number) : Observable<Post>{
     return this.http.get<Post>(this.baseApiUrl + "api/posts/" + id);
@@ -40,10 +45,4 @@ export class PostsService {
     return this.http.get<Post[]>(this.baseApiUrl + "api/posts/search/" + searchText);
   }
 
-  addPostTags(postId: number, tags:Tag[]){
-    return this.http.post<Post>(this.baseApiUrl + "api/posts/" + postId + "/tags", tags);
-  }
-  getPostTags(postId:number):Observable<Tag[]>{
-    return this.http.get<Tag[]>(this.baseApiUrl + "api/posts/" + postId + "/tags");
-  }
 } 

@@ -1,3 +1,4 @@
+import { Tag } from "./tag.model"
 export interface Post{
     id: number,
     title: string,

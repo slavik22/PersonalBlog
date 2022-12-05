@@ -12,11 +12,13 @@ namespace WebApi.Controllers
     {
         private readonly IPostService _postService;
         private readonly IUserService _userService;
+        private readonly ITagService _tagService;
 
-        public PostsController(IPostService postService,IUserService userService)
+        public PostsController(IPostService postService,IUserService userService, ITagService tagService)
         {
             _postService = postService;
             _userService = userService;
+            _tagService = tagService;
         }
     
         [HttpGet("published")]
@@ -39,6 +41,7 @@ namespace WebApi.Controllers
             return Ok(await _postService.GetByIdAsync(id));
         }
         // POST: api/posts
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Add([FromBody] PostModel value)
         {
@@ -59,14 +62,14 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
-        // POST: api/posts/
+
+        // POST: api/posts/postId/tags
         [HttpPost("{postId:int}/tags")]
-        public async Task<ActionResult> AddTags([FromRoute] int postId, [FromBody] IEnumerable<TagModel> tags)
+        public async Task<ActionResult> AddTag([FromRoute] int postId, [FromBody] TagModel tagModel)
         {
             try
             { 
-                await _postService.AddTagsAsync(postId, tags); 
+                await _tagService.AddTagAsync(postId, tagModel); 
                 return Ok();
             }
             catch (Exception e)
@@ -74,13 +77,15 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
+       
+        
         // GET: api/posts/id/tags
         [HttpGet("{postId:int}/tags")]
         public async Task<ActionResult> GetTags([FromRoute] int postId)
         {
             try
             { 
-                return Ok(await _postService.GetTagsAsync(postId));
+                return Ok(await _tagService.GetTagsAsync(postId));
             }
             catch (Exception e)
             {
@@ -88,13 +93,12 @@ namespace WebApi.Controllers
             }
         }
 
-
-        
         // PUT: api/posts/1
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] PostModel value)
         {
-            
+            value.UpdatedAt = DateTime.Now;
+
             try
             {
                 await _postService.UpdateAsync(value);
@@ -121,6 +125,21 @@ namespace WebApi.Controllers
             }
         }
 
+        // DELETE: api/posts/tags/id
+        [Authorize]
+        [HttpDelete("tags/{tagId}")]
+        public async Task<ActionResult> DeleteTag([FromRoute]int tagId)
+        { 
+            try{
+                await _tagService.DeleteAsync(tagId);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        
         [HttpGet]
         [Route("user/{userId}/")]
         public ActionResult<IEnumerable<PostModel>> GetPostsOfUser(int userId)

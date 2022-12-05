@@ -4,5 +4,6 @@ namespace BuisnessLogicLayer.Interfaces;
 
 public interface ITagService : ICrud<TagModel>
 {
-    //public IEnumerable<TagModel> GetPostTags(int postId);
+    public Task AddTagAsync(int postId, TagModel tagModel);
+    public Task<IEnumerable<TagModel>> GetTagsAsync(int postId);
 }

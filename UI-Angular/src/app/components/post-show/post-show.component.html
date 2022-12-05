@@ -52,19 +52,31 @@
               </p>
             <!--Section: Text-->
   
-            <!-- Section: Tags -->
+            <!-- Section: Categories -->
             <section class="text-center border-top border-bottom py-4 mb-4">
+              <p><strong>Categories:</strong></p>
+  
+              <div class="container" *ngFor="let category of postCategories">
+                <a class="link-primary me-1">{{category.title}}</a>
+              </div>
+
+            </section>
+            <!-- Section: Categories -->
+
+
+            <!-- Section: Tags -->
+            <section class="text-center border-top py-4 mb-4">
               <p><strong>Tags:</strong></p>
   
               <div class="container" *ngFor="let tag of postTags">
                 <a class="link-primary me-1">{{tag.title}}</a>
               </div>
-            </section>
 
+            </section>
             <!-- Section: Tags -->
 
             <!--Section: Share buttons-->
-            <section class="text-center border-top border-bottom py-4 mb-4">
+            <!-- <section class="text-center border-top py-4 mb-4">
               <p><strong>Share with your friends:</strong></p>
   
               <button type="button" class="btn btn-primary me-1" style="background-color: #3b5998;">
@@ -79,11 +91,11 @@
               <button type="button" class="btn btn-primary me-1">
                 <i class="fa fa-comments me-2"></i>Add comment
               </button>
-            </section>
+            </section> -->
             <!--Section: Share buttons-->
             
             <!--Section: Comments-->
-            <section class="border-bottom mb-3">
+            <section class="border-top py-4 mb-4">
               <p class="text-center"><strong>Comments: {{comments.length}}</strong></p>
               
               <div class="container" *ngFor="let comment of comments">
@@ -108,7 +120,7 @@
             <!--Section: Comments-->
   
             <!--Section: Reply-->
-            <section *ngIf="authService.isLoggedIn()">
+            <section class="border-top py-4 mb-4" *ngIf="authService.isLoggedIn()">
               <p class="text-center"><strong>Leave a comment</strong></p>
   
               <form [formGroup]="commentForm">
@@ -134,7 +146,7 @@
                 </div>
   
                 <!-- Submit button -->
-                <button (click)="onSubmit()" type="submit" class="btn btn-primary btn-block mb-4">
+                <button (click)="onCommentSubmit()" type="submit" class="btn btn-primary btn-block mb-4">
                   Publish
                 </button>
               </form>

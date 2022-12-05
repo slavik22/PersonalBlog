@@ -14,7 +14,9 @@ public class Post : BaseEntity
     
     public int UserId { get; set; }
     public User User { get; set; }
-    public IEnumerable<Comment> Comments { get; set; }
+    public ICollection<Comment> Comments { get; set; }
+    
     public ICollection<PostTag> PostTags  { get; set; }
     public ICollection<PostCategory> PostCategories { get; set; }
+
 }

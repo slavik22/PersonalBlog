@@ -16,8 +16,6 @@ public class PersonalBlogDbContext : DbContext
     }
 
     public DbSet<Post> Posts { get; set; }
-    public DbSet<PostTag> PostTags { get; set; }
-    public DbSet<PostCategory> PostCategories { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Tag> Tags { get; set; }
@@ -27,12 +25,13 @@ public class PersonalBlogDbContext : DbContext
     {
         modelBuilder.Entity<User>()
             .HasKey(u => u.Id);
-
+        
         modelBuilder.Entity<PostTag>()
             .HasKey(pt => new { pt.PostId, pt.TagId });
         
         modelBuilder.Entity<PostCategory>()
             .HasKey(pt => new { pt.PostId, pt.CategoryId });
+
         
         modelBuilder.Entity<Post>()
             .HasOne<User>(p => p.User)
@@ -46,29 +45,30 @@ public class PersonalBlogDbContext : DbContext
                .HasForeignKey(c => c.PostId)
                .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<PostTag>()
-                .HasOne(pt => pt.Post)
-                .WithMany(p => p.PostTags)
-                .HasForeignKey(pt => pt.PostId)
-                .OnDelete(DeleteBehavior.Cascade);
+           modelBuilder.Entity<PostTag>()
+               .HasOne(pt => pt.Post)
+               .WithMany(p => p.PostTags)
+               .HasForeignKey(pt => pt.PostId)
+               .OnDelete(DeleteBehavior.Cascade);
             
-            modelBuilder.Entity<PostTag>()
-                .HasOne(pt => pt.Tag)
-                .WithMany(t => t.PostTags)
-                .HasForeignKey(pt => pt.TagId)
-                .OnDelete(DeleteBehavior.Cascade);
+           modelBuilder.Entity<PostTag>()
+               .HasOne(pt => pt.Tag)
+               .WithMany(t => t.PostTags)
+               .HasForeignKey(pt => pt.TagId)
+               .OnDelete(DeleteBehavior.Cascade);
             
-            modelBuilder.Entity<PostCategory>()
-                .HasOne(pc => pc.Post)
-                .WithMany(p => p.PostCategories)
-                .HasForeignKey(pc => pc.PostId)
-                .OnDelete(DeleteBehavior.Cascade);
+           modelBuilder.Entity<PostCategory>()
+               .HasOne(pc => pc.Post)
+               .WithMany(p => p.PostCategories)
+               .HasForeignKey(pc => pc.PostId)
+               .OnDelete(DeleteBehavior.Cascade);
             
-            modelBuilder.Entity<PostCategory>()
-                .HasOne(pc => pc.Category)
-                .WithMany(c => c.PostCategories)
-                .HasForeignKey(pc => pc.CategoryId)
-                .OnDelete(DeleteBehavior.Cascade);
+           modelBuilder.Entity<PostCategory>()
+               .HasOne(pc => pc.Category)
+               .WithMany(c => c.PostCategories)
+               .HasForeignKey(pc => pc.CategoryId)
+               .OnDelete(DeleteBehavior.Cascade);
+
     }
     
 

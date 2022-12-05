@@ -55,4 +55,53 @@ public class TagService : ITagService
        await _unitOfWork.SaveAsync();
 
     }
+    
+    public async Task AddTagAsync(int postId, TagModel tagModel)
+    {
+        Post post = await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostTags");
+        
+        if ( post == null)
+        {
+            throw new Exception ("Post not found");
+        }
+        
+        Tag tag = await _unitOfWork.TagRepository.GetByValueOneAsync(tag => tag.Title == tagModel.Title);
+
+         if (tag == null)
+         {
+             tag = _mapper.Map<Tag>(tagModel);
+             await _unitOfWork.TagRepository.AddAsync(tag);
+
+         }
+        
+        post.PostTags.Add(new PostTag()
+        {
+            Tag = tag,
+            Post = post
+        });
+            
+        await _unitOfWork.SaveAsync();
+
+    }
+    
+    public async Task<IEnumerable<TagModel>> GetTagsAsync(int postId)
+    {
+        Post post = (await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostTags"));
+
+        if ( post == null)
+        {
+            throw new Exception ("Post not found");
+        }
+        
+        var tagsIds = post.PostTags.Select(pt => pt.TagId);
+        var tags = await _unitOfWork.TagRepository.GetAllAsync(t => tagsIds.Contains(t.Id));
+        
+        List<TagModel> tagModels = new List<TagModel>();
+
+        foreach (var item in post.PostTags.Select(pt => pt.Tag))
+            tagModels.Add(_mapper.Map<TagModel>(item));
+
+        return tagModels;
+
+    }
 }

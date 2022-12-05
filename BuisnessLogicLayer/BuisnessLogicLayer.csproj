@@ -8,9 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Helpers" />
-    <Folder Include="Interfaces" />
     <Folder Include="Models\Enums" />
-    <Folder Include="Services" />
   </ItemGroup>
 
   <ItemGroup>

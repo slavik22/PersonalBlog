@@ -1,0 +1,74 @@
+<div class="container my-5">
+    <h1 class="mb-3">Edit post</h1>
+
+    <form [formGroup]="postEditForm" class="row g-3" (ngSubmit)="editPost()">
+        <div class="col-12">
+            <label for="title" class="form-label">Title</label>
+            <input formControlName="title" type="text" class="form-control" id="title" name="title" [(ngModel)] = "post.title">
+        </div>
+        <div class="col-12">
+            <label for="summary" class="form-label">Summary</label>
+            <textarea formControlName="summary" class="form-control" id="summary" placeholder="Lorem ipsum..."
+            name="summary" maxlength="250">{{post.summary}}</textarea>
+        </div>
+        <div class="col-12">
+            <label for="content" class="form-label">Content</label>
+            <textarea formControlName="content" class="form-control" id="content" placeholder="Lorem ipsum..."
+            name="content">{{post.content}}</textarea>
+        </div>
+ 
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Edit post</button>
+        </div>
+        
+    </form>
+
+</div>
+
+<section class="border-top container my-5">
+    <h2 class="mb-3">Edit Tags</h2>
+
+    <div class="container" *ngFor="let tag of postTags">
+      <a class="link-primary me-1">{{tag.title}}</a>
+      <i (click)="this.deleteTag(tag.id)" class="fa fa-trash"></i>
+    </div>
+
+    <form class="row" [formGroup]="tagForm">
+      <!-- Message input -->
+        <div class="col-9">
+            <input  type="text" formControlName="title" class="form-control" id="title" />
+            <div class="col" id="passswordHelp" class="form-text text-danger" *ngIf="tagForm.controls['title'].dirty && tagForm.hasError('required','title')">*Tag form is required</div>
+        </div>
+        <div class="col-3">
+            <button class="col" (click)="onTagSubmit()" type="submit" class="btn btn-primary btn-block mb-4">
+                Add
+              </button>
+        </div>
+      <!-- Submit button -->
+
+  </form>
+  </section>
+
+  <section class="border-top container my-5">
+    <h2 class="mb-3">Edit Categories</h2>
+
+    <div class="container" *ngFor="let category of postCategories">
+      <span class="link-primary me-1">{{category.title}}</span>
+      <i (click)="this.deleteCategory(category.id)" class="fa fa-trash"></i>
+    </div>
+
+    <form class="row" [formGroup]="categoryForm">
+      <!-- Message input -->
+        <div class="col-9">
+            <input  type="text" formControlName="title" class="form-control" id="title" />
+            <div class="col" id="passswordHelp" class="form-text text-danger" *ngIf="categoryForm.controls['title'].dirty && categoryForm.hasError('required','title')">*Category is required</div>
+        </div>
+        <div class="col-3">
+            <button class="col" (click)="onCategorySubmit()" type="submit" class="btn btn-primary btn-block mb-4">
+                Add
+              </button>
+        </div>
+      <!-- Submit button -->
+
+  </form>
+  </section>

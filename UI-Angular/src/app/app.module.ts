@@ -17,6 +17,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AccountComponent } from './components/account/account.component';
 import { PostsSearchComponent } from './components/posts-search/posts-search.component';
+import { PostEditComponent } from './components/post-edit/post-edit.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +28,8 @@ import { PostsSearchComponent } from './components/posts-search/posts-search.com
     SignupComponent,
     DashboardComponent,
     AccountComponent,
-    PostsSearchComponent
+    PostsSearchComponent,
+    PostEditComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +41,7 @@ import { PostsSearchComponent } from './components/posts-search/posts-search.com
       {path: '', component: PostsListComponent, pathMatch: 'full'},
       {path: 'posts/add', component: PostAddComponent, canActivate:[AuthGuard]},
       {path: 'post/:postId', component: PostShowComponent},
+      {path: 'post/edit/:postId', component: PostEditComponent,canActivate:[AuthGuard]},
       {path: 'posts/search/:searchText', component: PostsSearchComponent},
       
       {path: 'login', component: LoginComponent},

@@ -2,6 +2,7 @@
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
+
 namespace DataAccessLayer.Data;
 
 public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
@@ -52,6 +53,18 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
         return query.ToList();
     }
     
+    public Task<TEntity> GetByValueOneAsync(Expression<Func<TEntity, bool>> find, string includeProperties = "")
+    {
+        IQueryable<TEntity> query = _dbSet;
+        
+        foreach (var includeProperty in includeProperties.Split( ',', StringSplitOptions.RemoveEmptyEntries))
+        {
+            query = query.Include(includeProperty);
+        }
+
+        return query.FirstOrDefaultAsync(find);
+    }
+    
     public async Task<TEntity> GetByIdAsync(int id, string includeProperties = "")
     {
         IQueryable<TEntity> query = _dbSet;
@@ -64,7 +77,7 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
     }
 
     public async Task AddAsync(TEntity entity)
-    {
+    { 
         await _dbSet.AddAsync(entity);
     }
 

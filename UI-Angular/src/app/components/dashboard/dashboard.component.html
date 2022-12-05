@@ -115,7 +115,7 @@
             <td>{{post.authorName}}</td>
             <td>{{post.postStatus === 0 ? "Under Moderation" : "Published  "}}</td>
             <td><i (click)="this.deletePost(post.id)" class="fa fa-trash"></i>
-                <!-- <i (click)="this.makeUserAdmin(user.id)" class="fa fa-plus"></i> -->
+                <i (click)="this.editPost(post.id)" class="fa fa-edit"></i>
             </td>
           </tr>
          

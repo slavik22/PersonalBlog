@@ -125,7 +125,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("PostCategories");
+                    b.ToTable("PostCategory");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.PostTag", b =>
@@ -142,7 +142,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("PostTags");
+                    b.ToTable("PostTag");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Entities.Tag", b =>

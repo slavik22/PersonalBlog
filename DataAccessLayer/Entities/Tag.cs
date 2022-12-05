@@ -3,5 +3,5 @@
 public class Tag : BaseEntity
 {
     public string Title { get; set; } = "";
-    public IEnumerable<PostTag> PostTags { get; set; }
+    public ICollection<PostTag> PostTags { get; set; }
 }

@@ -9,7 +9,7 @@ public interface IUnitOfWork
     GenericRepository<Post> PostRepository { get; } 
     GenericRepository<Comment> CommentRepository {get;}
     GenericRepository<Tag> TagRepository{get;}
-   // GenericRepository<PostTag> PostTagRepository{get;}
+    GenericRepository<Category> CategoryRepository{get;}
     Task SaveAsync();
 
 }

@@ -22,10 +22,8 @@ export class PostAddComponent implements OnInit {
     postStatus: 0,
     createdAt : new Date(),
     updatedAt : new Date(),
-    authorName: ""
+    authorName: "", 
   }
-
-  tags:string = "";
 
   constructor(private authService : AuthService, private postService : PostsService,private toast: NgToastService,private router: Router) { }
 
@@ -41,19 +39,14 @@ export class PostAddComponent implements OnInit {
     this.postService.addPost(this.addPostRequest)
     .subscribe({
       next: (post) =>{
+        console.log(post);
         this.toast.success({detail: "SUCCESS", summary: "Post added successfuly", duration: 5000});
         this.router.navigate(['/']);
-        console.log(post);
       },
       error: (error) =>{
         console.log(error);
         this.toast.error({detail: "ERROR", summary: "Some error occured", duration: 5000});
       }
     })
-
-    this.postService.addPostTags(this.addPostRequest.id, this.tags.split(",").map(str => {
-      const t:Tag = {id:0, title: str};
-      return t;
-    } ));
   }
 }

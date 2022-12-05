@@ -7,6 +7,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { PostsService } from 'src/app/services/posts.service';
 import { Post } from 'src/app/models/post.model';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -14,7 +15,7 @@ import { environment } from 'src/environments/environment';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private toast: NgToastService, private usersService: UsersService,private postsService: PostsService,private authService: AuthService) { }
+  constructor(private router:Router, private toast: NgToastService, private usersService: UsersService,private postsService: PostsService,private authService: AuthService) { }
 
   user:any = {};
   
@@ -117,5 +118,9 @@ export class DashboardComponent implements OnInit {
         this.toast.error({detail: "ERROR", summary: error.message, duration: 5000});
       }
     })
+  }
+
+  editPost(postId:number){
+    this.router.navigate(['/post/edit/', postId])
   }
 }
