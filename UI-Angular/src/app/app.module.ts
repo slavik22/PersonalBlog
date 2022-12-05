@@ -18,6 +18,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AccountComponent } from './components/account/account.component';
 import { PostsSearchComponent } from './components/posts-search/posts-search.component';
 import { PostEditComponent } from './components/post-edit/post-edit.component';
+import { PostsCategoryComponent } from './components/posts-category/posts-category.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +30,8 @@ import { PostEditComponent } from './components/post-edit/post-edit.component';
     DashboardComponent,
     AccountComponent,
     PostsSearchComponent,
-    PostEditComponent
+    PostEditComponent,
+    PostsCategoryComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +45,7 @@ import { PostEditComponent } from './components/post-edit/post-edit.component';
       {path: 'post/:postId', component: PostShowComponent},
       {path: 'post/edit/:postId', component: PostEditComponent,canActivate:[AuthGuard]},
       {path: 'posts/search/:searchText', component: PostsSearchComponent},
+      {path: 'categories/:categoryId', component: PostsCategoryComponent},
       
       {path: 'login', component: LoginComponent},
       {path: 'signup', component: SignupComponent},

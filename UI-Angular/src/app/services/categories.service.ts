@@ -23,4 +23,8 @@ export class CategoriesService {
   getPostCategories(postId:number):Observable<Post[]>{
     return this.http.get<Post[]>(this.baseApiUrl + "api/categories/post/" + postId);
   }
+  getAllCategories(){
+    return this.http.get<Post[]>(this.baseApiUrl + "api/categories/");
+
+  }
 }

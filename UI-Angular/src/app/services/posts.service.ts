@@ -45,4 +45,9 @@ export class PostsService {
     return this.http.get<Post[]>(this.baseApiUrl + "api/posts/search/" + searchText);
   }
 
+  getCategoryPosts(categoryId:number){
+    return this.http.get<Post[]>(this.baseApiUrl + "api/posts/category/" + categoryId);
+
+  }
+
 } 

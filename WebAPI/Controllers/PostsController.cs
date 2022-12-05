@@ -34,12 +34,17 @@ namespace WebApi.Controllers
         }
         
         // GET: api/posts
-        [HttpGet]
-        [Route("{id:int}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<IEnumerable<PostModel>>> GetById([FromRoute] int id)
         {
             return Ok(await _postService.GetByIdAsync(id));
         }
+        [HttpGet("category/{categoryId:int}")]
+        public async Task<ActionResult<IEnumerable<PostModel>>> GetByCategoryId([FromRoute] int categoryId)
+        {
+            return Ok(await _postService.GetByCategoryIdAsync(categoryId));
+        }
+        
         // POST: api/posts
         [Authorize]
         [HttpPost]

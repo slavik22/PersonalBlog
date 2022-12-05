@@ -1,0 +1,16 @@
+<div class="container">
+    <div  class="row row-cols-1 row-cols-lg-2 g-2" *ngIf="posts && posts.length > 0">
+        <div class="col" *ngFor="let post of posts">
+          <div class="card" (click)="onPostClick(post.id)">
+            <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(144).jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{post.title}}</h5>
+              <p class="card-text">{{post.summary}}</p>
+            </div>
+          </div>
+        </div>
+    </div>
+    
+    <p *ngIf="!posts || posts.length <= 0">No posts found</p>
+    
+</div>

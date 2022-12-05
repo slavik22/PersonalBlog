@@ -9,5 +9,7 @@ public interface IPostService : ICrud<PostModel>
     public Task<IEnumerable<PostModel>> GetPostsSearch(string text);
     //public Task AddTagAsync(int postId, TagModel tagModel);
     public Task<IEnumerable<PostModel>> GetAllPublishedAsync();
+    public Task<IEnumerable<PostModel>> GetByCategoryIdAsync(int categoryId);
+
     //public Task<IEnumerable<TagModel>> GetTagsAsync(int postId);
 }

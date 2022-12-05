@@ -38,7 +38,18 @@ public class PostService : IPostService
 
         return postModels;
     }
-    
+
+    public async Task<IEnumerable<PostModel>> GetByCategoryIdAsync(int categoryId)
+    {
+        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(p => p.PostCategories.Any(pt => pt.CategoryId == categoryId ) && p.PostStatus == PostStatus.Published,null,"PostCategories");
+        List<PostModel> postModels = new List<PostModel>();
+
+        foreach (var item in posts)
+            postModels.Add(_mapper.Map<PostModel>(item));
+
+        return postModels;
+    }
+
     public async Task<PostModel> GetByIdAsync(int id)
     {
         return _mapper.Map<PostModel>(await _unitOfWork.PostRepository.GetByIdAsync(id,"User"));
