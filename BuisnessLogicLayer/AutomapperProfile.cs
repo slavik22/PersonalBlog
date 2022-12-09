@@ -13,9 +13,10 @@ public class AutomapperProfile : Profile
 
         CreateMap<Post, PostModel>()
             .ForMember(pm => pm.AuthorName, p => p.MapFrom(x => $"{x.User.Name} {x.User.Surname}"));
-           
+
         CreateMap<PostModel, Post>();
 
+            
         CreateMap<Comment, CommentModel>()
             .ReverseMap();
 

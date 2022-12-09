@@ -50,8 +50,6 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult> Add([FromBody] PostModel value)
         {
-            value.CreatedAt = DateTime.Now;
-
             if ( (await _userService.GetByIdAsync(value.UserId))?.UserRole == UserRole.Admin)
             {
                 value.PostStatus = PostStatus.Published;
@@ -88,22 +86,13 @@ namespace WebApi.Controllers
         [HttpGet("{postId:int}/tags")]
         public async Task<ActionResult> GetTags([FromRoute] int postId)
         {
-            try
-            { 
                 return Ok(await _tagService.GetTagsAsync(postId));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
         }
 
         // PUT: api/posts/1
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] PostModel value)
         {
-            value.UpdatedAt = DateTime.Now;
-
             try
             {
                 await _postService.UpdateAsync(value);
@@ -156,14 +145,7 @@ namespace WebApi.Controllers
         [Route("search/{text}/")]
         public async Task<ActionResult<IEnumerable<PostModel>>> GetPostsSearch(string text)
         {
-            try
-            {
-                return Ok(await _postService.GetPostsSearch(text));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(new { Message = e.Message });
-            }
+            return Ok(await _postService.GetPostsSearch(text));
         }
     }
 }

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from 'src/app/models/post.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { PostsService } from 'src/app/services/posts.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-posts-category',
@@ -14,7 +15,7 @@ export class PostsCategoryComponent implements OnInit {
   posts : Post[] = [];
 
 
-  constructor(private postsService: PostsService, private route:ActivatedRoute, private router: Router, private authService: AuthService) {
+  constructor(public datePipe: DatePipe,private postsService: PostsService, private route:ActivatedRoute, private router: Router, private authService: AuthService) {
 
    }
 

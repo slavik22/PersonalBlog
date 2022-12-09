@@ -54,22 +54,13 @@ namespace WebApi.Controllers
         [HttpGet("post/{postId:int}")]
         public async Task<ActionResult> GetPostCategories([FromRoute] int postId)
         {
-            try
-            { 
                 return Ok(await _categoryService.GetCategoriesAsync(postId));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
         }
 
         // PUT: api/categories/1
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] PostModel value)
         {
-            value.UpdatedAt = DateTime.Now;
-
             try
             {
                 await _postService.UpdateAsync(value);

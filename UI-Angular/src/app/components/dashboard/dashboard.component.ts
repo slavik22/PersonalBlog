@@ -8,6 +8,7 @@ import { PostsService } from 'src/app/services/posts.service';
 import { Post } from 'src/app/models/post.model';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -15,7 +16,7 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private router:Router, private toast: NgToastService, private usersService: UsersService,private postsService: PostsService,private authService: AuthService) { }
+  constructor(public datePipe:DatePipe, private router:Router, private toast: NgToastService, private usersService: UsersService,private postsService: PostsService,private authService: AuthService) { }
 
   user:any = {};
   

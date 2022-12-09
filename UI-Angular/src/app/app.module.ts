@@ -19,6 +19,7 @@ import { AccountComponent } from './components/account/account.component';
 import { PostsSearchComponent } from './components/posts-search/posts-search.component';
 import { PostEditComponent } from './components/post-edit/post-edit.component';
 import { PostsCategoryComponent } from './components/posts-category/posts-category.component';
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,7 +57,9 @@ import { PostsCategoryComponent } from './components/posts-category/posts-catego
     ]),
   ],
 
-  providers: [{
+  providers: [
+    DatePipe,
+    {
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true

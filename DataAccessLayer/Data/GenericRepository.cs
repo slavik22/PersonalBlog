@@ -84,6 +84,10 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
     public async Task Delete(int id)
     {
         TEntity entityToDelete = await _dbSet.FindAsync(id);
+        if (entityToDelete == null)
+        {
+            throw new NullReferenceException();
+        }
         
         if (_context.Entry(entityToDelete).State == EntityState.Detached)
         {

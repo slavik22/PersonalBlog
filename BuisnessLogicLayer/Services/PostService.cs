@@ -41,7 +41,7 @@ public class PostService : IPostService
 
     public async Task<IEnumerable<PostModel>> GetByCategoryIdAsync(int categoryId)
     {
-        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(p => p.PostCategories.Any(pt => pt.CategoryId == categoryId ) && p.PostStatus == PostStatus.Published,null,"PostCategories");
+        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(p => p.PostCategories.Any(pt => pt.CategoryId == categoryId ) && p.PostStatus == PostStatus.Published,null,"PostCategories,User");
         List<PostModel> postModels = new List<PostModel>();
 
         foreach (var item in posts)
@@ -57,6 +57,9 @@ public class PostService : IPostService
 
     public async Task AddAsync(PostModel model)
     {
+        model.CreatedAt = DateTime.Now;
+        model.UpdatedAt = DateTime.Now;
+        
         await _unitOfWork.PostRepository.AddAsync(_mapper.Map<Post>(model));
         await _unitOfWork.SaveAsync();
     }
@@ -64,6 +67,8 @@ public class PostService : IPostService
 
     public async Task UpdateAsync(PostModel model)
     {
+        model.UpdatedAt = DateTime.Now;
+        
         _unitOfWork.PostRepository.Update(_mapper.Map<Post>(model));
         await _unitOfWork.SaveAsync();
 
@@ -93,7 +98,7 @@ public class PostService : IPostService
     public async Task<IEnumerable<PostModel>> GetPostsSearch(string text)
     {
         IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync( p => 
-            (p.Title.Contains(text) || p.Content.Contains(text)) && p.PostStatus == PostStatus.Published);
+            (p.Title.Contains(text) || p.Content.Contains(text)) && p.PostStatus == PostStatus.Published,null,"User");
         
         List<PostModel> postModels = new List<PostModel>();
 

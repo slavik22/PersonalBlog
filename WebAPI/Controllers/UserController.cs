@@ -4,7 +4,6 @@ using BuisnessLogicLayer.Models;
 using BuisnessLogicLayer.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace WebApi.Controllers
 {
@@ -41,9 +40,6 @@ namespace WebApi.Controllers
 
             user.Token = _userService.CreateJwt(user);
 
-
-            //await _userService.UpdateAsync(user);
-            
             return Ok(new
             {
                 Message = "Login Success",
@@ -65,12 +61,12 @@ namespace WebApi.Controllers
                 return BadRequest(new { Message = "User with such email already exists" });
             }
 
-            string pass = _userService.CheckUserPasswordStrength(userModel.Password);
-            if (!string.IsNullOrEmpty(pass))
+            string res = _userService.CheckUserPasswordAndEmail(userModel.Email, userModel.Password);
+            if (!string.IsNullOrEmpty(res))
             {
-                return BadRequest(new { Message = pass });
+                return BadRequest(new { Message = res });
             }
-
+            
             await _userService.AddAsync(userModel);
             return Ok(new { Message = "User registered successfully" });
         }
@@ -129,7 +125,7 @@ namespace WebApi.Controllers
 
             if (value.NewPassword != "")
             {
-                string pass = _userService.CheckUserPasswordStrength(value.NewPassword);
+                string pass = _userService.CheckUserPasswordAndEmail(value.Email, value.NewPassword);
 
                 if (!string.IsNullOrEmpty(pass))
                 {

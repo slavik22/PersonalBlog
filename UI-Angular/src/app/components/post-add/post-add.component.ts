@@ -20,8 +20,8 @@ export class PostAddComponent implements OnInit {
     summary: "",
     userId : 0,
     postStatus: 0,
-    createdAt : new Date(),
-    updatedAt : new Date(),
+    createdAt :  new Date(),
+    updatedAt :  new Date(),
     authorName: "", 
   }
 

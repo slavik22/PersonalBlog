@@ -10,10 +10,10 @@ import { PostsService } from 'src/app/services/posts.service';
 import { NgToastService } from 'ng-angular-popup';
 import { FormBuilder,FormGroup, Validators } from '@angular/forms';
 import { CommentService } from 'src/app/services/comment.service';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { TagsService } from 'src/app/services/tags.service';
 import { Category } from 'src/app/models/category.model';
 import { CategoriesService } from 'src/app/services/categories.service';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-post-show',
   templateUrl: './post-show.component.html',
@@ -44,20 +44,13 @@ export class PostShowComponent implements OnInit {
 
   commentForm!:FormGroup;
 
-  constructor(private route: ActivatedRoute, private router: Router,
+  constructor(public datePipe: DatePipe,private route: ActivatedRoute, private router: Router,
     private postsService: PostsService,private tagsService: TagsService, 
     private categoiriesService: CategoriesService, public authService: AuthService,
     private fb: FormBuilder, private toast: NgToastService,
     private commentService: CommentService) { }
 
   ngOnInit(): void {
-    const helper = new JwtHelperService();
-    const token: any = this.authService.getToken(); 
-    const tokenDecoded: any = helper.decodeToken(token);
-
-    this.author.id = tokenDecoded.nameid;
-    this.author.name = tokenDecoded.name;
-
     this.route.url.subscribe( (data)=>{
       this.post.id = +data[1];
       this.postsService.getPostById(this.post.id).subscribe({

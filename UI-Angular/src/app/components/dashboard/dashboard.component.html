@@ -44,9 +44,6 @@
           <th class="th-sm">Title
     
           </th>
-          <th class="th-sm">Summary
-    
-          </th>
           <th class="th-sm">Created
     
           </th>
@@ -65,9 +62,8 @@
       
         <tr>
           <td><a href="{{'/post/' + post.id}}">{{post.title}}</a></td>
-          <td>{{post.summary.substring(0,10)}}</td>
-          <td>{{post.createdAt}}</td>
-          <td>{{post.updatedAt}}</td>
+          <td>{{datePipe.transform(post.createdAt, "MMM dd, yyyy")}}</td>
+          <td>{{datePipe.transform(post.updatedAt, "MMM dd, yyyy")}}</td>
           <td>{{post.authorName}}</td>
           <td>{{post.postStatus === 0 ? "Under Moderation" : "Published  "}}</td>
           <td><i (click)="this.deletePost(post.id)" class="fa fa-trash"></i>
@@ -88,9 +84,6 @@
             <th class="th-sm">Title
       
             </th>
-            <th class="th-sm">Summary
-      
-            </th>
             <th class="th-sm">Created
       
             </th>
@@ -109,9 +102,8 @@
         
           <tr>
             <td><a href="{{'/post/' + post.id}}">{{post.title}}</a></td>
-            <td>{{post.summary.substring(0,10)}}</td>
-            <td>{{post.createdAt}}</td>
-            <td>{{post.updatedAt}}</td>
+            <td>{{datePipe.transform(post.createdAt, "MMM dd, yyyy")}}</td>
+            <td>{{datePipe.transform(post.updatedAt, "MMM dd, yyyy")}}</td>
             <td>{{post.authorName}}</td>
             <td>{{post.postStatus === 0 ? "Under Moderation" : "Published  "}}</td>
             <td><i (click)="this.deletePost(post.id)" class="fa fa-trash"></i>

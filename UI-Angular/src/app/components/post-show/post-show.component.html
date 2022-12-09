@@ -14,16 +14,11 @@
           <div class="col-md-8 mb-4">
             <!--Section: Post data-mdb-->
             <section class="border-bottom mb-4">
-              <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(144).jpg"
-                class="img-fluid shadow-2-strong rounded-5 mb-4" alt="" />
-  
               <div class="row align-items-center mb-4">
                 <div class="col-lg-7 text-center text-lg-start mb-3 m-lg-0">
-                  <img src="https://mdbootstrap.com/img/Photos/Avatars/img (23).jpg" class="rounded-5 shadow-1-strong me-2"
-                    height="35" alt="" loading="lazy" />
-                    by <a href="" class="text-dark">{{post.authorName}}</a> <br> <br>
-                  <span> Published <u>{{post.createdAt.toLocaleString()}}</u> </span> <br>
-                  <span> Updated <u>{{post.updatedAt.toLocaleString()}}</u> </span>
+                    by <strong>{{post.authorName}}</strong> <br> <br>
+                  <span> Published <strong>{{datePipe.transform(post.createdAt, "MMM dd, yyyy")}}</strong> </span> <br>
+                  <span> Updated <strong>{{datePipe.transform(post.updatedAt, "MMM dd, yyyy")}}</strong> </span>
                   
                 </div>
   
@@ -57,7 +52,7 @@
               <p><strong>Categories:</strong></p>
   
               <div class="container" *ngFor="let category of postCategories">
-                <a class="link-primary me-1">{{category.title}}</a>
+                <a [routerLink]="'/categories/'+category.id" class="link-primary me-1">{{category.title}}</a>
               </div>
 
             </section>
@@ -69,7 +64,7 @@
               <p><strong>Tags:</strong></p>
   
               <div class="container" *ngFor="let tag of postTags">
-                <a class="link-primary me-1">{{tag.title}}</a>
+                <strong class="me-1">{{tag.title}}</strong>
               </div>
 
             </section>

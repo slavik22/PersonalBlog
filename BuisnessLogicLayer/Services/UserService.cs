@@ -84,23 +84,30 @@ public class UserService : IUserService
        return users.Any(x => x.Email == email);
     }
     
-    public string CheckUserPasswordStrength(string password)
+    public string CheckUserPasswordAndEmail(string email,string password)
     {
         StringBuilder sb = new StringBuilder();
+        
+        if (!Regex.IsMatch(email,@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"))
+        {
+            sb.Append("Email is incorrect." + Environment.NewLine);   
+        }
+        
         if (password.Length < 9)
         {
-            sb.Append("Minimum password length should be 9" + Environment.NewLine);
+            sb.Append("Minimum password length should be 9." + Environment.NewLine);
         }
         if (!(Regex.IsMatch(password,"[a-z]") && Regex.IsMatch(password,"[A-Z]") 
                                             && Regex.IsMatch(password,"[0-9]")))
         {
-            sb.Append("Password should be Alphanumeric" + Environment.NewLine);
+            sb.Append("Password should be Alphanumeric." + Environment.NewLine);
         }
-        if (!Regex.IsMatch(password,"[<,>,@,!,#,$,%,^,(,),:,{,},?,=,+]"))
+        if (!Regex.IsMatch(password,"[<,>,@,!,#,$,%,^,(,),:,{,},?,=,+]" ))
         {
-            sb.Append("Password should contain special chars" + Environment.NewLine);   
+            sb.Append("Password should contain special chars." + Environment.NewLine);   
         }
 
+        
         return sb.ToString();
     }
 

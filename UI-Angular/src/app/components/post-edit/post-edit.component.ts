@@ -26,7 +26,7 @@ export class PostEditComponent implements OnInit {
     userId : 0,
     postStatus: 0,
     createdAt : new Date(),
-    updatedAt : new Date(),
+    updatedAt :  new Date(),
     authorName: "", 
   }
   
@@ -104,6 +104,11 @@ export class PostEditComponent implements OnInit {
 
 
   editPost(){
+    this.post.title = this.postEditForm.value.title;
+    this.post.summary = this.postEditForm.value.summary;
+    this.post.content = this.postEditForm.value.content;
+
+    console.log(this.post);
     this.postService.editPost(this.post.id, this.post)
     .subscribe({
       next: (post) =>{

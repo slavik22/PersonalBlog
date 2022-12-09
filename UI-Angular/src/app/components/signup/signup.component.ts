@@ -30,8 +30,9 @@ export class SignupComponent implements OnInit {
           this.router.navigate(['login']);
         },
         error: error => {
-          alert(error.error.message);
-          this.toast.error({detail: "Error", summary: error.error.message, duration: 5000});
+          this.toast.error({detail: "Error", summary: "Sign up failed", duration: 2000  });
+          alert(error.error.message)
+
         }
       })
     }

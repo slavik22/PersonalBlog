@@ -4,16 +4,16 @@
     <form [formGroup]="postEditForm" class="row g-3" (ngSubmit)="editPost()">
         <div class="col-12">
             <label for="title" class="form-label">Title</label>
-            <input formControlName="title" type="text" class="form-control" id="title" name="title" [(ngModel)] = "post.title">
+            <input formControlName="title" type="text" class="form-control" id="title" name="title">
         </div>
         <div class="col-12">
             <label for="summary" class="form-label">Summary</label>
-            <textarea formControlName="summary" class="form-control" id="summary" placeholder="Lorem ipsum..."
+            <textarea formControlName="summary" class="form-control" id="summary"
             name="summary" maxlength="250">{{post.summary}}</textarea>
         </div>
         <div class="col-12">
             <label for="content" class="form-label">Content</label>
-            <textarea formControlName="content" class="form-control" id="content" placeholder="Lorem ipsum..."
+            <textarea formControlName="content" class="form-control" id="content"
             name="content">{{post.content}}</textarea>
         </div>
  

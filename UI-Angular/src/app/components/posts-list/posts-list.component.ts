@@ -4,6 +4,7 @@ import { Post } from 'src/app/models/post.model';
 import { PostsService } from 'src/app/services/posts.service';
 import {Router} from "@angular/router"
 import { AuthService } from 'src/app/services/auth.service';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-posts-list',
   templateUrl: './posts-list.component.html',
@@ -13,7 +14,7 @@ export class PostsListComponent implements OnInit {
     posts : Post[] = [];
 
 
-  constructor(private postsService: PostsService, private router: Router, private authService: AuthService) {
+  constructor(public datePipe: DatePipe,private postsService: PostsService, private router: Router, private authService: AuthService) {
 
    }
 

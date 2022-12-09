@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PostsService } from 'src/app/services/posts.service';
 import { Post } from 'src/app/models/post.model';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-posts-search',
   templateUrl: './posts-search.component.html',
@@ -9,7 +10,7 @@ import { Post } from 'src/app/models/post.model';
 })
 export class PostsSearchComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private postsService: PostsService,
+  constructor(public datePipe: DatePipe,private route: ActivatedRoute, private postsService: PostsService,
     private router: Router) { }
 
   posts:Post[] = [];
