@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : WebAPI
+// Author           : Slava
+// Created          : 12-01-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-09-2022
+// ***********************************************************************
+// <copyright file="UserController.cs" company="WebAPI">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using Business.Helpers;
 using BuisnessLogicLayer.Interfaces;
 using BuisnessLogicLayer.Models;
@@ -7,17 +20,34 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
+    /// <summary>
+    /// Class UserController.
+    /// Implements the <see cref="ControllerBase" />
+    /// </summary>
+    /// <seealso cref="ControllerBase" />
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
+        /// <summary>
+        /// The user service
+        /// </summary>
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// </summary>
+        /// <param name="userService">The user service.</param>
         public UserController(IUserService userService)
         {
             _userService = userService;
         }
-        
+
+        /// <summary>
+        /// Authenticates the specified user model.
+        /// </summary>
+        /// <param name="userModel">The user model.</param>
+        /// <returns>IActionResult.</returns>
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] UserModel userModel)
         {
@@ -46,8 +76,13 @@ namespace WebApi.Controllers
                 Token = user.Token
             });
         }
-        
-        
+
+
+        /// <summary>
+        /// Registers the specified user model.
+        /// </summary>
+        /// <param name="userModel">The user model.</param>
+        /// <returns>IActionResult.</returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserModel userModel)
         {
@@ -70,15 +105,24 @@ namespace WebApi.Controllers
             await _userService.AddAsync(userModel);
             return Ok(new { Message = "User registered successfully" });
         }
-        
+
+        /// <summary>
+        /// Gets this instance.
+        /// </summary>
+        /// <returns>ActionResult&lt;IEnumerable&lt;UserModel&gt;&gt;.</returns>
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserModel>>> Get()
         {
             return Ok(await _userService.GetAllAsync());
         }
-        
+
         // DELETE: api/user/1
+        /// <summary>
+        /// Deletes the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>ActionResult.</returns>
         [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
@@ -93,8 +137,14 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
         // PUT: api/user/1
+        /// <summary>
+        /// Updates the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>ActionResult.</returns>
         [Authorize]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Update(int id, [FromBody] ChangeUserDataModel value)
@@ -156,7 +206,13 @@ namespace WebApi.Controllers
             }
         }
 
-       // [Authorize]
+        // [Authorize]
+        /// <summary>
+        /// Updates to admin.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>ActionResult.</returns>
         [HttpPut("{id:int}/makeAdmin")]
         public async Task<ActionResult> UpdateToAdmin(int id, [FromBody] UpdateToAdminUserModel value)
         {

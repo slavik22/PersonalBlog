@@ -1,4 +1,17 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿// ***********************************************************************
+// Assembly         : BuisnessLogicLayer
+// Author           : Slava
+// Created          : 12-01-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-09-2022
+// ***********************************************************************
+// <copyright file="UserService.cs" company="BuisnessLogicLayer">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,17 +26,37 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BuisnessLogicLayer.Services;
 
+/// <summary>
+/// Class UserService.
+/// Implements the <see cref="IUserService" />
+/// </summary>
+/// <seealso cref="IUserService" />
 public class UserService : IUserService
 {
+    /// <summary>
+    /// The unit of work
+    /// </summary>
     private readonly IUnitOfWork _unitOfWork;
+    /// <summary>
+    /// The mapper
+    /// </summary>
     private readonly IMapper _mapper;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UserService"/> class.
+    /// </summary>
+    /// <param name="unitOfWork">The unit of work.</param>
+    /// <param name="mapper">The mapper.</param>
     public UserService(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
-    
+
+    /// <summary>
+    /// Get all as an asynchronous operation.
+    /// </summary>
+    /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<UserModel>> GetAllAsync()
     {
         IEnumerable<User> users =  (await _unitOfWork.UserRepository.GetAllAsync());
@@ -36,10 +69,20 @@ public class UserService : IUserService
 
     }
 
+    /// <summary>
+    /// Get by identifier as an asynchronous operation.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
+    /// <returns>A Task&lt;UserModel&gt; representing the asynchronous operation.</returns>
     public async Task<UserModel> GetByIdAsync(int id)
     {
         return _mapper.Map<UserModel>(await _unitOfWork.UserRepository.GetByIdAsync(id));
     }
+    /// <summary>
+    /// Add as an asynchronous operation.
+    /// </summary>
+    /// <param name="model">The model.</param>
+    /// <returns>A Task representing the asynchronous operation.</returns>
     public async Task AddAsync(UserModel model)
     {
         model.Password = PasswordHasher.HashPassword(model.Password);
@@ -49,9 +92,14 @@ public class UserService : IUserService
         await _unitOfWork.UserRepository.AddAsync(_mapper.Map<User>(model));
         await _unitOfWork.SaveAsync();
     }
-    
-    
-    
+
+
+
+    /// <summary>
+    /// Update as an asynchronous operation.
+    /// </summary>
+    /// <param name="model">The model.</param>
+    /// <returns>A Task representing the asynchronous operation.</returns>
     public async Task UpdateAsync(UserModel model)
     {
         _unitOfWork.UserRepository.Update(_mapper.Map<User>(model));
@@ -59,12 +107,22 @@ public class UserService : IUserService
 
     }
 
+    /// <summary>
+    /// Delete as an asynchronous operation.
+    /// </summary>
+    /// <param name="modelId">The model identifier.</param>
+    /// <returns>A Task representing the asynchronous operation.</returns>
     public async Task DeleteAsync(int modelId)
     {
         await _unitOfWork.UserRepository.Delete(modelId);
         await _unitOfWork.SaveAsync();
     }
 
+    /// <summary>
+    /// Get by email as an asynchronous operation.
+    /// </summary>
+    /// <param name="email">The email.</param>
+    /// <returns>A Task&lt;UserModel&gt; representing the asynchronous operation.</returns>
     public async Task<UserModel> GetByEmailAsync(string email)
     {
         IEnumerable<User> users = await _unitOfWork.UserRepository.GetAllAsync();
@@ -77,13 +135,24 @@ public class UserService : IUserService
         return  _mapper.Map<UserModel>(user);
     }
 
+    /// <summary>
+    /// Check user email exist as an asynchronous operation.
+    /// </summary>
+    /// <param name="email">The email.</param>
+    /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
     public async Task<bool> CheckUserEmailExistAsync(string email)
     {
         IEnumerable<User> users = await _unitOfWork.UserRepository.GetAllAsync();
 
        return users.Any(x => x.Email == email);
     }
-    
+
+    /// <summary>
+    /// Checks the user password and email.
+    /// </summary>
+    /// <param name="email">The email.</param>
+    /// <param name="password">The password.</param>
+    /// <returns>System.String.</returns>
     public string CheckUserPasswordAndEmail(string email,string password)
     {
         StringBuilder sb = new StringBuilder();
@@ -111,6 +180,11 @@ public class UserService : IUserService
         return sb.ToString();
     }
 
+    /// <summary>
+    /// Creates the JWT.
+    /// </summary>
+    /// <param name="um">The um.</param>
+    /// <returns>System.String.</returns>
     public string CreateJwt(UserModel um)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();

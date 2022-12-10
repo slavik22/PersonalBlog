@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : WebAPI
+// Author           : Slava
+// Created          : 12-01-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-05-2022
+// ***********************************************************************
+// <copyright file="Program.cs" company="WebAPI">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System.Text;
 using BuisnessLogicLayer.Interfaces;
 using BuisnessLogicLayer.Services;
