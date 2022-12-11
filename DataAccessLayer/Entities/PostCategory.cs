@@ -38,10 +38,10 @@ public class PostCategory
     /// Gets or sets the post.
     /// </summary>
     /// <value>The post.</value>
-    public Post Post { get; set; }
+    public Post? Post { get; set; }
     /// <summary>
     /// Gets or sets the category.
     /// </summary>
     /// <value>The category.</value>
-    public Category Category { get; set; }
+    public Category? Category { get; set; }
 }

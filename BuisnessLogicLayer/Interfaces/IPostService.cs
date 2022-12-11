@@ -27,7 +27,7 @@ public interface IPostService : ICrud<PostModel>
     /// </summary>
     /// <param name="userId">The user identifier.</param>
     /// <returns>IEnumerable&lt;PostModel&gt;.</returns>
-    public IEnumerable<PostModel> GetUserPostsAsync(int userId);
+    public Task<IEnumerable<PostModel>> GetUserPostsAsync(int userId);
 
     /// <summary>
     /// Gets the posts search.
@@ -47,6 +47,4 @@ public interface IPostService : ICrud<PostModel>
     /// <param name="categoryId">The category identifier.</param>
     /// <returns>Task&lt;IEnumerable&lt;PostModel&gt;&gt;.</returns>
     public Task<IEnumerable<PostModel>> GetByCategoryIdAsync(int categoryId);
-
-    //public Task<IEnumerable<TagModel>> GetTagsAsync(int postId);
 }

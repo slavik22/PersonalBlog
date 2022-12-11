@@ -38,7 +38,7 @@ public class CategoryRepositoryTests
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
-        var categoryRepository = new GenericRepository<Category>(context);
+        var categoryRepository = new GenericRepository<Category?>(context);
         var category = new Category { Id = 3, Title = "New"};
 
         await categoryRepository.AddAsync(category);

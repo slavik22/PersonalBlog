@@ -11,10 +11,12 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using Business.Helpers;
+
+using BuisnessLogicLayer.Helpers;
 using BuisnessLogicLayer.Interfaces;
 using BuisnessLogicLayer.Models;
 using BuisnessLogicLayer.Models.Enums;
+using BuisnessLogicLayer.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,14 +51,15 @@ namespace WebApi.Controllers
         /// <param name="userModel">The user model.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] UserModel userModel)
+        [Obsolete("Obsolete")]
+        public async Task<IActionResult> Authenticate([FromBody] UserModel? userModel)
         {
             if (userModel == null)
             {
                 return BadRequest(new {Message = "Data incorrect"});
             }
             
-            UserModel user = await _userService.GetByEmailAsync(userModel.Email);
+            UserModel? user = await _userService.GetByEmailAsync(userModel.Email);
 
             if (user == null)
             {
@@ -72,8 +75,7 @@ namespace WebApi.Controllers
 
             return Ok(new
             {
-                Message = "Login Success",
-                Token = user.Token
+                Message = "Login Success", user.Token
             });
         }
 
@@ -84,7 +86,7 @@ namespace WebApi.Controllers
         /// <param name="userModel">The user model.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserModel userModel)
+        public async Task<IActionResult> Register([FromBody] UserModel? userModel)
         {
             if (userModel == null)
             {
@@ -147,7 +149,8 @@ namespace WebApi.Controllers
         /// <returns>ActionResult.</returns>
         [Authorize]
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Update(int id, [FromBody] ChangeUserDataModel value)
+        [Obsolete("Obsolete")]
+        public async Task<ActionResult> Update(int id, [FromBody] ChangeUserDataModel? value)
         {
 
             if (value == null)
@@ -155,7 +158,7 @@ namespace WebApi.Controllers
                 return BadRequest(new { Message = "Data are incorrect" });
             }
             
-            UserModel user = await _userService.GetByIdAsync(id);
+            UserModel? user = await _userService.GetByIdAsync(id);
 
             if (user == null)
             {
@@ -200,7 +203,7 @@ namespace WebApi.Controllers
                 await _userService.UpdateAsync(userModel);
                 return Ok();
             }
-            catch (Exception e)
+            catch (PersonalBlogException)
             {
                 return BadRequest( new {Message ="User not found"});
             }
@@ -214,14 +217,14 @@ namespace WebApi.Controllers
         /// <param name="value">The value.</param>
         /// <returns>ActionResult.</returns>
         [HttpPut("{id:int}/makeAdmin")]
-        public async Task<ActionResult> UpdateToAdmin(int id, [FromBody] UpdateToAdminUserModel value)
+        public async Task<ActionResult> UpdateToAdmin(int id, [FromBody] UpdateToAdminUserModel? value)
         {
             if (value == null)
             {
                 return BadRequest(new { Message = "Data are incorrect" });
             }
             
-            UserModel user = await _userService.GetByIdAsync(id);
+            UserModel? user = await _userService.GetByIdAsync(id);
 
             if (user == null)
             {
@@ -243,7 +246,7 @@ namespace WebApi.Controllers
                 await _userService.UpdateAsync(um);
                 return Ok();
             }
-            catch (Exception e)
+            catch (PersonalBlogException)
             {
                 return NotFound( new {Message = "User not found"});
             }

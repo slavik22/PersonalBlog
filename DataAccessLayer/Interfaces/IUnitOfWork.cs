@@ -11,7 +11,6 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using DataAccessLayer.Data;
 using DataAccessLayer.Entities;
 
 namespace DataAccessLayer.Interfaces;
@@ -25,27 +24,27 @@ public interface IUnitOfWork
     /// Gets the user repository.
     /// </summary>
     /// <value>The user repository.</value>
-    GenericRepository<User> UserRepository {get;}
+    IRepository<User> UserRepository {get;}
     /// <summary>
     /// Gets the post repository.
     /// </summary>
     /// <value>The post repository.</value>
-    GenericRepository<Post> PostRepository { get; }
+    IRepository<Post> PostRepository { get; }
     /// <summary>
     /// Gets the comment repository.
     /// </summary>
     /// <value>The comment repository.</value>
-    GenericRepository<Comment> CommentRepository {get;}
+    IRepository<Comment> CommentRepository {get;}
     /// <summary>
     /// Gets the tag repository.
     /// </summary>
     /// <value>The tag repository.</value>
-    GenericRepository<Tag> TagRepository{get;}
+    IRepository<Tag> TagRepository{get;}
     /// <summary>
     /// Gets the category repository.
     /// </summary>
     /// <value>The category repository.</value>
-    GenericRepository<Category> CategoryRepository{get;}
+    IRepository<Category> CategoryRepository{get;}
     /// <summary>
     /// Saves the asynchronous.
     /// </summary>

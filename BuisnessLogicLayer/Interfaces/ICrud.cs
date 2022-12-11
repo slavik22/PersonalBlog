@@ -30,7 +30,7 @@ public interface ICrud<TModel> where TModel : class
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>Task&lt;TModel&gt;.</returns>
-    Task<TModel> GetByIdAsync(int id);
+    Task<TModel?> GetByIdAsync(int id);
 
     /// <summary>
     /// Adds the asynchronous.

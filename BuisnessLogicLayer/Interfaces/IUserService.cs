@@ -27,7 +27,7 @@ public interface IUserService : ICrud<UserModel>
     /// </summary>
     /// <param name="email">The email.</param>
     /// <returns>Task&lt;UserModel&gt;.</returns>
-    Task<UserModel> GetByEmailAsync(string email);
+    Task<UserModel?> GetByEmailAsync(string email);
     /// <summary>
     /// Checks the user email exist asynchronous.
     /// </summary>

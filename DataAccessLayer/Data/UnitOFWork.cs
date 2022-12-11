@@ -33,29 +33,29 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     /// <summary>
     /// The user repository
     /// </summary>
-    private GenericRepository<User>? _userRepository;
+    private IRepository<User>? _userRepository;
     /// <summary>
     /// The post repository
     /// </summary>
-    private GenericRepository<Post>? _postRepository;
+    private IRepository<Post>? _postRepository;
     /// <summary>
     /// The comment repository
     /// </summary>
-    private GenericRepository<Comment>? _commentRepository;
+    private IRepository<Comment>? _commentRepository;
     /// <summary>
     /// The tag repository
     /// </summary>
-    private GenericRepository<Tag>? _tagRepository;
+    private IRepository<Tag>? _tagRepository;
     /// <summary>
     /// The category repository
     /// </summary>
-    private GenericRepository<Category>? _categoryRepository;
+    private IRepository<Category>? _categoryRepository;
 
     /// <summary>
     /// Gets the user repository.
     /// </summary>
     /// <value>The user repository.</value>
-    public GenericRepository<User> UserRepository
+    public IRepository<User> UserRepository
     {
         get
         {
@@ -67,7 +67,7 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     /// Gets the post repository.
     /// </summary>
     /// <value>The post repository.</value>
-    public GenericRepository<Post> PostRepository
+    public IRepository<Post> PostRepository
     {
         get
         {
@@ -79,7 +79,7 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     /// Gets the comment repository.
     /// </summary>
     /// <value>The comment repository.</value>
-    public GenericRepository<Comment> CommentRepository
+    public IRepository<Comment> CommentRepository
     {
         get
         {
@@ -91,7 +91,7 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     /// Gets the tag repository.
     /// </summary>
     /// <value>The tag repository.</value>
-    public GenericRepository<Tag> TagRepository
+    public IRepository<Tag> TagRepository
     {
         get
         {
@@ -103,7 +103,7 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     /// Gets the category repository.
     /// </summary>
     /// <value>The category repository.</value>
-    public GenericRepository<Category> CategoryRepository
+    public IRepository<Category> CategoryRepository
     {
         get
         {
@@ -124,7 +124,7 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     /// <summary>
     /// The disposed
     /// </summary>
-    private bool _disposed = false;
+    private bool _disposed;
 
     /// <summary>
     /// Releases unmanaged and - optionally - managed resources.
@@ -132,12 +132,9 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
     private void Dispose(bool disposing)
     {
-        if (!this._disposed)
+        if (!this._disposed || disposing)
         {
-            if (disposing)
-            {
                 _context.Dispose();
-            }
         }
         this._disposed = true;
     }

@@ -16,7 +16,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using AutoMapper;
-using Business.Helpers;
+using BuisnessLogicLayer.Helpers;
 using BuisnessLogicLayer.Interfaces;
 using BuisnessLogicLayer.Models;
 using BuisnessLogicLayer.Models.Enums;
@@ -59,7 +59,7 @@ public class UserService : IUserService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<UserModel>> GetAllAsync()
     {
-        IEnumerable<User> users =  (await _unitOfWork.UserRepository.GetAllAsync());
+        IEnumerable<User?> users =  (await _unitOfWork.UserRepository.GetAllAsync());
         List<UserModel> usersModels = new List<UserModel>();
 
         foreach (var item in users)
@@ -74,7 +74,7 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>A Task&lt;UserModel&gt; representing the asynchronous operation.</returns>
-    public async Task<UserModel> GetByIdAsync(int id)
+    public async Task<UserModel?> GetByIdAsync(int id)
     {
         return _mapper.Map<UserModel>(await _unitOfWork.UserRepository.GetByIdAsync(id));
     }
@@ -83,6 +83,7 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="model">The model.</param>
     /// <returns>A Task representing the asynchronous operation.</returns>
+    [Obsolete("Obsolete")]
     public async Task AddAsync(UserModel model)
     {
         model.Password = PasswordHasher.HashPassword(model.Password);
@@ -123,13 +124,10 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="email">The email.</param>
     /// <returns>A Task&lt;UserModel&gt; representing the asynchronous operation.</returns>
-    public async Task<UserModel> GetByEmailAsync(string email)
+    public async Task<UserModel?> GetByEmailAsync(string email)
     {
-        IEnumerable<User> users = await _unitOfWork.UserRepository.GetAllAsync();
+        User? user = await _unitOfWork.UserRepository.GetByValueOneAsync(u => u.Email == email);
 
-        bool Expression(User us) => us.Email == email;
-        
-        User user = users.FirstOrDefault(Expression);
         if (user is null) return null;
         
         return  _mapper.Map<UserModel>(user);
@@ -142,9 +140,7 @@ public class UserService : IUserService
     /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
     public async Task<bool> CheckUserEmailExistAsync(string email)
     {
-        IEnumerable<User> users = await _unitOfWork.UserRepository.GetAllAsync();
-
-       return users.Any(x => x.Email == email);
+        return (await _unitOfWork.UserRepository.GetByValueOneAsync(x => x.Email == email)) != null;
     }
 
     /// <summary>
@@ -189,7 +185,7 @@ public class UserService : IUserService
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes("veryverysecretkey....");
-        var identity = new ClaimsIdentity(new Claim[]
+        var identity = new ClaimsIdentity(new[]
         {
             new Claim(ClaimTypes.Role, um.UserRole.ToString()),
             new Claim(ClaimTypes.Email, um.Email),

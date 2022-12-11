@@ -67,7 +67,7 @@ public class PostService : IPostService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<PostModel>> GetAllPublishedAsync()
     {
-        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(p => p.PostStatus == PostStatus.Published,null,"User");
+        IEnumerable<Post?> posts =  await _unitOfWork.PostRepository.GetAllAsync(p =>  p.PostStatus == PostStatus.Published,null,"User");
         List<PostModel> postModels = new List<PostModel>();
 
         foreach (var item in posts)
@@ -83,7 +83,7 @@ public class PostService : IPostService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<PostModel>> GetByCategoryIdAsync(int categoryId)
     {
-        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(p => p.PostCategories.Any(pt => pt.CategoryId == categoryId ) && p.PostStatus == PostStatus.Published,null,"PostCategories,User");
+        IEnumerable<Post?> posts =  await _unitOfWork.PostRepository.GetAllAsync(p => p.PostCategories.Any(pt => pt.CategoryId == categoryId ) && p.PostStatus == PostStatus.Published,null,"PostCategories,User");
         List<PostModel> postModels = new List<PostModel>();
 
         foreach (var item in posts)
@@ -97,7 +97,7 @@ public class PostService : IPostService
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>A Task&lt;PostModel&gt; representing the asynchronous operation.</returns>
-    public async Task<PostModel> GetByIdAsync(int id)
+    public async Task<PostModel?> GetByIdAsync(int id)
     {
         return _mapper.Map<PostModel>(await _unitOfWork.PostRepository.GetByIdAsync(id,"User"));
     }
@@ -148,9 +148,9 @@ public class PostService : IPostService
     /// </summary>
     /// <param name="userId">The user identifier.</param>
     /// <returns>IEnumerable&lt;PostModel&gt;.</returns>
-    public IEnumerable<PostModel> GetUserPostsAsync(int userId)
+    public async Task<IEnumerable<PostModel>> GetUserPostsAsync(int userId)
     {
-        IEnumerable<Post> posts =  _unitOfWork.PostRepository.GetByValueAsync(post => post.UserId == userId,"User");
+        IEnumerable<Post?> posts =  await _unitOfWork.PostRepository.GetByValueAsync(post => post.UserId == userId,"User");
 
         var postModels = new List<PostModel>();
 
@@ -169,7 +169,7 @@ public class PostService : IPostService
     /// <returns>IEnumerable&lt;PostModel&gt;.</returns>
     public async Task<IEnumerable<PostModel>> GetPostsSearch(string text)
     {
-        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync( p => 
+        IEnumerable<Post?> posts =  await _unitOfWork.PostRepository.GetAllAsync( p => 
             (p.Title.Contains(text) || p.Content.Contains(text)) && p.PostStatus == PostStatus.Published,null,"User");
         
         List<PostModel> postModels = new List<PostModel>();

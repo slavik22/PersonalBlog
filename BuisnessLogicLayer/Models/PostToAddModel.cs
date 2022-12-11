@@ -56,10 +56,4 @@ public class PostToAddModel
     /// </summary>
     /// <value>The user identifier.</value>
     public int UserId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the category models.
-    /// </summary>
-    /// <value>The category models.</value>
-    public ICollection<CategoryModel> CategoryModels { get; set; }
 }

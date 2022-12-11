@@ -13,6 +13,7 @@
 // ***********************************************************************
 using BuisnessLogicLayer.Interfaces;
 using BuisnessLogicLayer.Models;
+using BuisnessLogicLayer.Validation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -54,7 +55,7 @@ namespace WebApi.Controllers
                 return Ok( _commentService.GetPostComments(postId));
 
             }
-            catch (Exception e)
+            catch (PersonalBlogException e)
             {
                 return BadRequest(e.Message);
             }
@@ -73,7 +74,7 @@ namespace WebApi.Controllers
                 await _commentService.AddAsync(value);
                 return Ok(value);
             }
-            catch (Exception e)
+            catch (PersonalBlogException e)
             {
                 return BadRequest(e.Message);
             }

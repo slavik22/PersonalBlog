@@ -38,7 +38,7 @@ public class CommentRepositoryTests
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
-        var commentRepository = new GenericRepository<Comment>(context);
+        var commentRepository = new GenericRepository<Comment?>(context);
 
         var comment = new Comment() { Id = 3, Title = "New", Content = "New", PostId = 1};
 

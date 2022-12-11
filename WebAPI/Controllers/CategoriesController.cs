@@ -13,6 +13,7 @@
 // ***********************************************************************
 using BuisnessLogicLayer.Interfaces;
 using BuisnessLogicLayer.Models;
+using BuisnessLogicLayer.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,10 +33,6 @@ namespace WebApi.Controllers
         /// </summary>
         private readonly IPostService _postService;
         /// <summary>
-        /// The user service
-        /// </summary>
-        private readonly IUserService _userService;
-        /// <summary>
         /// The category service
         /// </summary>
         private readonly ICategoryService _categoryService;
@@ -44,12 +41,10 @@ namespace WebApi.Controllers
         /// Initializes a new instance of the <see cref="CategoriesController"/> class.
         /// </summary>
         /// <param name="postService">The post service.</param>
-        /// <param name="userService">The user service.</param>
         /// <param name="categoryService">The category service.</param>
-        public CategoriesController(IPostService postService,IUserService userService, ICategoryService categoryService)
+        public CategoriesController(IPostService postService,ICategoryService categoryService)
         {
             _postService = postService;
-            _userService = userService;
             _categoryService = categoryService;
         }
 
@@ -91,7 +86,7 @@ namespace WebApi.Controllers
                 await _categoryService.AddCategoryAsync(postId, categoryModel); 
                 return Ok();
             }
-            catch (Exception e)
+            catch (PersonalBlogException e)
             {
                 return BadRequest(e.Message);
             }
@@ -125,7 +120,7 @@ namespace WebApi.Controllers
                 await _postService.UpdateAsync(value);
                 return Ok();
             }
-            catch (Exception e)
+            catch (PersonalBlogException e)
             {
                 return BadRequest(e.Message);
             }
@@ -145,7 +140,7 @@ namespace WebApi.Controllers
                 await _categoryService.DeleteAsync(id);
                 return Ok();
             }
-            catch (Exception e)
+            catch (PersonalBlogException e)
             {
                 return BadRequest(e.Message);
             }

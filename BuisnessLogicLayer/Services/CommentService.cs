@@ -51,9 +51,9 @@ public class CommentService : ICommentService
     /// </summary>
     /// <param name="postId">The post identifier.</param>
     /// <returns>IEnumerable&lt;CommentModel&gt;.</returns>
-    public IEnumerable<CommentModel> GetPostComments(int postId)
+    public async Task<IEnumerable<CommentModel>> GetPostComments(int postId)
     {
-        IEnumerable<Comment> comments =  _unitOfWork.CommentRepository.GetByValueAsync(c => c.PostId == postId);
+        IEnumerable<Comment> comments =  await _unitOfWork.CommentRepository.GetByValueAsync(c => c.PostId == postId);
 
         var commentModels = new List<CommentModel>();
 
@@ -72,7 +72,7 @@ public class CommentService : ICommentService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<CommentModel>> GetAllAsync()
     {
-        IEnumerable<Comment> comments =  await _unitOfWork.CommentRepository.GetAllAsync();
+        IEnumerable<Comment?> comments =  await _unitOfWork.CommentRepository.GetAllAsync();
         List<CommentModel> commentModels = new List<CommentModel>();
 
         foreach (var item in comments)
@@ -87,7 +87,7 @@ public class CommentService : ICommentService
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>A Task&lt;CommentModel&gt; representing the asynchronous operation.</returns>
-    public async Task<CommentModel> GetByIdAsync(int id)
+    public async Task<CommentModel?> GetByIdAsync(int id)
     {
         return _mapper.Map<CommentModel>(await _unitOfWork.CommentRepository.GetByIdAsync(id));
     }
@@ -122,7 +122,7 @@ public class CommentService : ICommentService
     /// <returns>A Task representing the asynchronous operation.</returns>
     public async Task DeleteAsync(int modelId)
     {
-        _unitOfWork.CommentRepository.Delete(modelId);
+        await _unitOfWork.CommentRepository.Delete(modelId);
         await _unitOfWork.SaveAsync();
 
     }

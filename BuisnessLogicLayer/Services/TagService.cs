@@ -14,6 +14,7 @@
 using AutoMapper;
 using BuisnessLogicLayer.Interfaces;
 using BuisnessLogicLayer.Models;
+using BuisnessLogicLayer.Validation;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
 
@@ -52,7 +53,7 @@ public class TagService : ITagService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<TagModel>> GetAllAsync()
     {
-        IEnumerable<Tag> tags =  await _unitOfWork.TagRepository.GetAllAsync();
+        IEnumerable<Tag?> tags =  await _unitOfWork.TagRepository.GetAllAsync();
         List<TagModel> tagModels = new List<TagModel>();
 
         foreach (var tag in tags)
@@ -69,7 +70,7 @@ public class TagService : ITagService
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>A Task&lt;TagModel&gt; representing the asynchronous operation.</returns>
-    public async Task<TagModel> GetByIdAsync(int id)
+    public async Task<TagModel?> GetByIdAsync(int id)
     {
         return _mapper.Map<TagModel>(await _unitOfWork.TagRepository.GetByIdAsync(id));
     }
@@ -118,14 +119,14 @@ public class TagService : ITagService
     /// <exception cref="System.Exception">Post not found</exception>
     public async Task AddTagAsync(int postId, TagModel tagModel)
     {
-        Post post = await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostTags");
+        Post? post = await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostTags");
         
         if ( post == null)
         {
-            throw new Exception ("Post not found");
+            throw new PersonalBlogException("Post not found");
         }
         
-        Tag tag = await _unitOfWork.TagRepository.GetByValueOneAsync(tag => tag.Title == tagModel.Title);
+        Tag? tag = await _unitOfWork.TagRepository.GetByValueOneAsync(tag => tag.Title == tagModel.Title);
 
          if (tag == null)
          {
@@ -152,15 +153,12 @@ public class TagService : ITagService
     /// <exception cref="System.Exception">Post not found</exception>
     public async Task<IEnumerable<TagModel>> GetTagsAsync(int postId)
     {
-        Post post = (await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostTags"));
+        Post? post = (await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostTags"));
 
         if ( post == null)
         {
-            throw new Exception ("Post not found");
+            throw new PersonalBlogException ("Post not found");
         }
-        
-        var tagsIds = post.PostTags.Select(pt => pt.TagId);
-        var tags = await _unitOfWork.TagRepository.GetAllAsync(t => tagsIds.Contains(t.Id));
         
         List<TagModel> tagModels = new List<TagModel>();
 

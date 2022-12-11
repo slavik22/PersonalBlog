@@ -39,7 +39,7 @@ public class UserRepositoryTests
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
-        var userRepository = new GenericRepository<User>(context);
+        var userRepository = new GenericRepository<User?>(context);
 
 
         var user = new User() { Id = 3, Name = "Bill", Surname = "Gates", BirthDate = new DateTime(1990,12,12), Email = "email3@ukr.net", Mobile = "233", Password = "password"};

@@ -39,7 +39,7 @@ public class TagRepositoryTests
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
-        var tagRepository = new GenericRepository<Tag>(context);
+        var tagRepository = new GenericRepository<Tag?>(context);
         var tag = new Tag { Id = 4, Title = "New"};
 
         await tagRepository.AddAsync(tag);

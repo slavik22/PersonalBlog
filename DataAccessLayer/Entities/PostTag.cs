@@ -39,10 +39,10 @@ public class PostTag
     /// Gets or sets the post.
     /// </summary>
     /// <value>The post.</value>
-    public Post Post { get; set; }
+    public Post? Post { get; set; }
     /// <summary>
     /// Gets or sets the tag.
     /// </summary>
     /// <value>The tag.</value>
-    public Tag Tag { get; set; }
+    public Tag? Tag { get; set; }
 }

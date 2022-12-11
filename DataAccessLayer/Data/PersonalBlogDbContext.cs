@@ -54,10 +54,10 @@ public class PersonalBlogDbContext : DbContext
     /// typically define extension methods on this object that allow you to configure the context.</param>
     /// <remarks>See <see href="https://aka.ms/efcore-docs-dbcontext">DbContext lifetime, configuration, and initialization</see>
     /// for more information.</remarks>
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer("Server=DESKTOP-OC1V65E;Database=PersonalBlogDB;Trusted_Connection=True;TrustServerCertificate=True");
-    }
+    }*/
 
     /// <summary>
     /// Gets or sets the posts.

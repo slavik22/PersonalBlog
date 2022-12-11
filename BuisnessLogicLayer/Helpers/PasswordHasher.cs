@@ -11,14 +11,16 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using System.Security.Cryptography;
 
-namespace Business.Helpers;
+namespace BuisnessLogicLayer.Helpers;
 
 /// <summary>
 /// Class PasswordHasher.
 /// </summary>
-public class PasswordHasher
+[Obsolete("Obsolete")]
+public static class PasswordHasher
 {
     /// <summary>
     /// The RNG

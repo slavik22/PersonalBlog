@@ -45,7 +45,12 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
         this._dbSet = context.Set<TEntity>();
     }
 
-
+    public IEnumerable<TEntity?> GetAll()
+    {
+        return _dbSet.ToList();
+    }
+    
+    
     /// <summary>
     /// Get all as an asynchronous operation.
     /// </summary>
@@ -83,7 +88,7 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
     /// <param name="find">The find.</param>
     /// <param name="includeProperties">The include properties.</param>
     /// <returns>IEnumerable&lt;TEntity&gt;.</returns>
-    public IEnumerable<TEntity> GetByValueAsync(Expression<Func<TEntity, bool>> find,string includeProperties = "")
+    public async Task<IEnumerable<TEntity>> GetByValueAsync(Expression<Func<TEntity, bool>> find,string includeProperties = "")
     {
         IQueryable<TEntity> query =  _dbSet.Where(find);
         
@@ -92,7 +97,7 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
             query = query.Include(includeProperty);
         }
 
-        return query.ToList();
+        return await query.ToListAsync();
     }
 
     /// <summary>
@@ -101,7 +106,7 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
     /// <param name="find">The find.</param>
     /// <param name="includeProperties">The include properties.</param>
     /// <returns>Task&lt;TEntity&gt;.</returns>
-    public Task<TEntity> GetByValueOneAsync(Expression<Func<TEntity, bool>> find, string includeProperties = "")
+    public async Task<TEntity?> GetByValueOneAsync(Expression<Func<TEntity, bool>> find, string includeProperties = "")
     {
         IQueryable<TEntity> query = _dbSet;
         
@@ -110,7 +115,7 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
             query = query.Include(includeProperty);
         }
 
-        return query.FirstOrDefaultAsync(find);
+        return await query.FirstOrDefaultAsync(find);
     }
 
     /// <summary>
@@ -119,7 +124,7 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
     /// <param name="id">The identifier.</param>
     /// <param name="includeProperties">The include properties.</param>
     /// <returns>A Task&lt;TEntity&gt; representing the asynchronous operation.</returns>
-    public async Task<TEntity> GetByIdAsync(int id, string includeProperties = "")
+    public async Task<TEntity?> GetByIdAsync(int id, string includeProperties = "")
     {
         IQueryable<TEntity> query = _dbSet;
         foreach (var includeProperty in includeProperties.Split( ',', StringSplitOptions.RemoveEmptyEntries))
@@ -144,15 +149,11 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
     /// Deletes the specified identifier.
     /// </summary>
     /// <param name="id">The identifier.</param>
-    /// <exception cref="System.NullReferenceException"></exception>
+    /// <exception cref="System.InvalidOperationException"></exception>
     public async Task Delete(int id)
     {
-        TEntity entityToDelete = await _dbSet.FindAsync(id);
-        if (entityToDelete == null)
-        {
-            throw new NullReferenceException();
-        }
-        
+        TEntity entityToDelete = await _dbSet.FindAsync(id) ?? throw new InvalidOperationException();
+
         if (_context.Entry(entityToDelete).State == EntityState.Detached)
         {
             _dbSet.Attach(entityToDelete);
@@ -162,16 +163,16 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
     /// <summary>
     /// Updates the specified item.
     /// </summary>
-    /// <param name="item">The item.</param>
+    /// <param name="entityToUpdate">The item.</param>
     /// <exception cref="System.NullReferenceException"></exception>
-    public void Update(TEntity item)
+    public void Update(TEntity entityToUpdate)
     {
-        var entity = _dbSet.Find(item.Id);
+        var entity = _dbSet.Find(entityToUpdate.Id);
         if (entity == null)
         {
             throw new NullReferenceException();
         }
 
-        _context.Entry(entity).CurrentValues.SetValues(item);
+        _context.Entry(entity).CurrentValues.SetValues(entityToUpdate);
     }
 }

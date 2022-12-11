@@ -14,6 +14,7 @@
 using BuisnessLogicLayer.Interfaces;
 using BuisnessLogicLayer.Models;
 using BuisnessLogicLayer.Models.Enums;
+using BuisnessLogicLayer.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -116,7 +117,7 @@ namespace WebApi.Controllers
                 await _postService.AddAsync(value);
                 return Ok(value);
             }
-            catch (Exception e)
+            catch (PersonalBlogException e)
             {
                 return BadRequest(e.Message);
             }
@@ -137,7 +138,7 @@ namespace WebApi.Controllers
                 await _tagService.AddTagAsync(postId, tagModel); 
                 return Ok();
             }
-            catch (Exception e)
+            catch (PersonalBlogException e)
             {
                 return BadRequest(e.Message);
             }
@@ -171,7 +172,7 @@ namespace WebApi.Controllers
                 await _postService.UpdateAsync(value);
                 return Ok();
             }
-            catch (Exception e)
+            catch (PersonalBlogException e)
             {
                 return BadRequest(e.Message);
             }
@@ -191,7 +192,7 @@ namespace WebApi.Controllers
                 await _postService.DeleteAsync(id);
                 return Ok();
             }
-            catch (Exception e)
+            catch (PersonalBlogException e)
             {
                 return BadRequest(e.Message);
             }
@@ -211,7 +212,7 @@ namespace WebApi.Controllers
                 await _tagService.DeleteAsync(tagId);
                 return Ok();
             }
-            catch (Exception e)
+            catch (PersonalBlogException e)
             {
                 return BadRequest(e.Message);
             }

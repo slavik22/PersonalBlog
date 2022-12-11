@@ -46,7 +46,10 @@ public class UserModel
     /// Gets or sets the password.
     /// </summary>
     /// <value>The password.</value>
+    
     public string Password { get; set; }= "";
+    
+    public string Mobile { get; set; }= "";
 
     /// <summary>
     /// Gets or sets the token.

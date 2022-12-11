@@ -27,5 +27,5 @@ public interface ICommentService : ICrud<CommentModel>
     /// </summary>
     /// <param name="postId">The post identifier.</param>
     /// <returns>IEnumerable&lt;CommentModel&gt;.</returns>
-    public IEnumerable<CommentModel> GetPostComments(int postId);
+    public Task<IEnumerable<CommentModel>> GetPostComments(int postId);
 }

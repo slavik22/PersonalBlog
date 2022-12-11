@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System.Linq.Expressions;
 using DataAccessLayer.Entities;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace DataAccessLayer.Interfaces;
 
@@ -22,7 +21,10 @@ namespace DataAccessLayer.Interfaces;
 /// </summary>
 /// <typeparam name="TEntity">The type of the t entity.</typeparam>
 public interface IRepository<TEntity> where TEntity : BaseEntity
+
+
 {
+    
     /// <summary>
     /// Gets all asynchronous.
     /// </summary>
@@ -30,7 +32,7 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     /// <param name="orderBy">The order by.</param>
     /// <param name="includeProperties">The include properties.</param>
     /// <returns>Task&lt;IEnumerable&lt;TEntity&gt;&gt;.</returns>
-    Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null,
+     Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string includeProperties = "");
 
@@ -40,7 +42,7 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     /// <param name="id">The identifier.</param>
     /// <param name="includeProperties">The include properties.</param>
     /// <returns>Task&lt;TEntity&gt;.</returns>
-    Task<TEntity> GetByIdAsync(int id,string includeProperties = "");
+    Task<TEntity?> GetByIdAsync(int id,string includeProperties = "");
 
     /// <summary>
     /// Adds the asynchronous.
@@ -60,4 +62,7 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     /// </summary>
     /// <param name="entityToUpdate">The entity to update.</param>
     void Update(TEntity entityToUpdate);
+
+    public Task<TEntity?> GetByValueOneAsync(Expression<Func<TEntity, bool>> find, string includeProperties = "");
+    public Task<IEnumerable<TEntity>> GetByValueAsync(Expression<Func<TEntity, bool>> find, string includeProperties = "");
 }

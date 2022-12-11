@@ -40,7 +40,7 @@ public class PostRepositoryTests
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
-        var postRepository = new GenericRepository<Post>(context);
+        var postRepository = new GenericRepository<Post?>(context);
 
 
         var post = new Post() { Id = 4, Title = "New", Summary = "New", Content = "New", UserId = 1};
