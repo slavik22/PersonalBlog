@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-09-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="UserService.cs" company="BuisnessLogicLayer">
 //     Copyright (c) . All rights reserved.
@@ -20,6 +20,7 @@ using BuisnessLogicLayer.Helpers;
 using BuisnessLogicLayer.Interfaces;
 using BuisnessLogicLayer.Models;
 using BuisnessLogicLayer.Models.Enums;
+using BuisnessLogicLayer.Validation;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
 using Microsoft.IdentityModel.Tokens;
@@ -43,7 +44,7 @@ public class UserService : IUserService
     private readonly IMapper _mapper;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="UserService"/> class.
+    /// Initializes a new instance of the <see cref="UserService" /> class.
     /// </summary>
     /// <param name="unitOfWork">The unit of work.</param>
     /// <param name="mapper">The mapper.</param>
@@ -59,7 +60,7 @@ public class UserService : IUserService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<UserModel>> GetAllAsync()
     {
-        IEnumerable<User?> users =  (await _unitOfWork.UserRepository.GetAllAsync());
+        IEnumerable<User> users =  (await _unitOfWork.UserRepository.GetAllAsync());
         List<UserModel> usersModels = new List<UserModel>();
 
         foreach (var item in users)
@@ -74,9 +75,14 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>A Task&lt;UserModel&gt; representing the asynchronous operation.</returns>
+    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">User not found</exception>
     public async Task<UserModel?> GetByIdAsync(int id)
     {
-        return _mapper.Map<UserModel>(await _unitOfWork.UserRepository.GetByIdAsync(id));
+        var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
+
+        if (user == null) throw new PersonalBlogException("User not found");
+        
+        return _mapper.Map<UserModel>(user);
     }
     /// <summary>
     /// Add as an asynchronous operation.
@@ -126,7 +132,7 @@ public class UserService : IUserService
     /// <returns>A Task&lt;UserModel&gt; representing the asynchronous operation.</returns>
     public async Task<UserModel?> GetByEmailAsync(string email)
     {
-        User? user = await _unitOfWork.UserRepository.GetByValueOneAsync(u => u.Email == email);
+        User? user = (await _unitOfWork.UserRepository.GetAllAsync(u => u.Email == email)).FirstOrDefault();
 
         if (user is null) return null;
         
@@ -140,7 +146,7 @@ public class UserService : IUserService
     /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
     public async Task<bool> CheckUserEmailExistAsync(string email)
     {
-        return (await _unitOfWork.UserRepository.GetByValueOneAsync(x => x.Email == email)) != null;
+        return (await _unitOfWork.UserRepository.GetAllAsync(x => x.Email == email)).Any();
     }
 
     /// <summary>

@@ -1,4 +1,17 @@
-﻿using BuisnessLogicLayer.Models;
+﻿// ***********************************************************************
+// Assembly         : Tests
+// Author           : Slava
+// Created          : 12-11-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="TagServiceTests.cs" company="Tests">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using BuisnessLogicLayer.Models;
 using BuisnessLogicLayer.Services;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
@@ -8,17 +21,22 @@ using NUnit.Framework;
 
 namespace Tests.BusinessTests;
 
+/// <summary>
+/// Class TagServiceTest.
+/// </summary>
 public class TagServiceTest
 {
+    /// <summary>
+    /// Defines the test method TagService_GetAll_ReturnsAllCustomers.
+    /// </summary>
     [Test]
     public async Task TagService_GetAll_ReturnsAllCustomers()
     {
         //arrange
-        var expected = GetTestTagModels;
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.TagRepository.GetAllAsync(null,null,""))
+            .Setup(x => x.TagRepository.GetAllAsync(null,""))
             .ReturnsAsync(GetTestTags.AsEnumerable());
         
         var tagService = new TagService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
@@ -30,7 +48,10 @@ public class TagServiceTest
         actual.Should().BeEquivalentTo(GetTestTagModels);
     }
 
-    
+
+    /// <summary>
+    /// Defines the test method TagService_GetById_ReturnsCustomerModel.
+    /// </summary>
     [Test]
     public async Task TagService_GetById_ReturnsCustomerModel()
     {
@@ -51,6 +72,9 @@ public class TagServiceTest
         actual.Should().BeEquivalentTo(expected);
     }
 
+    /// <summary>
+    /// Defines the test method TagService_AddAsync_AddsModel.
+    /// </summary>
     [Test]
     public async Task TagService_AddAsync_AddsModel()
     {
@@ -69,7 +93,11 @@ public class TagServiceTest
             t.Id == tag.Id && t.Title == tag.Title)), Times.Once);
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
-    
+
+    /// <summary>
+    /// Defines the test method TagService_DeleteAsync_DeletesTag.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(100)]
@@ -88,6 +116,9 @@ public class TagServiceTest
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
     }
 
+    /// <summary>
+    /// Defines the test method TagService_UpdateAsync_UpdatesTag.
+    /// </summary>
     [Test]
     public async Task TagService_UpdateAsync_UpdatesTag()
     {
@@ -107,9 +138,13 @@ public class TagServiceTest
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
-    
+
     #region TestData
 
+    /// <summary>
+    /// Gets the get test tags.
+    /// </summary>
+    /// <value>The get test tags.</value>
     private List<Tag> GetTestTags =>
         new()
         {
@@ -118,6 +153,10 @@ public class TagServiceTest
             new Tag { Id = 3, Title = "pop" }
         };
 
+    /// <summary>
+    /// Gets the get test tag models.
+    /// </summary>
+    /// <value>The get test tag models.</value>
     private List<TagModel> GetTestTagModels =>
         new()
         {

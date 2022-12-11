@@ -19,10 +19,9 @@ export class PostsSearchComponent implements OnInit {
     this.route.url.subscribe( (data)=>{
       const searchText:string = data[2].toString();
       this.postsService.getSearchPosts(searchText).subscribe({
-        next: (posts) => this.posts = posts,
+        next: (posts) => this.posts = posts[0] === null ? [] : posts,
         error: (error) => {
           this.router.navigate(['**']);
-          console.log(error);
         }
       });
     });

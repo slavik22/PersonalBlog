@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-02-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="IRepository.cs" company="DataAccessLayer">
 //     Copyright (c) . All rights reserved.
@@ -24,16 +24,14 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
 
 
 {
-    
+
     /// <summary>
     /// Gets all asynchronous.
     /// </summary>
     /// <param name="filter">The filter.</param>
-    /// <param name="orderBy">The order by.</param>
     /// <param name="includeProperties">The include properties.</param>
     /// <returns>Task&lt;IEnumerable&lt;TEntity&gt;&gt;.</returns>
-     Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+    public Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null,
         string includeProperties = "");
 
     /// <summary>
@@ -63,6 +61,18 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     /// <param name="entityToUpdate">The entity to update.</param>
     void Update(TEntity entityToUpdate);
 
+    /*/// <summary>
+    /// Gets the by value one asynchronous.
+    /// </summary>
+    /// <param name="find">The find.</param>
+    /// <param name="includeProperties">The include properties.</param>
+    /// <returns>Task&lt;System.Nullable&lt;TEntity&gt;&gt;.</returns>
     public Task<TEntity?> GetByValueOneAsync(Expression<Func<TEntity, bool>> find, string includeProperties = "");
-    public Task<IEnumerable<TEntity>> GetByValueAsync(Expression<Func<TEntity, bool>> find, string includeProperties = "");
+    /// <summary>
+    /// Gets the by value asynchronous.
+    /// </summary>
+    /// <param name="find">The find.</param>
+    /// <param name="includeProperties">The include properties.</param>
+    /// <returns>Task&lt;IEnumerable&lt;TEntity&gt;&gt;.</returns>
+    public Task<IEnumerable<TEntity>> GetByValueAsync(Expression<Func<TEntity, bool>> find, string includeProperties = "");*/
 }

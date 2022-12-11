@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-09-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="PostService.cs" company="BuisnessLogicLayer">
 //     Copyright (c) . All rights reserved.
@@ -14,6 +14,7 @@
 using AutoMapper;
 using BuisnessLogicLayer.Interfaces;
 using BuisnessLogicLayer.Models;
+using BuisnessLogicLayer.Validation;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
 using PostStatus = DataAccessLayer.Enums.PostStatus;
@@ -37,7 +38,7 @@ public class PostService : IPostService
     private readonly IMapper _mapper;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PostService"/> class.
+    /// Initializes a new instance of the <see cref="PostService" /> class.
     /// </summary>
     /// <param name="unitOfWork">The unit of work.</param>
     /// <param name="mapper">The mapper.</param>
@@ -52,7 +53,7 @@ public class PostService : IPostService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<PostModel>> GetAllAsync()
     {
-        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(null,null,"User");
+        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(null,"User");
         List<PostModel> postModels = new List<PostModel>();
 
         foreach (var item in posts)
@@ -67,7 +68,7 @@ public class PostService : IPostService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<PostModel>> GetAllPublishedAsync()
     {
-        IEnumerable<Post?> posts =  await _unitOfWork.PostRepository.GetAllAsync(p =>  p.PostStatus == PostStatus.Published,null,"User");
+        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(p =>  p.PostStatus == PostStatus.Published,"User");
         List<PostModel> postModels = new List<PostModel>();
 
         foreach (var item in posts)
@@ -83,7 +84,7 @@ public class PostService : IPostService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<PostModel>> GetByCategoryIdAsync(int categoryId)
     {
-        IEnumerable<Post?> posts =  await _unitOfWork.PostRepository.GetAllAsync(p => p.PostCategories.Any(pt => pt.CategoryId == categoryId ) && p.PostStatus == PostStatus.Published,null,"PostCategories,User");
+        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(p => p.PostCategories.Any(pt => pt.CategoryId == categoryId ) && p.PostStatus == PostStatus.Published,"PostCategories,User");
         List<PostModel> postModels = new List<PostModel>();
 
         foreach (var item in posts)
@@ -97,9 +98,14 @@ public class PostService : IPostService
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>A Task&lt;PostModel&gt; representing the asynchronous operation.</returns>
+    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Post not Fount</exception>
     public async Task<PostModel?> GetByIdAsync(int id)
     {
-        return _mapper.Map<PostModel>(await _unitOfWork.PostRepository.GetByIdAsync(id,"User"));
+        var post = await _unitOfWork.PostRepository.GetByIdAsync(id, "User");
+
+        if (post == null) throw new PersonalBlogException("Post not Fount");
+        
+        return _mapper.Map<PostModel>(post);
     }
 
     /// <summary>
@@ -150,7 +156,7 @@ public class PostService : IPostService
     /// <returns>IEnumerable&lt;PostModel&gt;.</returns>
     public async Task<IEnumerable<PostModel>> GetUserPostsAsync(int userId)
     {
-        IEnumerable<Post?> posts =  await _unitOfWork.PostRepository.GetByValueAsync(post => post.UserId == userId,"User");
+        IEnumerable<Post> posts = (await _unitOfWork.PostRepository.GetAllAsync(post => post.UserId == userId, "User"));
 
         var postModels = new List<PostModel>();
 
@@ -169,8 +175,8 @@ public class PostService : IPostService
     /// <returns>IEnumerable&lt;PostModel&gt;.</returns>
     public async Task<IEnumerable<PostModel>> GetPostsSearch(string text)
     {
-        IEnumerable<Post?> posts =  await _unitOfWork.PostRepository.GetAllAsync( p => 
-            (p.Title.Contains(text) || p.Content.Contains(text)) && p.PostStatus == PostStatus.Published,null,"User");
+        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync( p => 
+            (p.Title.Contains(text) || p.Content.Contains(text)) && p.PostStatus == PostStatus.Published,"User");
         
         List<PostModel> postModels = new List<PostModel>();
 

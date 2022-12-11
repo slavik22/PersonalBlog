@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-01-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="CommentsController.cs" company="WebAPI">
 //     Copyright (c) . All rights reserved.
@@ -33,7 +33,7 @@ namespace WebApi.Controllers
         private readonly ICommentService _commentService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommentsController"/> class.
+        /// Initializes a new instance of the <see cref="CommentsController" /> class.
         /// </summary>
         /// <param name="commentService">The comment service.</param>
         public CommentsController(ICommentService commentService)
@@ -48,11 +48,11 @@ namespace WebApi.Controllers
         /// <param name="postId">The post identifier.</param>
         /// <returns>ActionResult&lt;IEnumerable&lt;CommentModel&gt;&gt;.</returns>
         [HttpGet("post/{postId:int}")]
-        public ActionResult<IEnumerable<CommentModel>> GetPostComments(int postId)
+        public async Task<ActionResult<IEnumerable<CommentModel>>> GetPostComments(int postId)
         {
             try
             {
-                return Ok( _commentService.GetPostComments(postId));
+                return  Ok(await _commentService.GetPostComments(postId));
 
             }
             catch (PersonalBlogException e)

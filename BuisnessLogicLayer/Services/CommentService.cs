@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-01-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="CommentService.cs" company="BuisnessLogicLayer">
 //     Copyright (c) . All rights reserved.
@@ -14,6 +14,7 @@
 using AutoMapper;
 using BuisnessLogicLayer.Interfaces;
 using BuisnessLogicLayer.Models;
+using BuisnessLogicLayer.Validation;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Interfaces;
 
@@ -36,7 +37,7 @@ public class CommentService : ICommentService
     private readonly IMapper _mapper;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CommentService"/> class.
+    /// Initializes a new instance of the <see cref="CommentService" /> class.
     /// </summary>
     /// <param name="unitOfWork">The unit of work.</param>
     /// <param name="mapper">The mapper.</param>
@@ -53,7 +54,7 @@ public class CommentService : ICommentService
     /// <returns>IEnumerable&lt;CommentModel&gt;.</returns>
     public async Task<IEnumerable<CommentModel>> GetPostComments(int postId)
     {
-        IEnumerable<Comment> comments =  await _unitOfWork.CommentRepository.GetByValueAsync(c => c.PostId == postId);
+        IEnumerable<Comment> comments =  await _unitOfWork.CommentRepository.GetAllAsync(c => c.PostId == postId);
 
         var commentModels = new List<CommentModel>();
 
@@ -72,7 +73,7 @@ public class CommentService : ICommentService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<CommentModel>> GetAllAsync()
     {
-        IEnumerable<Comment?> comments =  await _unitOfWork.CommentRepository.GetAllAsync();
+        IEnumerable<Comment> comments =  await _unitOfWork.CommentRepository.GetAllAsync();
         List<CommentModel> commentModels = new List<CommentModel>();
 
         foreach (var item in comments)
@@ -87,9 +88,14 @@ public class CommentService : ICommentService
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>A Task&lt;CommentModel&gt; representing the asynchronous operation.</returns>
+    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Comment not found</exception>
     public async Task<CommentModel?> GetByIdAsync(int id)
     {
-        return _mapper.Map<CommentModel>(await _unitOfWork.CommentRepository.GetByIdAsync(id));
+        var comment = await _unitOfWork.CommentRepository.GetByIdAsync(id);
+
+        if (comment == null) throw new PersonalBlogException("Comment not found");
+        
+        return _mapper.Map<CommentModel>(comment);
     }
 
     /// <summary>

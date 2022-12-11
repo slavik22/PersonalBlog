@@ -1,12 +1,32 @@
-﻿using DataAccessLayer.Data;
+﻿// ***********************************************************************
+// Assembly         : Tests
+// Author           : Slava
+// Created          : 12-11-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="CategoryRepositoryTests.cs" company="Tests">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using DataAccessLayer.Data;
 using DataAccessLayer.Entities;
 using NUnit.Framework;
 
 namespace Tests.DataTests;
 
+/// <summary>
+/// Defines test class CategoryRepositoryTests.
+/// </summary>
 [TestFixture]
 public class CategoryRepositoryTests
 {
+    /// <summary>
+    /// Defines the test method CategoryRepository_GetByIdAsync_ReturnsSingleValue.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     public async Task CategoryRepository_GetByIdAsync_ReturnsSingleValue(int id)
@@ -21,7 +41,10 @@ public class CategoryRepositoryTests
 
         Assert.That(category, Is.EqualTo(expected).Using(new CategoryEqualityComparer()), message: "GetByIdAsync method works incorrect");
     }
-    
+
+    /// <summary>
+    /// Defines the test method CategoryRepository_GetAllAsync_ReturnsAllValues.
+    /// </summary>
     [Test]
     public async Task CategoryRepository_GetAllAsync_ReturnsAllValues()
     {
@@ -33,6 +56,9 @@ public class CategoryRepositoryTests
 
         Assert.That(categories, Is.EqualTo(ExpectedCategories).Using(new CategoryEqualityComparer()), message: "GetAllAsync method works incorrect");
     }
+    /// <summary>
+    /// Defines the test method CategoryRepository_AddAsync_AddsValueToDatabase.
+    /// </summary>
     [Test]
     public async Task CategoryRepository_AddAsync_AddsValueToDatabase()
     {
@@ -47,7 +73,10 @@ public class CategoryRepositoryTests
         Assert.That(context.Categories.Count(), Is.EqualTo(3), message: "AddAsync method works incorrect");
     }
 
-    
+
+    /// <summary>
+    /// Defines the test method CategoryRepository_DeleteByIdAsync_DeletesEntity.
+    /// </summary>
     [Test]
     public async Task CategoryRepository_DeleteByIdAsync_DeletesEntity()
     {
@@ -61,6 +90,9 @@ public class CategoryRepositoryTests
         Assert.That(context.Categories.Count(), Is.EqualTo(1), message: "DeleteByIdAsync works incorrect");
     }
 
+    /// <summary>
+    /// Defines the test method CategoryRepository_Update_UpdatesEntity.
+    /// </summary>
     [Test]
     public async Task CategoryRepository_Update_UpdatesEntity()
     {
@@ -83,7 +115,11 @@ public class CategoryRepositoryTests
         }).Using(new CategoryEqualityComparer()), message: "Update method works incorrect");
     }
 
-    
+
+    /// <summary>
+    /// Gets the expected categories.
+    /// </summary>
+    /// <value>The expected categories.</value>
     private static IEnumerable<Category> ExpectedCategories =>
         new[]
         {

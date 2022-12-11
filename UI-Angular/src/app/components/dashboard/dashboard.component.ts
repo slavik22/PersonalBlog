@@ -35,21 +35,21 @@ export class DashboardComponent implements OnInit {
     this.usersService.getUsers()
     .subscribe({
       next: (users) => {
+        users = users[0] == null ? [] : users;
         this.users = users.filter(user => user.email !== this.user.email);
       },
       error: (error) =>{
-        console.error(error);
+        this.toast.error({detail: "ERROR", summary: "Some error occured", duration: 5000});
       }
     })
 
     this.postsService.getUserPosts(this.user.nameid)
     .subscribe({
       next: (posts) => {
-        console.log(posts);
-        this.userPosts = posts;
+        this.userPosts = posts[0] === null ? [] : posts;
       },
       error: (error) =>{
-        console.error(error);
+        this.toast.error({detail: "ERROR", summary: "Some error occured", duration: 5000});
       }
     })
 
@@ -57,11 +57,10 @@ export class DashboardComponent implements OnInit {
     this.postsService.getAllPosts()
     .subscribe({
       next: (posts) => {
-        console.log(posts);
-        this.allPosts = posts;
+        this.allPosts = posts[0] === null ? [] : posts;
       },
       error: (error) =>{
-        console.error(error);
+        this.toast.error({detail: "ERROR", summary: "Some error occured", duration: 5000});
       }
     })
   }

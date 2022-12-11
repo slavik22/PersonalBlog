@@ -1,4 +1,17 @@
-﻿using BuisnessLogicLayer;
+﻿// ***********************************************************************
+// Assembly         : Tests
+// Author           : Slava
+// Created          : 12-11-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="UnitTestHelper.cs" company="Tests">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using BuisnessLogicLayer;
 
 namespace Tests;
 
@@ -8,9 +21,16 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using AutoMapper;
 
-    internal static class UnitTestHelper
+/// <summary>
+/// Class UnitTestHelper.
+/// </summary>
+internal static class UnitTestHelper
     {
-        public static DbContextOptions<PersonalBlogDbContext> GetUnitTestDbOptions()
+    /// <summary>
+    /// Gets the unit test database options.
+    /// </summary>
+    /// <returns>DbContextOptions&lt;PersonalBlogDbContext&gt;.</returns>
+    public static DbContextOptions<PersonalBlogDbContext> GetUnitTestDbOptions()
         {
             var options = new DbContextOptionsBuilder<PersonalBlogDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
@@ -24,7 +44,11 @@ using AutoMapper;
             return options;
         }
 
-        public static IMapper CreateMapperProfile()
+    /// <summary>
+    /// Creates the mapper profile.
+    /// </summary>
+    /// <returns>IMapper.</returns>
+    public static IMapper CreateMapperProfile()
         {
             var myProfile = new AutomapperProfile();
             var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
@@ -32,7 +56,11 @@ using AutoMapper;
             return new Mapper(configuration);
         }
 
-        public static void SeedData(PersonalBlogDbContext context)
+    /// <summary>
+    /// Seeds the data.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    public static void SeedData(PersonalBlogDbContext context)
         {
             context.Categories.AddRange(
                 new Category { Id = 1, Title = "Programing" },

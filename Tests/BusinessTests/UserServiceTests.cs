@@ -1,4 +1,17 @@
-﻿using System.Linq.Expressions;
+﻿// ***********************************************************************
+// Assembly         : Tests
+// Author           : Slava
+// Created          : 12-11-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="UserServiceTests.cs" company="Tests">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System.Linq.Expressions;
 using BuisnessLogicLayer.Models;
 using BuisnessLogicLayer.Services;
 using DataAccessLayer.Entities;
@@ -9,8 +22,14 @@ using NUnit.Framework;
 
 namespace Tests.BusinessTests;
 
+/// <summary>
+/// Class UserServiceTest.
+/// </summary>
 public class UserServiceTest
 {
+    /// <summary>
+    /// Defines the test method UserService_GetAll_ReturnsAllUserModels.
+    /// </summary>
     [Test]
     public async Task UserService_GetAll_ReturnsAllUserModels()
     {
@@ -18,7 +37,7 @@ public class UserServiceTest
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.UserRepository.GetAllAsync(null,null,""))
+            .Setup(x => x.UserRepository.GetAllAsync(null,""))
             .ReturnsAsync(GetTestUsers.AsEnumerable());
         
         var userService = new UserService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
@@ -30,6 +49,11 @@ public class UserServiceTest
         actual.Should().BeEquivalentTo(GetTestUserModels);
     }
 
+    /// <summary>
+    /// User service get by email asynchronous returns by email as an asynchronous operation.
+    /// </summary>
+    /// <param name="email">The email.</param>
+    /// <returns>A Task representing the asynchronous operation.</returns>
     [TestCase("email1@gmaill.com")]
     [TestCase("email2@gmaill.com")]
     public async Task UserService_GetByEmailAsync_ReturnsByEmailAsync(string email)
@@ -39,8 +63,8 @@ public class UserServiceTest
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.UserRepository.GetByValueOneAsync(It.IsAny<Expression<Func<User,bool>>>(),It.IsAny<string>()))
-            .ReturnsAsync(GetTestUsers.FirstOrDefault(u => u.Email == email));
+            .Setup(x => x.UserRepository.GetAllAsync(It.IsAny<Expression<Func<User,bool>>>(),It.IsAny<string>()))
+            .ReturnsAsync(GetTestUsers.Where(u => u.Email == email));
         
         var userService = new UserService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
@@ -50,8 +74,13 @@ public class UserServiceTest
         //assert
         actual.Should().BeEquivalentTo(expected);
     }
-    
-    
+
+
+    /// <summary>
+    /// User service check user email exist asynchronous returns if user email exist as an asynchronous operation.
+    /// </summary>
+    /// <param name="email">The email.</param>
+    /// <returns>A Task representing the asynchronous operation.</returns>
     [TestCase("email1@gmaill.com")]
     [TestCase("email2@gmaill.com")]
     [TestCase("incorrect")]
@@ -62,8 +91,8 @@ public class UserServiceTest
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.UserRepository.GetByValueOneAsync(It.IsAny<Expression<Func<User,bool>>>(),It.IsAny<string>()))
-            .ReturnsAsync(GetTestUsers.FirstOrDefault(u => u.Email == email));
+            .Setup(x => x.UserRepository.GetAllAsync(It.IsAny<Expression<Func<User,bool>>>(),It.IsAny<string>()))
+            .ReturnsAsync(GetTestUsers.Where(u => u.Email == email));
         
         var userService = new UserService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
@@ -74,6 +103,12 @@ public class UserServiceTest
         actual.Should().Be(expected);
     }
 
+    /// <summary>
+    /// Defines the test method UserService_CheckUserPasswordAndEmail_ReturnsIfUserPasswordAndEmailAreCorrect.
+    /// </summary>
+    /// <param name="email">The email.</param>
+    /// <param name="password">The password.</param>
+    /// <param name="expectedResult">The expected result.</param>
     [TestCase("email1gmaill.com","Slava11111!","Email is incorrect.")]
     [TestCase("email2@gmaill.com","Slava1!","Minimum password length should be 9.")]
     [TestCase("email2@gmaill.com","Slavaaaaa!","Password should be Alphanumeric.")]
@@ -91,7 +126,10 @@ public class UserServiceTest
         //assert
         actual.Should().Be(expectedResult);
     }
-    
+
+    /// <summary>
+    /// Defines the test method UserService_GetById_ReturnsUserModel.
+    /// </summary>
     [Test]
     public async Task UserService_GetById_ReturnsUserModel()
     {
@@ -112,6 +150,9 @@ public class UserServiceTest
         actual.Should().BeEquivalentTo(expected);
     }
 
+    /// <summary>
+    /// Defines the test method UserService_AddAsync_AddsUserModel.
+    /// </summary>
     [Test]
     [Obsolete("Obsolete")]
     public async Task UserService_AddAsync_AddsUserModel()
@@ -132,7 +173,11 @@ public class UserServiceTest
             && t.Password == user.Password && t.BirthDate == user.BirthDate)), Times.Once);
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
-    
+
+    /// <summary>
+    /// Defines the test method UserService_DeleteAsync_DeletesUser.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(100)]
@@ -151,6 +196,9 @@ public class UserServiceTest
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
     }
 
+    /// <summary>
+    /// Defines the test method UserService_UpdateAsync_UpdatesUser.
+    /// </summary>
     [Test]
     public async Task UserService_UpdateAsync_UpdatesUser()
     {
@@ -171,9 +219,13 @@ public class UserServiceTest
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
-    
+
     #region TestData
 
+    /// <summary>
+    /// Gets the get test users.
+    /// </summary>
+    /// <value>The get test users.</value>
     private List<User> GetTestUsers =>
         new()
         {
@@ -181,6 +233,10 @@ public class UserServiceTest
             new User{Id = 2, Email = "email2@gmaill.com", Mobile = "+90502411234", Name = "Tom", Surname = "Shelby", Password = "password", BirthDate = new DateTime(1991,10,12)}
         };
 
+    /// <summary>
+    /// Gets the get test user models.
+    /// </summary>
+    /// <value>The get test user models.</value>
     private List<UserModel> GetTestUserModels =>
         new()
         {

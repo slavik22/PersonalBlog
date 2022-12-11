@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-09-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="PostsController.cs" company="WebAPI">
 //     Copyright (c) . All rights reserved.
@@ -43,7 +43,7 @@ namespace WebApi.Controllers
         private readonly ITagService _tagService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PostsController"/> class.
+        /// Initializes a new instance of the <see cref="PostsController" /> class.
         /// </summary>
         /// <param name="postService">The post service.</param>
         /// <param name="userService">The user service.</param>
@@ -84,7 +84,15 @@ namespace WebApi.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<IEnumerable<PostModel>>> GetById([FromRoute] int id)
         {
-            return Ok(await _postService.GetByIdAsync(id));
+            try
+            {
+                
+                return Ok(await _postService.GetByIdAsync(id));
+            }
+            catch (PersonalBlogException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         /// <summary>
         /// Gets the by category identifier.
@@ -94,7 +102,16 @@ namespace WebApi.Controllers
         [HttpGet("category/{categoryId:int}")]
         public async Task<ActionResult<IEnumerable<PostModel>>> GetByCategoryId([FromRoute] int categoryId)
         {
-            return Ok(await _postService.GetByCategoryIdAsync(categoryId));
+            try
+            {
+                return Ok(await _postService.GetByCategoryIdAsync(categoryId));
+
+            }
+            catch (PersonalBlogException e)
+            {
+                return BadRequest(e.Message);
+
+            }
         }
 
         // POST: api/posts
@@ -154,7 +171,15 @@ namespace WebApi.Controllers
         [HttpGet("{postId:int}/tags")]
         public async Task<ActionResult> GetTags([FromRoute] int postId)
         {
+            try
+            {
                 return Ok(await _tagService.GetTagsAsync(postId));
+
+            }
+            catch (PersonalBlogException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // PUT: api/posts/1
@@ -225,9 +250,18 @@ namespace WebApi.Controllers
         /// <returns>ActionResult&lt;IEnumerable&lt;PostModel&gt;&gt;.</returns>
         [HttpGet]
         [Route("user/{userId}/")]
-        public ActionResult<IEnumerable<PostModel>> GetPostsOfUser(int userId)
+        public async Task<ActionResult<IEnumerable<PostModel>>> GetPostsOfUser(int userId)
         {
-            return Ok(_postService.GetUserPostsAsync(userId));
+            try
+            {
+                return Ok(await _postService.GetUserPostsAsync(userId));
+
+            }
+            catch (PersonalBlogException e)
+            {
+                return BadRequest(e.Message);
+
+            }
         }
 
         /// <summary>

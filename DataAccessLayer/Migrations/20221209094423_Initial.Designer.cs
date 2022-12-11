@@ -4,7 +4,7 @@
 // Created          : 12-09-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-09-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="20221209094423_Initial.Designer.cs" company="DataAccessLayer">
 //     Copyright (c) . All rights reserved.
@@ -36,6 +36,7 @@ namespace DataAccessLayer.Migrations
         /// Builds the target model.
         /// </summary>
         /// <param name="modelBuilder">The model builder.</param>
+        /// <remarks>See <see href="https://aka.ms/efcore-docs-migrations">Database migrations</see> for more information.</remarks>
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618

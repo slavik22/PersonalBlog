@@ -53,45 +53,46 @@ export class PostShowComponent implements OnInit {
   ngOnInit(): void {
     this.route.url.subscribe( (data)=>{
       this.post.id = +data[1];
+      
       this.postsService.getPostById(this.post.id).subscribe({
         next: (post) =>this.post = post,
         error: (error) => {
            this.router.navigate(['**']);
-        }
-      });
+        }});
+
+        this.commentService.getAllComments(this.post.id)
+        .subscribe({
+          next: (comments: any) => {
+            this.comments = comments[0] === null ? [] : comments;
+          },
+          error: (error) =>{
+            this.toast.error({detail: "ERROR", summary: "Some error occured", duration: 5000});
+          }
+        })
+    
+        this.tagsService.getPostTags(this.post.id)
+        .subscribe({
+          next: (tags) => {
+             this.postTags = tags[0] === null ? [] : tags;
+          },
+          error: (error) => {
+          this.toast.error({detail: "ERROR", summary: "Tags error", duration: 5000});
+    
+          }
+        })
+    
+        this.categoiriesService.getPostCategories(this.post.id)
+        .subscribe({
+          next: (categories) => {
+            this.postCategories = categories[0] === null ? [] : categories;
+          },
+          error: (error) => {
+          this.toast.error({detail: "ERROR", summary: "Tags error", duration: 5000});
+    
+          }
+        })
     });
 
-    this.commentService.getAllComments(this.post.id)
-    .subscribe({
-      next: (comments: any) => {
-        this.comments = comments;
-      },
-      error: (error) =>{
-        console.error(error);
-        this.toast.error({detail: "ERROR", summary: "Some error occured", duration: 5000});
-      }
-    })
-
-    this.tagsService.getPostTags(this.post.id)
-    .subscribe({
-      next: (tags) => {
-        this.postTags = tags
-      },
-      error: (error) => {
-      this.toast.error({detail: "ERROR", summary: "Tags error", duration: 5000});
-
-      }
-    })
-    this.categoiriesService.getPostCategories(this.post.id)
-    .subscribe({
-      next: (categories) => {
-        this.postCategories = categories
-      },
-      error: (error) => {
-      this.toast.error({detail: "ERROR", summary: "Tags error", duration: 5000});
-
-      }
-    })
 
     this.commentForm = this.fb.group({
       title: ["Your title...",Validators.required],

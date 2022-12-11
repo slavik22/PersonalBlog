@@ -4,7 +4,7 @@
 // Created          : 12-05-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-09-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="CategoriesController.cs" company="WebAPI">
 //     Copyright (c) . All rights reserved.
@@ -38,7 +38,7 @@ namespace WebApi.Controllers
         private readonly ICategoryService _categoryService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CategoriesController"/> class.
+        /// Initializes a new instance of the <see cref="CategoriesController" /> class.
         /// </summary>
         /// <param name="postService">The post service.</param>
         /// <param name="categoryService">The category service.</param>

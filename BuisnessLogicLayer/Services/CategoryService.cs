@@ -4,7 +4,7 @@
 // Created          : 12-05-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-05-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="CategoryService.cs" company="BuisnessLogicLayer">
 //     Copyright (c) . All rights reserved.
@@ -37,7 +37,7 @@ public class CategoryService : ICategoryService
     private readonly IMapper _mapper;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CategoryService"/> class.
+    /// Initializes a new instance of the <see cref="CategoryService" /> class.
     /// </summary>
     /// <param name="unitOfWork">The unit of work.</param>
     /// <param name="mapper">The mapper.</param>
@@ -53,7 +53,7 @@ public class CategoryService : ICategoryService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<CategoryModel>> GetAllAsync()
     {
-        IEnumerable<Category?> categories =  await _unitOfWork.CategoryRepository.GetAllAsync();
+        IEnumerable<Category> categories =  await _unitOfWork.CategoryRepository.GetAllAsync();
         List<CategoryModel> categoryModels = new List<CategoryModel>();
 
         foreach (var c in categories)
@@ -70,9 +70,12 @@ public class CategoryService : ICategoryService
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>A Task&lt;CategoryModel&gt; representing the asynchronous operation.</returns>
+    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Category not found</exception>
     public async Task<CategoryModel?> GetByIdAsync(int id)
     {
-        return _mapper.Map<CategoryModel>(await _unitOfWork.CategoryRepository.GetByIdAsync(id));
+        var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+        if (category == null) throw new PersonalBlogException("Category not found");
+        return _mapper.Map<CategoryModel>(category);
     }
 
     /// <summary>
@@ -110,7 +113,14 @@ public class CategoryService : ICategoryService
 
     }
 
-    
+
+    /// <summary>
+    /// Add category as an asynchronous operation.
+    /// </summary>
+    /// <param name="postId">The post identifier.</param>
+    /// <param name="categoryModel">The category model.</param>
+    /// <returns>A Task representing the asynchronous operation.</returns>
+    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Post not found</exception>
     public async Task AddCategoryAsync(int postId, CategoryModel categoryModel)
     {
         Post? post = await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostCategories");
@@ -120,7 +130,7 @@ public class CategoryService : ICategoryService
             throw new PersonalBlogException("Post not found");
         }
         
-        Category? category = await _unitOfWork.CategoryRepository.GetByValueOneAsync(category => category.Title == categoryModel.Title);
+        Category? category = (await _unitOfWork.CategoryRepository.GetAllAsync(category => category.Title == categoryModel.Title)).FirstOrDefault();
         
         if(category == null )
         {
@@ -136,7 +146,13 @@ public class CategoryService : ICategoryService
             
         await _unitOfWork.SaveAsync();
     }
-    
+
+    /// <summary>
+    /// Get categories as an asynchronous operation.
+    /// </summary>
+    /// <param name="postId">The post identifier.</param>
+    /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Post not found</exception>
     public async Task<IEnumerable<CategoryModel>> GetCategoriesAsync(int postId)
     {
         Post? post = (await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostCategories"));

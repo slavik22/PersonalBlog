@@ -1,12 +1,32 @@
-﻿using DataAccessLayer.Data;
+﻿// ***********************************************************************
+// Assembly         : Tests
+// Author           : Slava
+// Created          : 12-11-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="PostRepositoryTests.cs" company="Tests">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using DataAccessLayer.Data;
 using DataAccessLayer.Entities;
 using NUnit.Framework;
 
 namespace Tests.DataTests;
 
+/// <summary>
+/// Defines test class PostRepositoryTests.
+/// </summary>
 [TestFixture]
 public class PostRepositoryTests
 {
+    /// <summary>
+    /// Defines the test method PostRepository_GetByIdAsync_ReturnsSingleValue.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(3)]
@@ -22,7 +42,10 @@ public class PostRepositoryTests
 
         Assert.That(post, Is.EqualTo(expected).Using(new PostEqualityComparer()), message: "GetByIdAsync method works incorrect");
     }
-    
+
+    /// <summary>
+    /// Defines the test method PostRepository_GetAllAsync_ReturnsAllValues.
+    /// </summary>
     [Test]
     public async Task PostRepository_GetAllAsync_ReturnsAllValues()
     {
@@ -35,6 +58,9 @@ public class PostRepositoryTests
 
         Assert.That(posts, Is.EqualTo(ExpectedPosts).Using(new PostEqualityComparer()), message: "GetAllAsync method works incorrect");
     }
+    /// <summary>
+    /// Defines the test method PostRepository_AddAsync_AddsValueToDatabase.
+    /// </summary>
     [Test]
     public async Task PostRepository_AddAsync_AddsValueToDatabase()
     {
@@ -51,7 +77,10 @@ public class PostRepositoryTests
         Assert.That(context.Posts.Count(), Is.EqualTo(4), message: "AddAsync method works incorrect");
     }
 
-    
+
+    /// <summary>
+    /// Defines the test method PostRepository_DeleteByIdAsync_DeletesEntity.
+    /// </summary>
     [Test]
     public async Task PostRepository_DeleteByIdAsync_DeletesEntity()
     {
@@ -65,6 +94,9 @@ public class PostRepositoryTests
         Assert.That(context.Users.Count(), Is.EqualTo(2), message: "DeleteByIdAsync works incorrect");
     }
 
+    /// <summary>
+    /// Defines the test method PostRepository_Update_UpdatesEntity.
+    /// </summary>
     [Test]
     public async Task PostRepository_Update_UpdatesEntity()
     {
@@ -85,7 +117,11 @@ public class PostRepositoryTests
         }).Using(new PostEqualityComparer()), message: "Update method works incorrect");
     }
 
-    
+
+    /// <summary>
+    /// Gets the expected posts.
+    /// </summary>
+    /// <value>The expected posts.</value>
     private static IEnumerable<Post> ExpectedPosts =>
         new[]
         {

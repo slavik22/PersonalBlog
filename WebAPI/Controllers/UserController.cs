@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-09-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="UserController.cs" company="WebAPI">
 //     Copyright (c) . All rights reserved.
@@ -37,7 +37,7 @@ namespace WebApi.Controllers
         private readonly IUserService _userService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// Initializes a new instance of the <see cref="UserController" /> class.
         /// </summary>
         /// <param name="userService">The user service.</param>
         public UserController(IUserService userService)

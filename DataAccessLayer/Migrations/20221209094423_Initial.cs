@@ -4,7 +4,7 @@
 // Created          : 12-09-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-09-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="20221209094423_Initial.cs" company="DataAccessLayer">
 //     Copyright (c) . All rights reserved.
@@ -207,6 +207,7 @@ namespace DataAccessLayer.Migrations
         /// Downs the specified migration builder.
         /// </summary>
         /// <param name="migrationBuilder">The migration builder.</param>
+        /// <remarks>See <see href="https://aka.ms/efcore-docs-migrations">Database migrations</see> for more information.</remarks>
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-09-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="AutomapperProfile.cs" company="BuisnessLogicLayer">
 //     Copyright (c) . All rights reserved.
@@ -25,7 +25,7 @@ namespace BuisnessLogicLayer;
 public class AutomapperProfile : Profile
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="AutomapperProfile"/> class.
+    /// Initializes a new instance of the <see cref="AutomapperProfile" /> class.
     /// </summary>
     public AutomapperProfile()
     {

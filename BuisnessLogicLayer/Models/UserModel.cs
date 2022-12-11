@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-01-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="UserModel.cs" company="BuisnessLogicLayer">
 //     Copyright (c) . All rights reserved.
@@ -46,9 +46,13 @@ public class UserModel
     /// Gets or sets the password.
     /// </summary>
     /// <value>The password.</value>
-    
+
     public string Password { get; set; }= "";
-    
+
+    /// <summary>
+    /// Gets or sets the mobile.
+    /// </summary>
+    /// <value>The mobile.</value>
     public string Mobile { get; set; }= "";
 
     /// <summary>

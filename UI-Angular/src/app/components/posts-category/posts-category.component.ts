@@ -33,7 +33,7 @@ export class PostsCategoryComponent implements OnInit {
       this.postsService.getCategoryPosts(categoryId)
       .subscribe({
         next: (posts) => {
-          this.posts = posts;
+          this.posts = posts[0]=== null ? [] : posts;
         },
         error: (error) =>{
           console.error(error);

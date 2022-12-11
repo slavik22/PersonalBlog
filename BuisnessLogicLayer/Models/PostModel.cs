@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-09-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="PostModel.cs" company="BuisnessLogicLayer">
 //     Copyright (c) . All rights reserved.
@@ -35,7 +35,7 @@ public class PostModel
     /// </summary>
     /// <value>The summary.</value>
     public string Summary { get; set; } = "";
-    /// <summary> 
+    /// <summary>
     /// Gets or sets the content.
     /// </summary>
     /// <value>The content.</value>

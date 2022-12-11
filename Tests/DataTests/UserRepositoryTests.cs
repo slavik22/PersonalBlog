@@ -1,12 +1,32 @@
-﻿using DataAccessLayer.Data;
+﻿// ***********************************************************************
+// Assembly         : Tests
+// Author           : Slava
+// Created          : 12-11-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="UserRepositoryTests.cs" company="Tests">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using DataAccessLayer.Data;
 using DataAccessLayer.Entities;
 using NUnit.Framework;
 
 namespace Tests.DataTests;
 
+/// <summary>
+/// Defines test class UserRepositoryTests.
+/// </summary>
 [TestFixture]
 public class UserRepositoryTests
 {
+    /// <summary>
+    /// Defines the test method UserRepository_GetByIdAsync_ReturnsSingleValue.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     public async Task UserRepository_GetByIdAsync_ReturnsSingleValue(int id)
@@ -21,7 +41,10 @@ public class UserRepositoryTests
 
         Assert.That(user, Is.EqualTo(expected).Using(new UserEqualityComparer()), message: "GetByIdAsync method works incorrect");
     }
-    
+
+    /// <summary>
+    /// Defines the test method UserRepository_GetAllAsync_ReturnsAllValues.
+    /// </summary>
     [Test]
     public async Task UserRepository_GetAllAsync_ReturnsAllValues()
     {
@@ -34,6 +57,9 @@ public class UserRepositoryTests
 
         Assert.That(users, Is.EqualTo(ExpectedUsers).Using(new UserEqualityComparer()), message: "GetAllAsync method works incorrect");
     }
+    /// <summary>
+    /// Defines the test method UserRepository_AddAsync_AddsValueToDatabase.
+    /// </summary>
     [Test]
     public async Task UserRepository_AddAsync_AddsValueToDatabase()
     {
@@ -50,7 +76,10 @@ public class UserRepositoryTests
         Assert.That(context.Users.Count(), Is.EqualTo(3), message: "AddAsync method works incorrect");
     }
 
-    
+
+    /// <summary>
+    /// Defines the test method UserRepository_DeleteByIdAsync_DeletesEntity.
+    /// </summary>
     [Test]
     public async Task UserRepository_DeleteByIdAsync_DeletesEntity()
     {
@@ -64,6 +93,9 @@ public class UserRepositoryTests
         Assert.That(context.Users.Count(), Is.EqualTo(1), message: "DeleteByIdAsync works incorrect");
     }
 
+    /// <summary>
+    /// Defines the test method UserRepository_Update_UpdatesEntity.
+    /// </summary>
     [Test]
     public async Task UserRepository_Update_UpdatesEntity()
     {
@@ -85,7 +117,11 @@ public class UserRepositoryTests
         }).Using(new UserEqualityComparer()), message: "Update method works incorrect");
     }
 
-    
+
+    /// <summary>
+    /// Gets the expected users.
+    /// </summary>
+    /// <value>The expected users.</value>
     private static IEnumerable<User> ExpectedUsers =>
         new[]
         {

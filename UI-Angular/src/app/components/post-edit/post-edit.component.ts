@@ -75,7 +75,7 @@ export class PostEditComponent implements OnInit {
       this.tagsService.getPostTags(this.post.id)
       .subscribe({
         next: (tags) => {
-          this.postTags = tags
+          this.postTags = tags[0] === null ? [] : tags;
         },
         error: (error) => {
         this.toast.error({detail: "ERROR", summary: "Tags error", duration: 5000});
@@ -85,7 +85,7 @@ export class PostEditComponent implements OnInit {
       this.categoriesService.getPostCategories(this.post.id)
       .subscribe({
         next: (categories) => {
-          this.postCategories = categories
+          this.postCategories = categories[0] === null ? [] : categories;
         },
         error: (error) => {
         this.toast.error({detail: "ERROR", summary: "Categories error", duration: 5000});

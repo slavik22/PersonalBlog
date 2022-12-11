@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-09-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="GenericRepository.cs" company="DataAccessLayer">
 //     Copyright (c) . All rights reserved.
@@ -36,7 +36,7 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
     private readonly DbSet<TEntity> _dbSet;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="GenericRepository{TEntity}"/> class.
+    /// Initializes a new instance of the <see cref="GenericRepository{TEntity}" /> class.
     /// </summary>
     /// <param name="context">The context.</param>
     public GenericRepository(PersonalBlogDbContext context)
@@ -45,22 +45,13 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
         this._dbSet = context.Set<TEntity>();
     }
 
-    public IEnumerable<TEntity?> GetAll()
-    {
-        return _dbSet.ToList();
-    }
-    
-    
     /// <summary>
     /// Get all as an asynchronous operation.
     /// </summary>
     /// <param name="filter">The filter.</param>
-    /// <param name="orderBy">The order by.</param>
     /// <param name="includeProperties">The include properties.</param>
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
-    public async Task<IEnumerable<TEntity>> GetAllAsync( Expression<Func<TEntity, bool>>? filter = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
-        string includeProperties = "")
+    public async Task<IEnumerable<TEntity>> GetAllAsync( Expression<Func<TEntity, bool>>? filter = null,string includeProperties = "")
     {
         IQueryable<TEntity> query = _dbSet;
 
@@ -74,15 +65,10 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
             query = query.Include(includeProperty);
         }
 
-        if (orderBy != null)
-        {
-            return await orderBy(query).ToListAsync();
-        }
-        
         return await query.ToListAsync();
     }
 
-    /// <summary>
+    /*/// <summary>
     /// Gets the by value asynchronous.
     /// </summary>
     /// <param name="find">The find.</param>
@@ -116,7 +102,7 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
         }
 
         return await query.FirstOrDefaultAsync(find);
-    }
+    }*/
 
     /// <summary>
     /// Get by identifier as an asynchronous operation.
@@ -149,6 +135,7 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
     /// Deletes the specified identifier.
     /// </summary>
     /// <param name="id">The identifier.</param>
+    /// <returns>Task.</returns>
     /// <exception cref="System.InvalidOperationException"></exception>
     public async Task Delete(int id)
     {

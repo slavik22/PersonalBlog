@@ -1,4 +1,17 @@
-﻿using System.Linq.Expressions;
+﻿// ***********************************************************************
+// Assembly         : Tests
+// Author           : Slava
+// Created          : 12-11-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="CommentServiceTests.cs" company="Tests">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System.Linq.Expressions;
 using BuisnessLogicLayer.Models;
 using BuisnessLogicLayer.Services;
 using DataAccessLayer.Entities;
@@ -9,8 +22,14 @@ using NUnit.Framework;
 
 namespace Tests.BusinessTests;
 
+/// <summary>
+/// Class CommentServiceTest.
+/// </summary>
 public class CommentServiceTest
 {
+    /// <summary>
+    /// Defines the test method CommentService_GetAll_ReturnsAllComments.
+    /// </summary>
     [Test]
     public async Task CommentService_GetAll_ReturnsAllComments()
     {
@@ -18,7 +37,7 @@ public class CommentServiceTest
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.CommentRepository.GetAllAsync(null,null,""))
+            .Setup(x => x.CommentRepository.GetAllAsync(null,""))
             .ReturnsAsync(GetTestComments.AsEnumerable());
         
         var commentService = new CommentService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
@@ -29,7 +48,11 @@ public class CommentServiceTest
         //assert
         actual.Should().BeEquivalentTo(GetTestCommentModels);
     }
-    
+
+    /// <summary>
+    /// Defines the test method PostService_GetPostComments_ReturnsPostComments.
+    /// </summary>
+    /// <param name="postId">The post identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(100)]
@@ -40,7 +63,7 @@ public class CommentServiceTest
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.CommentRepository.GetByValueAsync(It.IsAny<Expression<Func<Comment,bool>>>(),""))
+            .Setup(x => x.CommentRepository.GetAllAsync(It.IsAny<Expression<Func<Comment,bool>>>(),""))
             .ReturnsAsync(GetTestComments.Where(x => x.PostId == postId));
         
         var commentService = new CommentService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
@@ -52,7 +75,10 @@ public class CommentServiceTest
         actual.Should().BeEquivalentTo(expected);
     }
 
-    
+
+    /// <summary>
+    /// Defines the test method CommentService_GetById_ReturnsCommentModel.
+    /// </summary>
     [Test]
     public async Task CommentService_GetById_ReturnsCommentModel()
     {
@@ -73,6 +99,9 @@ public class CommentServiceTest
         actual.Should().BeEquivalentTo(expected);
     }
 
+    /// <summary>
+    /// Defines the test method CommentService_AddAsync_AddsModel.
+    /// </summary>
     [Test]
     public async Task CommentService_AddAsync_AddsModel()
     {
@@ -91,7 +120,11 @@ public class CommentServiceTest
             t.Id == comment.Id && t.Title == comment.Title && t.Content == comment.Content && t.PostId == comment.PostId)), Times.Once);
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
-    
+
+    /// <summary>
+    /// Defines the test method CommentService_DeleteAsync_DeletesComment.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(100)]
@@ -110,6 +143,9 @@ public class CommentServiceTest
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
     }
 
+    /// <summary>
+    /// Defines the test method CommentService_UpdateAsync_UpdatesComment.
+    /// </summary>
     [Test]
     public async Task CommentService_UpdateAsync_UpdatesComment()
     {
@@ -129,9 +165,13 @@ public class CommentServiceTest
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
-    
+
     #region TestData
 
+    /// <summary>
+    /// Gets the get test comments.
+    /// </summary>
+    /// <value>The get test comments.</value>
     private List<Comment> GetTestComments =>
         new()
         {
@@ -139,6 +179,10 @@ public class CommentServiceTest
             new Comment {Id = 2, Title = "Hello from Tom", Content = "I completely agree with author's opinion", PostId = 2}
         };
 
+    /// <summary>
+    /// Gets the get test comment models.
+    /// </summary>
+    /// <value>The get test comment models.</value>
     private List<CommentModel> GetTestCommentModels =>
         new()
         {

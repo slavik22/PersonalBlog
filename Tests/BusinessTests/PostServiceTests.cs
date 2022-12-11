@@ -1,4 +1,17 @@
-﻿using System.Linq.Expressions;
+﻿// ***********************************************************************
+// Assembly         : Tests
+// Author           : Slava
+// Created          : 12-11-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="PostServiceTests.cs" company="Tests">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System.Linq.Expressions;
 using BuisnessLogicLayer.Models;
 using BuisnessLogicLayer.Services;
 using DataAccessLayer.Entities;
@@ -10,8 +23,14 @@ using PostStatus = BuisnessLogicLayer.Models.Enums.PostStatus;
 
 namespace Tests.BusinessTests;
 
+/// <summary>
+/// Class PostServiceTest.
+/// </summary>
 public class PostServiceTest
 {
+    /// <summary>
+    /// Defines the test method PostService_GetAll_ReturnsAllPosts.
+    /// </summary>
     [Test]
     public async Task PostService_GetAll_ReturnsAllPosts()
     {
@@ -19,7 +38,7 @@ public class PostServiceTest
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.PostRepository.GetAllAsync(null,null, It.IsAny<string>()))
+            .Setup(x => x.PostRepository.GetAllAsync(null, It.IsAny<string>()))
             .ReturnsAsync(GetTestPosts.AsEnumerable());
         
         var postService = new PostService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
@@ -30,7 +49,10 @@ public class PostServiceTest
         //assert
         actual.Should().BeEquivalentTo(GetTestPostModels);
     }
-    
+
+    /// <summary>
+    /// Defines the test method PostService_GetAllPublished_ReturnsAllPublishedPosts.
+    /// </summary>
     [Test]
     public async Task PostService_GetAllPublished_ReturnsAllPublishedPosts()
     {
@@ -39,7 +61,7 @@ public class PostServiceTest
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.PostRepository.GetAllAsync(null,null, It.IsAny<string>()))
+            .Setup(x => x.PostRepository.GetAllAsync(null, It.IsAny<string>()))
             .ReturnsAsync(GetTestPosts.Where(p =>  p.PostStatus == DataAccessLayer.Enums.PostStatus.Published));
         
         var postService = new PostService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
@@ -52,6 +74,11 @@ public class PostServiceTest
     }
 
 
+    /// <summary>
+    /// Post service get user posts asynchronous returns user posts as an asynchronous operation.
+    /// </summary>
+    /// <param name="userId">The user identifier.</param>
+    /// <returns>A Task representing the asynchronous operation.</returns>
     [TestCase(1)]
     [TestCase(2)]
     public async Task PostService_GetUserPostsAsync_ReturnsUserPostsAsync(int userId)
@@ -61,7 +88,7 @@ public class PostServiceTest
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.PostRepository.GetByValueAsync( It.IsAny<Expression<Func<Post,bool>>>(), It.IsAny<string>()))
+            .Setup(x => x.PostRepository.GetAllAsync( It.IsAny<Expression<Func<Post,bool>>>(), It.IsAny<string>()))
             .ReturnsAsync(GetTestPosts.Where(p =>  p.UserId == userId));
         
         var postService = new PostService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
@@ -72,7 +99,12 @@ public class PostServiceTest
         //assert
         actual.Should().BeEquivalentTo(expected);
     }
-    
+
+    /// <summary>
+    /// Post service get posts search returns posts search as an asynchronous operation.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <returns>A Task representing the asynchronous operation.</returns>
     [TestCase("pop")]
     [TestCase("java")]
     [TestCase("music")]
@@ -86,7 +118,7 @@ public class PostServiceTest
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.PostRepository.GetAllAsync( It.IsAny<Expression<Func<Post,bool>>>(), It.IsAny<Func<IQueryable<Post>,IOrderedQueryable<Post>>?>(),It.IsAny<string>()))
+            .Setup(x => x.PostRepository.GetAllAsync( It.IsAny<Expression<Func<Post,bool>>>(), It.IsAny<string>()))
             .ReturnsAsync(GetTestPosts.Where(p => 
                 (p.Title.Contains(text) || p.Content.Contains(text)) && p.PostStatus == DataAccessLayer.Enums.PostStatus.Published));
         
@@ -99,8 +131,11 @@ public class PostServiceTest
         actual.Should().BeEquivalentTo(expected);
     }
 
-    
-    
+
+
+    /// <summary>
+    /// Defines the test method PostService_GetById_ReturnsPostModel.
+    /// </summary>
     [Test]
     public async Task PostService_GetById_ReturnsPostModel()
     {
@@ -120,9 +155,12 @@ public class PostServiceTest
         //assert
         actual.Should().BeEquivalentTo(expected);
     }
-    
-    
 
+
+
+    /// <summary>
+    /// Defines the test method PostService_AddAsync_AddsModel.
+    /// </summary>
     [Test]
     public async Task PostService_AddAsync_AddsModel()
     {
@@ -141,7 +179,11 @@ public class PostServiceTest
             t.Id == post.Id && t.Title == post.Title && t.Summary == post.Summary && t.Content == post.Content && t.UserId == post.UserId)), Times.Once);
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
-    
+
+    /// <summary>
+    /// Defines the test method PostService_DeleteAsync_DeletesPost.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(100)]
@@ -160,6 +202,9 @@ public class PostServiceTest
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
     }
 
+    /// <summary>
+    /// Defines the test method PostService_UpdateAsync_UpdatesPost.
+    /// </summary>
     [Test]
     public async Task PostService_UpdateAsync_UpdatesPost()
     {
@@ -179,9 +224,13 @@ public class PostServiceTest
         mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
-    
+
     #region TestData
 
+    /// <summary>
+    /// Gets the get test users.
+    /// </summary>
+    /// <value>The get test users.</value>
     private List<User> GetTestUsers =>
         new()
         {
@@ -197,8 +246,12 @@ public class PostServiceTest
             }
         };
 
-    
-    
+
+
+    /// <summary>
+    /// Gets the get test posts.
+    /// </summary>
+    /// <value>The get test posts.</value>
     private List<Post> GetTestPosts =>
         new()
         {
@@ -207,6 +260,10 @@ public class PostServiceTest
             new Post { Id = 3, Title = "Hello world", Summary = "pop", Content = "pop music", UserId = 2, User = GetTestUsers[1] }
         };
 
+    /// <summary>
+    /// Gets the get test post models.
+    /// </summary>
+    /// <value>The get test post models.</value>
     private List<PostModel> GetTestPostModels =>
         new()
         {

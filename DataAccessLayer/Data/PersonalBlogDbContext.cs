@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-03-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="PersonalBlogDbContext.cs" company="DataAccessLayer">
 //     Copyright (c) . All rights reserved.
@@ -23,7 +23,7 @@ namespace DataAccessLayer.Data;
 public class PersonalBlogDbContext : DbContext
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="PersonalBlogDbContext"/> class.
+    /// Initializes a new instance of the <see cref="PersonalBlogDbContext" /> class.
     /// </summary>
     /// <remarks>See <see href="https://aka.ms/efcore-docs-dbcontext">DbContext lifetime, configuration, and initialization</see>
     /// for more information.</remarks>
@@ -32,7 +32,7 @@ public class PersonalBlogDbContext : DbContext
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PersonalBlogDbContext"/> class.
+    /// Initializes a new instance of the <see cref="PersonalBlogDbContext" /> class.
     /// </summary>
     /// <param name="options">The options.</param>
     public PersonalBlogDbContext(DbContextOptions<PersonalBlogDbContext> options) : base(options){}
@@ -54,10 +54,10 @@ public class PersonalBlogDbContext : DbContext
     /// typically define extension methods on this object that allow you to configure the context.</param>
     /// <remarks>See <see href="https://aka.ms/efcore-docs-dbcontext">DbContext lifetime, configuration, and initialization</see>
     /// for more information.</remarks>
-    /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer("Server=DESKTOP-OC1V65E;Database=PersonalBlogDB;Trusted_Connection=True;TrustServerCertificate=True");
-    }*/
+    }
 
     /// <summary>
     /// Gets or sets the posts.
@@ -89,6 +89,13 @@ public class PersonalBlogDbContext : DbContext
     /// Called when [model creating].
     /// </summary>
     /// <param name="modelBuilder">The model builder.</param>
+    /// <remarks><para>
+    /// If a model is explicitly set on the options for this context (via <see cref="M:Microsoft.EntityFrameworkCore.DbContextOptionsBuilder.UseModel(Microsoft.EntityFrameworkCore.Metadata.IModel)" />)
+    /// then this method will not be run.
+    /// </para>
+    /// <para>
+    /// See <see href="https://aka.ms/efcore-docs-modeling">Modeling entity types and relationships</see> for more information.
+    /// </para></remarks>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()

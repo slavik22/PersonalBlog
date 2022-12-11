@@ -1,12 +1,32 @@
-﻿using DataAccessLayer.Data;
+﻿// ***********************************************************************
+// Assembly         : Tests
+// Author           : Slava
+// Created          : 12-11-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="CommentRepositoryTests.cs" company="Tests">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using DataAccessLayer.Data;
 using DataAccessLayer.Entities;
 using NUnit.Framework;
 
 namespace Tests.DataTests;
 
+/// <summary>
+/// Defines test class CommentRepositoryTests.
+/// </summary>
 [TestFixture]
 public class CommentRepositoryTests
 {
+    /// <summary>
+    /// Defines the test method CommentRepository_GetByIdAsync_ReturnsSingleValue.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     public async Task CommentRepository_GetByIdAsync_ReturnsSingleValue(int id)
@@ -21,7 +41,10 @@ public class CommentRepositoryTests
 
         Assert.That(comment, Is.EqualTo(expected).Using(new CommentEqualityComparer()), message: "GetByIdAsync method works incorrect");
     }
-    
+
+    /// <summary>
+    /// Defines the test method CommentRepository_GetAllAsync_ReturnsAllValues.
+    /// </summary>
     [Test]
     public async Task CommentRepository_GetAllAsync_ReturnsAllValues()
     {
@@ -33,6 +56,9 @@ public class CommentRepositoryTests
 
         Assert.That(comments, Is.EqualTo(ExpectedComments).Using(new CommentEqualityComparer()), message: "GetAllAsync method works incorrect");
     }
+    /// <summary>
+    /// Defines the test method CommentRepository_AddAsync_AddsValueToDatabase.
+    /// </summary>
     [Test]
     public async Task CommentRepository_AddAsync_AddsValueToDatabase()
     {
@@ -48,7 +74,10 @@ public class CommentRepositoryTests
         Assert.That(context.Tags.Count(), Is.EqualTo(3), message: "AddAsync method works incorrect");
     }
 
-    
+
+    /// <summary>
+    /// Defines the test method CommentRepository_DeleteByIdAsync_DeletesEntity.
+    /// </summary>
     [Test]
     public async Task CommentRepository_DeleteByIdAsync_DeletesEntity()
     {
@@ -63,6 +92,9 @@ public class CommentRepositoryTests
         Assert.That(context.Comments.Count(), Is.EqualTo(1), message: "DeleteByIdAsync works incorrect");
     }
 
+    /// <summary>
+    /// Defines the test method CommentRepository_Update_UpdatesEntity.
+    /// </summary>
     [Test]
     public async Task CommentRepository_Update_UpdatesEntity()
     {
@@ -84,7 +116,11 @@ public class CommentRepositoryTests
         }).Using(new CommentEqualityComparer()), message: "Update method works incorrect");
     }
 
-    
+
+    /// <summary>
+    /// Gets the expected comments.
+    /// </summary>
+    /// <value>The expected comments.</value>
     private static IEnumerable<Comment> ExpectedComments =>
         new[]
         {

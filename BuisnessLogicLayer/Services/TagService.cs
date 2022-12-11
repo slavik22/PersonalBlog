@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-05-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="TagService.cs" company="BuisnessLogicLayer">
 //     Copyright (c) . All rights reserved.
@@ -37,7 +37,7 @@ public class TagService : ITagService
     private readonly IMapper _mapper;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TagService"/> class.
+    /// Initializes a new instance of the <see cref="TagService" /> class.
     /// </summary>
     /// <param name="unitOfWork">The unit of work.</param>
     /// <param name="mapper">The mapper.</param>
@@ -53,7 +53,7 @@ public class TagService : ITagService
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
     public async Task<IEnumerable<TagModel>> GetAllAsync()
     {
-        IEnumerable<Tag?> tags =  await _unitOfWork.TagRepository.GetAllAsync();
+        IEnumerable<Tag> tags =  await _unitOfWork.TagRepository.GetAllAsync();
         List<TagModel> tagModels = new List<TagModel>();
 
         foreach (var tag in tags)
@@ -70,9 +70,14 @@ public class TagService : ITagService
     /// </summary>
     /// <param name="id">The identifier.</param>
     /// <returns>A Task&lt;TagModel&gt; representing the asynchronous operation.</returns>
+    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Tag not found</exception>
     public async Task<TagModel?> GetByIdAsync(int id)
     {
-        return _mapper.Map<TagModel>(await _unitOfWork.TagRepository.GetByIdAsync(id));
+        var tag = await _unitOfWork.TagRepository.GetByIdAsync(id);
+
+        if (tag == null) throw new PersonalBlogException("Tag not found");
+        
+        return _mapper.Map<TagModel>(tag);
     }
 
     /// <summary>
@@ -116,6 +121,7 @@ public class TagService : ITagService
     /// <param name="postId">The post identifier.</param>
     /// <param name="tagModel">The tag model.</param>
     /// <returns>A Task representing the asynchronous operation.</returns>
+    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Post not found</exception>
     /// <exception cref="System.Exception">Post not found</exception>
     public async Task AddTagAsync(int postId, TagModel tagModel)
     {
@@ -126,7 +132,7 @@ public class TagService : ITagService
             throw new PersonalBlogException("Post not found");
         }
         
-        Tag? tag = await _unitOfWork.TagRepository.GetByValueOneAsync(tag => tag.Title == tagModel.Title);
+        Tag? tag = (await _unitOfWork.TagRepository.GetAllAsync(tag => tag.Title == tagModel.Title)).FirstOrDefault();
 
          if (tag == null)
          {
@@ -150,10 +156,11 @@ public class TagService : ITagService
     /// </summary>
     /// <param name="postId">The post identifier.</param>
     /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Post not found</exception>
     /// <exception cref="System.Exception">Post not found</exception>
     public async Task<IEnumerable<TagModel>> GetTagsAsync(int postId)
     {
-        Post? post = (await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostTags"));
+        Post? post = await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostTags");
 
         if ( post == null)
         {

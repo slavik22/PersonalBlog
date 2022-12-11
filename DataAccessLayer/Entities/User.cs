@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-03-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="User.cs" company="DataAccessLayer">
 //     Copyright (c) . All rights reserved.

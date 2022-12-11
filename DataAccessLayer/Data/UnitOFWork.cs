@@ -4,7 +4,7 @@
 // Created          : 12-01-2022
 //
 // Last Modified By : Slava
-// Last Modified On : 12-05-2022
+// Last Modified On : 12-11-2022
 // ***********************************************************************
 // <copyright file="UnitOFWork.cs" company="DataAccessLayer">
 //     Copyright (c) . All rights reserved.
@@ -42,6 +42,7 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     /// The comment repository
     /// </summary>
     private IRepository<Comment>? _commentRepository;
+
     /// <summary>
     /// The tag repository
     /// </summary>

@@ -1,12 +1,32 @@
-﻿using DataAccessLayer.Data;
+﻿// ***********************************************************************
+// Assembly         : Tests
+// Author           : Slava
+// Created          : 12-11-2022
+//
+// Last Modified By : Slava
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="TagRepositoryTests.cs" company="Tests">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using DataAccessLayer.Data;
 using DataAccessLayer.Entities;
 using NUnit.Framework;
 
 namespace Tests.DataTests;
 
+/// <summary>
+/// Defines test class TagRepositoryTests.
+/// </summary>
 [TestFixture]
 public class TagRepositoryTests
 {
+    /// <summary>
+    /// Defines the test method TagRepository_GetByIdAsync_ReturnsSingleValue.
+    /// </summary>
+    /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(3)]
@@ -22,7 +42,10 @@ public class TagRepositoryTests
 
         Assert.That(tag, Is.EqualTo(expected).Using(new TagEqualityComparer()), message: "GetByIdAsync method works incorrect");
     }
-    
+
+    /// <summary>
+    /// Defines the test method CategoryRepository_GetAllAsync_ReturnsAllValues.
+    /// </summary>
     [Test]
     public async Task CategoryRepository_GetAllAsync_ReturnsAllValues()
     {
@@ -34,6 +57,9 @@ public class TagRepositoryTests
 
         Assert.That(tags, Is.EqualTo(ExpectedTags).Using(new TagEqualityComparer()), message: "GetAllAsync method works incorrect");
     }
+    /// <summary>
+    /// Defines the test method CategoryRepository_AddAsync_AddsValueToDatabase.
+    /// </summary>
     [Test]
     public async Task CategoryRepository_AddAsync_AddsValueToDatabase()
     {
@@ -48,7 +74,10 @@ public class TagRepositoryTests
         Assert.That(context.Tags.Count(), Is.EqualTo(4), message: "AddAsync method works incorrect");
     }
 
-    
+
+    /// <summary>
+    /// Defines the test method CategoryRepository_DeleteByIdAsync_DeletesEntity.
+    /// </summary>
     [Test]
     public async Task CategoryRepository_DeleteByIdAsync_DeletesEntity()
     {
@@ -62,6 +91,9 @@ public class TagRepositoryTests
         Assert.That(context.Tags.Count(), Is.EqualTo(2), message: "DeleteByIdAsync works incorrect");
     }
 
+    /// <summary>
+    /// Defines the test method CategoryRepository_Update_UpdatesEntity.
+    /// </summary>
     [Test]
     public async Task CategoryRepository_Update_UpdatesEntity()
     {
@@ -84,7 +116,11 @@ public class TagRepositoryTests
         }).Using(new TagEqualityComparer()), message: "Update method works incorrect");
     }
 
-    
+
+    /// <summary>
+    /// Gets the expected tags.
+    /// </summary>
+    /// <value>The expected tags.</value>
     private static IEnumerable<Tag> ExpectedTags =>
         new[]
         {
