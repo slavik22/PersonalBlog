@@ -68,42 +68,6 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
         return await query.ToListAsync();
     }
 
-    /*/// <summary>
-    /// Gets the by value asynchronous.
-    /// </summary>
-    /// <param name="find">The find.</param>
-    /// <param name="includeProperties">The include properties.</param>
-    /// <returns>IEnumerable&lt;TEntity&gt;.</returns>
-    public async Task<IEnumerable<TEntity>> GetByValueAsync(Expression<Func<TEntity, bool>> find,string includeProperties = "")
-    {
-        IQueryable<TEntity> query =  _dbSet.Where(find);
-        
-        foreach (var includeProperty in includeProperties.Split( ',', StringSplitOptions.RemoveEmptyEntries))
-        {
-            query = query.Include(includeProperty);
-        }
-
-        return await query.ToListAsync();
-    }
-
-    /// <summary>
-    /// Gets the by value one asynchronous.
-    /// </summary>
-    /// <param name="find">The find.</param>
-    /// <param name="includeProperties">The include properties.</param>
-    /// <returns>Task&lt;TEntity&gt;.</returns>
-    public async Task<TEntity?> GetByValueOneAsync(Expression<Func<TEntity, bool>> find, string includeProperties = "")
-    {
-        IQueryable<TEntity> query = _dbSet;
-        
-        foreach (var includeProperty in includeProperties.Split( ',', StringSplitOptions.RemoveEmptyEntries))
-        {
-            query = query.Include(includeProperty);
-        }
-
-        return await query.FirstOrDefaultAsync(find);
-    }*/
-
     /// <summary>
     /// Get by identifier as an asynchronous operation.
     /// </summary>
@@ -155,11 +119,10 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
     public void Update(TEntity entityToUpdate)
     {
         var entity = _dbSet.Find(entityToUpdate.Id);
-        if (entity == null)
+        if (entity != null)
         {
-            throw new NullReferenceException();
+            _context.Entry(entity).CurrentValues.SetValues(entityToUpdate);
         }
 
-        _context.Entry(entity).CurrentValues.SetValues(entityToUpdate);
     }
 }

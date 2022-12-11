@@ -47,8 +47,8 @@ public static class PasswordHasher
     /// <returns>System.String.</returns>
     public static string HashPassword(string password)
     {
-        byte[] salt;
-        rng.GetBytes(salt = new byte[SaltSize]);
+        byte[] salt = new byte[SaltSize];
+        rng.GetBytes(salt);
         var key = new Rfc2898DeriveBytes(password, salt, Iterations);
         var hash = key.GetBytes(HashSize);
 

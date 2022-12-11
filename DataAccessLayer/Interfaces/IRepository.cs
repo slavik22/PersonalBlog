@@ -60,19 +60,4 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
     /// </summary>
     /// <param name="entityToUpdate">The entity to update.</param>
     void Update(TEntity entityToUpdate);
-
-    /*/// <summary>
-    /// Gets the by value one asynchronous.
-    /// </summary>
-    /// <param name="find">The find.</param>
-    /// <param name="includeProperties">The include properties.</param>
-    /// <returns>Task&lt;System.Nullable&lt;TEntity&gt;&gt;.</returns>
-    public Task<TEntity?> GetByValueOneAsync(Expression<Func<TEntity, bool>> find, string includeProperties = "");
-    /// <summary>
-    /// Gets the by value asynchronous.
-    /// </summary>
-    /// <param name="find">The find.</param>
-    /// <param name="includeProperties">The include properties.</param>
-    /// <returns>Task&lt;IEnumerable&lt;TEntity&gt;&gt;.</returns>
-    public Task<IEnumerable<TEntity>> GetByValueAsync(Expression<Func<TEntity, bool>> find, string includeProperties = "");*/
 }
