@@ -23,16 +23,16 @@ namespace BuisnessLogicLayer.Interfaces;
 public interface ITagService : ICrud<TagModel>
 {
     /// <summary>
-    /// Adds the tag asynchronous.
+    /// Add tag
     /// </summary>
-    /// <param name="postId">The post identifier.</param>
-    /// <param name="tagModel">The tag model.</param>
-    /// <returns>Task.</returns>
-    public Task AddTagAsync(int postId, TagModel tagModel);
+    /// <param name="postId"></param>
+    /// <param name="tagModel"></param>
+    public void AddTag(int postId, TagModel tagModel);
+
     /// <summary>
-    /// Gets the tags asynchronous.
+    /// Get tags
     /// </summary>
-    /// <param name="postId">The post identifier.</param>
-    /// <returns>Task&lt;IEnumerable&lt;TagModel&gt;&gt;.</returns>
-    public Task<IEnumerable<TagModel>> GetTagsAsync(int postId);
+    /// <param name="postId"></param>
+    /// <returns></returns>
+    public IEnumerable<TagModel> GetTags(int postId);
 }

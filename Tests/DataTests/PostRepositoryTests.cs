@@ -24,45 +24,45 @@ namespace Tests.DataTests;
 public class PostRepositoryTests
 {
     /// <summary>
-    /// Defines the test method PostRepository_GetByIdAsync_ReturnsSingleValue.
+    /// Defines the test method PostRepository_GetById_ReturnsSingleValue.
     /// </summary>
     /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(3)]
-    public async Task PostRepository_GetByIdAsync_ReturnsSingleValue(int id)
+    public void  PostRepository_GetById_ReturnsSingleValue(int id)
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var postRepository = new GenericRepository<Post>(context);
 
-        var post = await postRepository.GetByIdAsync(id);
+        var post =  postRepository.GetById(id);
 
         var expected = ExpectedPosts.FirstOrDefault(x => x.Id == id);
 
-        Assert.That(post, Is.EqualTo(expected).Using(new PostEqualityComparer()), message: "GetByIdAsync method works incorrect");
+        Assert.That(post, Is.EqualTo(expected).Using(new PostEqualityComparer()), message: "GetById method works incorrect");
     }
 
     /// <summary>
-    /// Defines the test method PostRepository_GetAllAsync_ReturnsAllValues.
+    /// Defines the test method PostRepository_GetAll_ReturnsAllValues.
     /// </summary>
     [Test]
-    public async Task PostRepository_GetAllAsync_ReturnsAllValues()
+    public void  PostRepository_GetAll_ReturnsAllValues()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
         
         var postRepository = new GenericRepository<Post>(context);
 
 
-        var posts = await postRepository.GetAllAsync();
+        var posts =  postRepository.GetAll();
 
-        Assert.That(posts, Is.EqualTo(ExpectedPosts).Using(new PostEqualityComparer()), message: "GetAllAsync method works incorrect");
+        Assert.That(posts, Is.EqualTo(ExpectedPosts).Using(new PostEqualityComparer()), message: "GetAll method works incorrect");
     }
     /// <summary>
-    /// Defines the test method PostRepository_AddAsync_AddsValueToDatabase.
+    /// Defines the test method PostRepository_Add_AddsValueToDatabase.
     /// </summary>
     [Test]
-    public async Task PostRepository_AddAsync_AddsValueToDatabase()
+    public  void  PostRepository_Add_AddsValueToDatabase()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
@@ -71,34 +71,34 @@ public class PostRepositoryTests
 
         var post = new Post() { Id = 4, Title = "New", Summary = "New", Content = "New", UserId = 1};
 
-        await postRepository.AddAsync(post);
-        await context.SaveChangesAsync();
+         postRepository.Add(post);
+         context.SaveChanges();
 
-        Assert.That(context.Posts.Count(), Is.EqualTo(4), message: "AddAsync method works incorrect");
+        Assert.That(context.Posts.Count(), Is.EqualTo(4), message: "Add method works incorrect");
     }
 
 
     /// <summary>
-    /// Defines the test method PostRepository_DeleteByIdAsync_DeletesEntity.
+    /// Defines the test method PostRepository_DeleteById_DeletesEntity.
     /// </summary>
     [Test]
-    public async Task PostRepository_DeleteByIdAsync_DeletesEntity()
+    public void  PostRepository_DeleteById_DeletesEntity()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var postRepository = new GenericRepository<Post>(context);
         
-        await postRepository.Delete(1);
-        await context.SaveChangesAsync();
+         postRepository.Delete(1);
+         context.SaveChanges();
 
-        Assert.That(context.Users.Count(), Is.EqualTo(2), message: "DeleteByIdAsync works incorrect");
+        Assert.That(context.Users.Count(), Is.EqualTo(2), message: "DeleteById works incorrect");
     }
 
     /// <summary>
     /// Defines the test method PostRepository_Update_UpdatesEntity.
     /// </summary>
     [Test]
-    public async Task PostRepository_Update_UpdatesEntity()
+    public  void PostRepository_Update_UpdatesEntity()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
         var postRepository = new GenericRepository<Post>(context);
@@ -109,7 +109,7 @@ public class PostRepositoryTests
         };
 
         postRepository.Update(post);
-        await context.SaveChangesAsync();
+         context.SaveChanges();
 
         Assert.That(post, Is.EqualTo(new Post
         {

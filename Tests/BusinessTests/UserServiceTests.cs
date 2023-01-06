@@ -31,73 +31,65 @@ public class UserServiceTest
     /// Defines the test method UserService_GetAll_ReturnsAllUserModels.
     /// </summary>
     [Test]
-    public async Task UserService_GetAll_ReturnsAllUserModels()
+    public void  UserService_GetAll_ReturnsAllUserModels()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.UserRepository.GetAllAsync(null,""))
-            .ReturnsAsync(GetTestUsers.AsEnumerable());
+            .Setup(x => x.UserRepository.GetAll(null,""))
+            .Returns(GetTestUsers.AsEnumerable());
         
         var userService = new UserService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await userService.GetAllAsync();
+        var actual =  userService.GetAll();
 
         //assert
         actual.Should().BeEquivalentTo(GetTestUserModels);
     }
 
-    /// <summary>
-    /// User service get by email asynchronous returns by email as an asynchronous operation.
-    /// </summary>
-    /// <param name="email">The email.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
+
     [TestCase("email1@gmaill.com")]
     [TestCase("email2@gmaill.com")]
-    public async Task UserService_GetByEmailAsync_ReturnsByEmailAsync(string email)
+    public void  UserService_GetByEmail_ReturnsByEmail(string email)
     {
         //arrange
         var expected = GetTestUserModels.FirstOrDefault(u => u.Email == email);
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.UserRepository.GetAllAsync(It.IsAny<Expression<Func<User,bool>>>(),It.IsAny<string>()))
-            .ReturnsAsync(GetTestUsers.Where(u => u.Email == email));
+            .Setup(x => x.UserRepository.GetAll(It.IsAny<Expression<Func<User,bool>>>(),It.IsAny<string>()))
+            .Returns(GetTestUsers.Where(u => u.Email == email));
         
         var userService = new UserService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await userService.GetByEmailAsync(email);
+        var actual =  userService.GetByEmail(email);
 
         //assert
         actual.Should().BeEquivalentTo(expected);
     }
 
 
-    /// <summary>
-    /// User service check user email exist asynchronous returns if user email exist as an asynchronous operation.
-    /// </summary>
-    /// <param name="email">The email.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
+
     [TestCase("email1@gmaill.com")]
     [TestCase("email2@gmaill.com")]
     [TestCase("incorrect")]
-    public async Task UserService_CheckUserEmailExistAsync_ReturnsIfUserEmailExistAsync(string email)
+    public void  UserService_CheckUserEmailExist_ReturnsIfUserEmailExist(string email)
     {
         //arrange
         bool expected = GetTestUserModels.Any(u => u.Email == email);
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.UserRepository.GetAllAsync(It.IsAny<Expression<Func<User,bool>>>(),It.IsAny<string>()))
-            .ReturnsAsync(GetTestUsers.Where(u => u.Email == email));
+            .Setup(x => x.UserRepository.GetAll(It.IsAny<Expression<Func<User,bool>>>(),It.IsAny<string>()))
+            .Returns(GetTestUsers.Where(u => u.Email == email));
         
         var userService = new UserService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        bool actual = await userService.CheckUserEmailExistAsync(email);
+        bool actual =  userService.CheckUserEmailExist(email);
 
         //assert
         actual.Should().Be(expected);
@@ -131,57 +123,57 @@ public class UserServiceTest
     /// Defines the test method UserService_GetById_ReturnsUserModel.
     /// </summary>
     [Test]
-    public async Task UserService_GetById_ReturnsUserModel()
+    public void  UserService_GetById_ReturnsUserModel()
     {
         //arrange
         var expected = GetTestUserModels.First();
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(m => m.UserRepository.GetByIdAsync(It.IsAny<int>(),""))
-            .ReturnsAsync(GetTestUsers.First());
+            .Setup(m => m.UserRepository.GetById(It.IsAny<int>(),""))
+            .Returns(GetTestUsers.First());
 
         var userService = new UserService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await userService.GetByIdAsync(1);
+        var actual =  userService.GetById(1);
 
         //assert
         actual.Should().BeEquivalentTo(expected);
     }
 
     /// <summary>
-    /// Defines the test method UserService_AddAsync_AddsUserModel.
+    /// Defines the test method UserService_Add_AddsUserModel.
     /// </summary>
     [Test]
     [Obsolete("Obsolete")]
-    public async Task UserService_AddAsync_AddsUserModel()
+    public void  UserService_Add_AddsUserModel()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
-        mockUnitOfWork.Setup(m => m.UserRepository.AddAsync(It.IsAny<User>()));
+        mockUnitOfWork.Setup(m => m.UserRepository.Add(It.IsAny<User>()));
 
         var userService = new UserService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
         var user = GetTestUserModels.First();
 
         //act
-        await userService.AddAsync(user);
+         userService.Add(user);
 
         //assert
-        mockUnitOfWork.Verify(x => x.UserRepository.AddAsync(It.Is<User>(t =>
+        mockUnitOfWork.Verify(x => x.UserRepository.Add(It.Is<User>(t =>
             t.Id == user.Id && t.Name == user.Name && t.Surname == user.Surname && t.Email == user.Email && t.Mobile == user.Mobile
             && t.Password == user.Password && t.BirthDate == user.BirthDate)), Times.Once);
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
     }
 
     /// <summary>
-    /// Defines the test method UserService_DeleteAsync_DeletesUser.
+    /// Defines the test method UserService_Delete_DeletesUser.
     /// </summary>
     /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(100)]
-    public async Task UserService_DeleteAsync_DeletesUser(int id)
+    public void  UserService_Delete_DeletesUser(int id)
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -189,18 +181,18 @@ public class UserServiceTest
         var userService = new UserService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        await userService.DeleteAsync(id);
+         userService.Delete(id);
 
         //assert
         mockUnitOfWork.Verify(x => x.UserRepository.Delete(id), Times.Once());
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once());
     }
 
     /// <summary>
-    /// Defines the test method UserService_UpdateAsync_UpdatesUser.
+    /// Defines the test method UserService_Update_UpdatesUser.
     /// </summary>
     [Test]
-    public async Task UserService_UpdateAsync_UpdatesUser()
+    public void  UserService_Update_UpdatesUser()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -210,13 +202,13 @@ public class UserServiceTest
         var user = GetTestUserModels.First();
 
         //act
-        await userService.UpdateAsync(user);
+         userService.Update(user);
 
         //assert
         mockUnitOfWork.Verify(x => x.UserRepository.Update(It.Is<User>(t =>
             t.Id == user.Id && t.Name == user.Name && t.Surname == user.Surname && t.Email == user.Email && t.Mobile == user.Mobile
             && t.Password == user.Password && t.BirthDate == user.BirthDate )), Times.Once);
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
     }
 
 

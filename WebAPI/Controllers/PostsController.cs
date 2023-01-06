@@ -54,40 +54,38 @@ namespace WebApi.Controllers
             _userService = userService;
             _tagService = tagService;
         }
-
         /// <summary>
-        /// Gets the published.
+        /// Get all published posts
         /// </summary>
-        /// <returns>ActionResult&lt;IEnumerable&lt;PostModel&gt;&gt;.</returns>
+        /// <returns></returns>
         [HttpGet("published")]
-        public async Task<ActionResult<IEnumerable<PostModel>>> GetPublished()
+        public ActionResult<IEnumerable<PostModel>> GetPublished()
         {
-            return Ok(await _postService.GetAllPublishedAsync());
+            return Ok( _postService.GetAllPublished());
         }
 
         /// <summary>
-        /// Gets all.
+        /// Get all posts
         /// </summary>
-        /// <returns>ActionResult&lt;IEnumerable&lt;PostModel&gt;&gt;.</returns>
+        /// <returns></returns>
         [HttpGet("all")]
-        public async Task<ActionResult<IEnumerable<PostModel>>> GetAll()
+        public ActionResult<IEnumerable<PostModel>> GetAll()
         {
-            return Ok(await _postService.GetAllAsync());
+            return Ok( _postService.GetAll());
         }
 
-        // GET: api/posts
         /// <summary>
-        /// Gets the by identifier.
+        /// Get post by id
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>ActionResult&lt;IEnumerable&lt;PostModel&gt;&gt;.</returns>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<IEnumerable<PostModel>>> GetById([FromRoute] int id)
+        public ActionResult<IEnumerable<PostModel>> GetById([FromRoute] int id)
         {
             try
             {
                 
-                return Ok(await _postService.GetByIdAsync(id));
+                return Ok( _postService.GetById(id));
             }
             catch (PersonalBlogException e)
             {
@@ -95,16 +93,16 @@ namespace WebApi.Controllers
             }
         }
         /// <summary>
-        /// Gets the by category identifier.
+        /// Get category by id
         /// </summary>
-        /// <param name="categoryId">The category identifier.</param>
-        /// <returns>ActionResult&lt;IEnumerable&lt;PostModel&gt;&gt;.</returns>
+        /// <param name="categoryId"></param>
+        /// <returns></returns>
         [HttpGet("category/{categoryId:int}")]
-        public async Task<ActionResult<IEnumerable<PostModel>>> GetByCategoryId([FromRoute] int categoryId)
+        public ActionResult<IEnumerable<PostModel>> GetByCategoryId([FromRoute] int categoryId)
         {
             try
             {
-                return Ok(await _postService.GetByCategoryIdAsync(categoryId));
+                return Ok( _postService.GetByCategoryId(categoryId));
 
             }
             catch (PersonalBlogException e)
@@ -114,24 +112,23 @@ namespace WebApi.Controllers
             }
         }
 
-        // POST: api/posts
         /// <summary>
-        /// Adds the specified value.
+        /// Add new post
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult> Add([FromBody] PostModel value)
+        public  ActionResult Add([FromBody] PostModel value)
         {
-            if ( (await _userService.GetByIdAsync(value.UserId))?.UserRole == UserRole.Admin)
+            if (  _userService.GetById(value.UserId)?.UserRole == UserRole.Admin)
             {
                 value.PostStatus = PostStatus.Published;
             }
             
             try
             {
-                await _postService.AddAsync(value);
+                 _postService.Add(value);
                 return Ok(value);
             }
             catch (PersonalBlogException e)
@@ -140,19 +137,18 @@ namespace WebApi.Controllers
             }
         }
 
-        // POST: api/posts/postId/tags
         /// <summary>
-        /// Adds the tag.
+        /// Add new tag to post
         /// </summary>
-        /// <param name="postId">The post identifier.</param>
-        /// <param name="tagModel">The tag model.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="postId"></param>
+        /// <param name="tagModel"></param>
+        /// <returns></returns>
         [HttpPost("{postId:int}/tags")]
-        public async Task<ActionResult> AddTag([FromRoute] int postId, [FromBody] TagModel tagModel)
+        public ActionResult AddTag([FromRoute] int postId, [FromBody] TagModel tagModel)
         {
             try
             { 
-                await _tagService.AddTagAsync(postId, tagModel); 
+                 _tagService.AddTag(postId, tagModel); 
                 return Ok();
             }
             catch (PersonalBlogException e)
@@ -161,19 +157,18 @@ namespace WebApi.Controllers
             }
         }
 
-
-        // GET: api/posts/id/tags
         /// <summary>
-        /// Gets the tags.
+        /// Get post's tags
         /// </summary>
-        /// <param name="postId">The post identifier.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="postId"></param>
+        /// <returns></returns>
+
         [HttpGet("{postId:int}/tags")]
-        public async Task<ActionResult> GetTags([FromRoute] int postId)
+        public ActionResult GetTags([FromRoute] int postId)
         {
             try
             {
-                return Ok(await _tagService.GetTagsAsync(postId));
+                return Ok( _tagService.GetTags(postId));
 
             }
             catch (PersonalBlogException e)
@@ -182,19 +177,18 @@ namespace WebApi.Controllers
             }
         }
 
-        // PUT: api/posts/1
         /// <summary>
-        /// Updates the specified identifier.
+        /// Update post
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] PostModel value)
+        public ActionResult Update(int id, [FromBody] PostModel value)
         {
             try
             {
-                await _postService.UpdateAsync(value);
+                 _postService.Update(value);
                 return Ok();
             }
             catch (PersonalBlogException e)
@@ -203,18 +197,17 @@ namespace WebApi.Controllers
             }
         }
 
-        // DELETE: api/posts/1
         /// <summary>
-        /// Deletes the specified identifier.
+        /// Delete post
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public ActionResult Delete(int id)
         { 
             try{
-                await _postService.DeleteAsync(id);
+                 _postService.Delete(id);
                 return Ok();
             }
             catch (PersonalBlogException e)
@@ -223,18 +216,17 @@ namespace WebApi.Controllers
             }
         }
 
-        // DELETE: api/posts/tags/id
         /// <summary>
-        /// Deletes the tag.
+        /// Delete tag
         /// </summary>
-        /// <param name="tagId">The tag identifier.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="tagId"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("tags/{tagId}")]
-        public async Task<ActionResult> DeleteTag([FromRoute]int tagId)
+        public ActionResult DeleteTag([FromRoute]int tagId)
         { 
             try{
-                await _tagService.DeleteAsync(tagId);
+                 _tagService.Delete(tagId);
                 return Ok();
             }
             catch (PersonalBlogException e)
@@ -244,17 +236,18 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the posts of user.
+        /// Get user's posts
         /// </summary>
-        /// <param name="userId">The user identifier.</param>
-        /// <returns>ActionResult&lt;IEnumerable&lt;PostModel&gt;&gt;.</returns>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+
         [HttpGet]
         [Route("user/{userId}/")]
-        public async Task<ActionResult<IEnumerable<PostModel>>> GetPostsOfUser(int userId)
+        public ActionResult<IEnumerable<PostModel>> GetPostsOfUser(int userId)
         {
             try
             {
-                return Ok(await _postService.GetUserPostsAsync(userId));
+                return Ok(_postService.GetUserPosts(userId));
 
             }
             catch (PersonalBlogException e)
@@ -263,17 +256,17 @@ namespace WebApi.Controllers
 
             }
         }
-
         /// <summary>
-        /// Gets the posts search.
+        /// Search posts
         /// </summary>
-        /// <param name="text">The text.</param>
-        /// <returns>ActionResult&lt;IEnumerable&lt;PostModel&gt;&gt;.</returns>
+        /// <param name="text"></param>
+        /// <returns></returns>
+
         [HttpGet]
         [Route("search/{text}/")]
-        public async Task<ActionResult<IEnumerable<PostModel>>> GetPostsSearch(string text)
+        public ActionResult<IEnumerable<PostModel>> GetPostsSearch(string text)
         {
-            return Ok(await _postService.GetPostsSearch(text));
+            return Ok(_postService.GetPostsSearch(text));
         }
     }
 }

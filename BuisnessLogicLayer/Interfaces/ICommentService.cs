@@ -23,9 +23,9 @@ namespace BuisnessLogicLayer.Interfaces;
 public interface ICommentService : ICrud<CommentModel>
 {
     /// <summary>
-    /// Gets the post comments.
+    /// Get post's comments
     /// </summary>
-    /// <param name="postId">The post identifier.</param>
-    /// <returns>IEnumerable&lt;CommentModel&gt;.</returns>
-    public Task<IEnumerable<CommentModel>> GetPostComments(int postId);
+    /// <param name="postId"></param>
+    /// <returns></returns>
+    public IEnumerable<CommentModel> GetPostComments(int postId);
 }

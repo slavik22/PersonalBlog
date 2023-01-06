@@ -48,12 +48,12 @@ public class PostService : IPostService
         _mapper = mapper;
     }
     /// <summary>
-    /// Get all as an asynchronous operation.
+    /// Get all postmodels
     /// </summary>
-    /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
-    public async Task<IEnumerable<PostModel>> GetAllAsync()
+    /// <returns></returns>
+    public  IEnumerable<PostModel> GetAll()
     {
-        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(null,"User");
+        IEnumerable<Post> posts =   _unitOfWork.PostRepository.GetAll(null,"User");
         List<PostModel> postModels = new List<PostModel>();
 
         foreach (var item in posts)
@@ -63,12 +63,12 @@ public class PostService : IPostService
     }
 
     /// <summary>
-    /// Get all published as an asynchronous operation.
+    /// Get all published posts
     /// </summary>
-    /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
-    public async Task<IEnumerable<PostModel>> GetAllPublishedAsync()
+    /// <returns></returns>
+    public  IEnumerable<PostModel> GetAllPublished()
     {
-        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(p =>  p.PostStatus == PostStatus.Published,"User");
+        IEnumerable<Post> posts =   _unitOfWork.PostRepository.GetAll(p =>  p.PostStatus == PostStatus.Published,"User");
         List<PostModel> postModels = new List<PostModel>();
 
         foreach (var item in posts)
@@ -78,13 +78,13 @@ public class PostService : IPostService
     }
 
     /// <summary>
-    /// Get by category identifier as an asynchronous operation.
+    /// Get category by id
     /// </summary>
-    /// <param name="categoryId">The category identifier.</param>
-    /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
-    public async Task<IEnumerable<PostModel>> GetByCategoryIdAsync(int categoryId)
+    /// <param name="categoryId"></param>
+    /// <returns></returns>
+    public IEnumerable<PostModel> GetByCategoryId(int categoryId)
     {
-        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync(p => p.PostCategories.Any(pt => pt.CategoryId == categoryId ) && p.PostStatus == PostStatus.Published,"PostCategories,User");
+        IEnumerable<Post> posts =   _unitOfWork.PostRepository.GetAll(p => p.PostCategories.Any(pt => pt.CategoryId == categoryId ) && p.PostStatus == PostStatus.Published,"PostCategories,User");
         List<PostModel> postModels = new List<PostModel>();
 
         foreach (var item in posts)
@@ -94,14 +94,14 @@ public class PostService : IPostService
     }
 
     /// <summary>
-    /// Get by identifier as an asynchronous operation.
+    /// Get post by id
     /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>A Task&lt;PostModel&gt; representing the asynchronous operation.</returns>
-    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Post not Fount</exception>
-    public async Task<PostModel?> GetByIdAsync(int id)
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="PersonalBlogException"></exception>
+    public  PostModel? GetById(int id)
     {
-        var post = await _unitOfWork.PostRepository.GetByIdAsync(id, "User");
+        var post =  _unitOfWork.PostRepository.GetById(id, "User");
 
         if (post == null) throw new PersonalBlogException("Post not Fount");
         
@@ -109,54 +109,48 @@ public class PostService : IPostService
     }
 
     /// <summary>
-    /// Add as an asynchronous operation.
+    /// Add post
     /// </summary>
-    /// <param name="model">The model.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task AddAsync(PostModel model)
+    /// <param name="model"></param>
+    public void Add(PostModel model)
     {
         model.CreatedAt = DateTime.Now;
         model.UpdatedAt = DateTime.Now;
         
-        await _unitOfWork.PostRepository.AddAsync(_mapper.Map<Post>(model));
-        await _unitOfWork.SaveAsync();
+         _unitOfWork.PostRepository.Add(_mapper.Map<Post>(model));
+         _unitOfWork.Save();
     }
 
-
     /// <summary>
-    /// Update as an asynchronous operation.
+    /// Update post
     /// </summary>
-    /// <param name="model">The model.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task UpdateAsync(PostModel model)
+    /// <param name="model"></param>
+    public void Update(PostModel model)
     {
         model.UpdatedAt = DateTime.Now;
         
         _unitOfWork.PostRepository.Update(_mapper.Map<Post>(model));
-        await _unitOfWork.SaveAsync();
+         _unitOfWork.Save();
 
     }
-
     /// <summary>
-    /// Delete as an asynchronous operation.
+    /// Delete post
     /// </summary>
-    /// <param name="modelId">The model identifier.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task DeleteAsync(int modelId)
+    /// <param name="modelId"></param>
+    public void Delete(int modelId)
     {
-        await _unitOfWork.PostRepository.Delete(modelId);
-        await _unitOfWork.SaveAsync();
+         _unitOfWork.PostRepository.Delete(modelId);
+         _unitOfWork.Save();
 
     }
-
     /// <summary>
-    /// Gets the user posts asynchronous.
+    /// Get user's posts
     /// </summary>
-    /// <param name="userId">The user identifier.</param>
-    /// <returns>IEnumerable&lt;PostModel&gt;.</returns>
-    public async Task<IEnumerable<PostModel>> GetUserPostsAsync(int userId)
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    public  IEnumerable<PostModel> GetUserPosts(int userId)
     {
-        IEnumerable<Post> posts = (await _unitOfWork.PostRepository.GetAllAsync(post => post.UserId == userId, "User"));
+        IEnumerable<Post> posts =  _unitOfWork.PostRepository.GetAll(post => post.UserId == userId, "User");
 
         var postModels = new List<PostModel>();
 
@@ -167,15 +161,14 @@ public class PostService : IPostService
 
         return postModels;
     }
-
     /// <summary>
-    /// Gets the posts search.
+    /// Get posts by search
     /// </summary>
-    /// <param name="text">The text.</param>
-    /// <returns>IEnumerable&lt;PostModel&gt;.</returns>
-    public async Task<IEnumerable<PostModel>> GetPostsSearch(string text)
+    /// <param name="text"></param>
+    /// <returns></returns>
+    public  IEnumerable<PostModel> GetPostsSearch(string text)
     {
-        IEnumerable<Post> posts =  await _unitOfWork.PostRepository.GetAllAsync( p => 
+        IEnumerable<Post> posts =   _unitOfWork.PostRepository.GetAll( p => 
             (p.Title.Contains(text) || p.Content.Contains(text)) && p.PostStatus == PostStatus.Published,"User");
         
         List<PostModel> postModels = new List<PostModel>();

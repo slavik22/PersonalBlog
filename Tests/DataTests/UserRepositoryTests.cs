@@ -24,44 +24,44 @@ namespace Tests.DataTests;
 public class UserRepositoryTests
 {
     /// <summary>
-    /// Defines the test method UserRepository_GetByIdAsync_ReturnsSingleValue.
+    /// Defines the test method UserRepository_GetById_ReturnsSingleValue.
     /// </summary>
     /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
-    public async Task UserRepository_GetByIdAsync_ReturnsSingleValue(int id)
+    public void  UserRepository_GetById_ReturnsSingleValue(int id)
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var userRepository = new GenericRepository<User>(context);
 
-        var user = await userRepository.GetByIdAsync(id);
+        var user =  userRepository.GetById(id);
 
         var expected = ExpectedUsers.FirstOrDefault(x => x.Id == id);
 
-        Assert.That(user, Is.EqualTo(expected).Using(new UserEqualityComparer()), message: "GetByIdAsync method works incorrect");
+        Assert.That(user, Is.EqualTo(expected).Using(new UserEqualityComparer()), message: "GetById method works incorrect");
     }
 
     /// <summary>
-    /// Defines the test method UserRepository_GetAllAsync_ReturnsAllValues.
+    /// Defines the test method UserRepository_GetAll_ReturnsAllValues.
     /// </summary>
     [Test]
-    public async Task UserRepository_GetAllAsync_ReturnsAllValues()
+    public void  UserRepository_GetAll_ReturnsAllValues()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
         
         var userRepository = new GenericRepository<User>(context);
 
 
-        var users = await userRepository.GetAllAsync();
+        var users =  userRepository.GetAll();
 
-        Assert.That(users, Is.EqualTo(ExpectedUsers).Using(new UserEqualityComparer()), message: "GetAllAsync method works incorrect");
+        Assert.That(users, Is.EqualTo(ExpectedUsers).Using(new UserEqualityComparer()), message: "GetAll method works incorrect");
     }
     /// <summary>
-    /// Defines the test method UserRepository_AddAsync_AddsValueToDatabase.
+    /// Defines the test method UserRepository_Add_AddsValueToDatabase.
     /// </summary>
     [Test]
-    public async Task UserRepository_AddAsync_AddsValueToDatabase()
+    public void UserRepository_Add_AddsValueToDatabase()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
@@ -70,34 +70,34 @@ public class UserRepositoryTests
 
         var user = new User() { Id = 3, Name = "Bill", Surname = "Gates", BirthDate = new DateTime(1990,12,12), Email = "email3@ukr.net", Mobile = "233", Password = "password"};
 
-        await userRepository.AddAsync(user);
-        await context.SaveChangesAsync();
+         userRepository.Add(user);
+         context.SaveChanges();
 
-        Assert.That(context.Users.Count(), Is.EqualTo(3), message: "AddAsync method works incorrect");
+        Assert.That(context.Users.Count(), Is.EqualTo(3), message: "Add method works incorrect");
     }
 
 
     /// <summary>
-    /// Defines the test method UserRepository_DeleteByIdAsync_DeletesEntity.
+    /// Defines the test method UserRepository_DeleteById_DeletesEntity.
     /// </summary>
     [Test]
-    public async Task UserRepository_DeleteByIdAsync_DeletesEntity()
+    public  void UserRepository_DeleteById_DeletesEntity()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var userRepository = new GenericRepository<User>(context);
         
-        await userRepository.Delete(1);
-        await context.SaveChangesAsync();
+         userRepository.Delete(1);
+         context.SaveChanges();
 
-        Assert.That(context.Users.Count(), Is.EqualTo(1), message: "DeleteByIdAsync works incorrect");
+        Assert.That(context.Users.Count(), Is.EqualTo(1), message: "DeleteById works incorrect");
     }
 
     /// <summary>
     /// Defines the test method UserRepository_Update_UpdatesEntity.
     /// </summary>
     [Test]
-    public async Task UserRepository_Update_UpdatesEntity()
+    public void  UserRepository_Update_UpdatesEntity()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
         var userRepository = new GenericRepository<User>(context);
@@ -109,7 +109,7 @@ public class UserRepositoryTests
         };
 
         userRepository.Update(user);
-        await context.SaveChangesAsync();
+         context.SaveChanges();
 
         Assert.That(user, Is.EqualTo(new User
         {

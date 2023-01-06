@@ -23,17 +23,17 @@ namespace BuisnessLogicLayer.Interfaces;
 public interface IUserService : ICrud<UserModel>
 {
     /// <summary>
-    /// Gets the by email asynchronous.
+    /// Get user by email
     /// </summary>
-    /// <param name="email">The email.</param>
-    /// <returns>Task&lt;UserModel&gt;.</returns>
-    Task<UserModel?> GetByEmailAsync(string email);
+    /// <param name="email"></param>
+    /// <returns></returns>
+    UserModel? GetByEmail(string email);
     /// <summary>
-    /// Checks the user email exist asynchronous.
+    /// Check if email already in use
     /// </summary>
-    /// <param name="email">The email.</param>
-    /// <returns>Task&lt;System.Boolean&gt;.</returns>
-    Task<bool> CheckUserEmailExistAsync(string email);
+    /// <param name="email"></param>
+    /// <returns></returns>
+    bool CheckUserEmailExist(string email);
     /// <summary>
     /// Checks the user password and email.
     /// </summary>

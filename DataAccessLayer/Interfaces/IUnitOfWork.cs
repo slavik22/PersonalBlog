@@ -46,9 +46,9 @@ public interface IUnitOfWork
     /// <value>The category repository.</value>
     IRepository<Category> CategoryRepository{get;}
     /// <summary>
-    /// Saves the asynchronous.
+    /// Saves.
     /// </summary>
     /// <returns>Task.</returns>
-    Task SaveAsync();
+    void Save();
 
 }

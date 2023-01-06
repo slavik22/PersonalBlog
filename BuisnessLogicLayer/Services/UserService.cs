@@ -55,12 +55,12 @@ public class UserService : IUserService
     }
 
     /// <summary>
-    /// Get all as an asynchronous operation.
+    /// Get all users
     /// </summary>
-    /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
-    public async Task<IEnumerable<UserModel>> GetAllAsync()
+    /// <returns></returns>
+    public  IEnumerable<UserModel> GetAll()
     {
-        IEnumerable<User> users =  (await _unitOfWork.UserRepository.GetAllAsync());
+        IEnumerable<User> users =   _unitOfWork.UserRepository.GetAll();
         List<UserModel> usersModels = new List<UserModel>();
 
         foreach (var item in users)
@@ -69,70 +69,62 @@ public class UserService : IUserService
         return usersModels;
 
     }
-
     /// <summary>
-    /// Get by identifier as an asynchronous operation.
+    /// Get user by id
     /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>A Task&lt;UserModel&gt; representing the asynchronous operation.</returns>
-    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">User not found</exception>
-    public async Task<UserModel?> GetByIdAsync(int id)
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="PersonalBlogException"></exception>
+
+    public UserModel? GetById(int id)
     {
-        var user = await _unitOfWork.UserRepository.GetByIdAsync(id);
+        var user =  _unitOfWork.UserRepository.GetById(id);
 
         if (user == null) throw new PersonalBlogException("User not found");
         
         return _mapper.Map<UserModel>(user);
     }
     /// <summary>
-    /// Add as an asynchronous operation.
+    /// Add user
     /// </summary>
-    /// <param name="model">The model.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
+    /// <param name="model"></param>
     [Obsolete("Obsolete")]
-    public async Task AddAsync(UserModel model)
+    public void Add(UserModel model)
     {
         model.Password = PasswordHasher.HashPassword(model.Password);
         model.UserRole = UserRole.User;
         model.Token = "";
         
-        await _unitOfWork.UserRepository.AddAsync(_mapper.Map<User>(model));
-        await _unitOfWork.SaveAsync();
+         _unitOfWork.UserRepository.Add(_mapper.Map<User>(model));
+         _unitOfWork.Save();
     }
-
-
-
     /// <summary>
-    /// Update as an asynchronous operation.
+    /// Update user
     /// </summary>
-    /// <param name="model">The model.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task UpdateAsync(UserModel model)
+    /// <param name="model"></param>
+    public void Update(UserModel model)
     {
         _unitOfWork.UserRepository.Update(_mapper.Map<User>(model));
-        await _unitOfWork.SaveAsync();
+         _unitOfWork.Save();
 
     }
-
     /// <summary>
-    /// Delete as an asynchronous operation.
+    /// Delete user
     /// </summary>
-    /// <param name="modelId">The model identifier.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task DeleteAsync(int modelId)
+    /// <param name="modelId"></param>
+    public void Delete(int modelId)
     {
-        await _unitOfWork.UserRepository.Delete(modelId);
-        await _unitOfWork.SaveAsync();
+         _unitOfWork.UserRepository.Delete(modelId);
+         _unitOfWork.Save();
     }
-
     /// <summary>
-    /// Get by email as an asynchronous operation.
+    /// Get user by email
     /// </summary>
-    /// <param name="email">The email.</param>
-    /// <returns>A Task&lt;UserModel&gt; representing the asynchronous operation.</returns>
-    public async Task<UserModel?> GetByEmailAsync(string email)
+    /// <param name="email"></param>
+    /// <returns></returns>
+    public UserModel? GetByEmail(string email)
     {
-        User? user = (await _unitOfWork.UserRepository.GetAllAsync(u => u.Email == email)).FirstOrDefault();
+        User? user =  _unitOfWork.UserRepository.GetAll(u => u.Email == email).FirstOrDefault();
 
         if (user is null) return null;
         
@@ -140,13 +132,13 @@ public class UserService : IUserService
     }
 
     /// <summary>
-    /// Check user email exist as an asynchronous operation.
+    /// Check if email is already in use
     /// </summary>
-    /// <param name="email">The email.</param>
-    /// <returns>A Task&lt;System.Boolean&gt; representing the asynchronous operation.</returns>
-    public async Task<bool> CheckUserEmailExistAsync(string email)
+    /// <param name="email"></param>
+    /// <returns></returns>
+    public bool CheckUserEmailExist(string email)
     {
-        return (await _unitOfWork.UserRepository.GetAllAsync(x => x.Email == email)).Any();
+        return  _unitOfWork.UserRepository.GetAll(x => x.Email == email).Any();
     }
 
     /// <summary>

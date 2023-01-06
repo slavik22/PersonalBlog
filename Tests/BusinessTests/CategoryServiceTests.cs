@@ -30,19 +30,19 @@ public class CategoryServiceTest
     /// Defines the test method CategoryService_GetAll_ReturnsAllCategories.
     /// </summary>
     [Test]
-    public async Task CategoryService_GetAll_ReturnsAllCategories()
+    public void CategoryService_GetAll_ReturnsAllCategories()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.CategoryRepository.GetAllAsync(null,""))
-            .ReturnsAsync(GetTestCategories.AsEnumerable());
+            .Setup(x => x.CategoryRepository.GetAll(null,""))
+            .Returns(GetTestCategories.AsEnumerable());
         
         var categoryService = new CategoryService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await categoryService.GetAllAsync();
+        var actual =  categoryService.GetAll();
 
         //assert
         actual.Should().BeEquivalentTo(GetTestCategoryModels);
@@ -53,55 +53,55 @@ public class CategoryServiceTest
     /// Defines the test method CategoryService_GetById_ReturnsCategoryModel.
     /// </summary>
     [Test]
-    public async Task CategoryService_GetById_ReturnsCategoryModel()
+    public void CategoryService_GetById_ReturnsCategoryModel()
     {
         //arrange
         var expected = GetTestCategoryModels.First();
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(m => m.CategoryRepository.GetByIdAsync(It.IsAny<int>(),""))
-            .ReturnsAsync(GetTestCategories.First());
+            .Setup(m => m.CategoryRepository.GetById(It.IsAny<int>(),""))
+            .Returns(GetTestCategories.First());
 
         var categoryService = new CategoryService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await categoryService.GetByIdAsync(1);
+        var actual =  categoryService.GetById(1);
 
         //assert
         actual.Should().BeEquivalentTo(expected);
     }
 
     /// <summary>
-    /// Defines the test method CategoryService_AddAsync_AddsModel.
+    /// Defines the test method CategoryService_Add_AddsModel.
     /// </summary>
     [Test]
-    public async Task CategoryService_AddAsync_AddsModel()
+    public void CategoryService_Add_AddsModel()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
-        mockUnitOfWork.Setup(m => m.CategoryRepository.AddAsync(It.IsAny<Category>()));
+        mockUnitOfWork.Setup(m => m.CategoryRepository.Add(It.IsAny<Category>()));
 
         var categoryService = new CategoryService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
         var category = GetTestCategoryModels.First();
 
         //act
-        await categoryService.AddAsync(category);
+         categoryService.Add(category);
 
         //assert
-        mockUnitOfWork.Verify(x => x.CategoryRepository.AddAsync(It.Is<Category>(t =>
+        mockUnitOfWork.Verify(x => x.CategoryRepository.Add(It.Is<Category>(t =>
             t.Id == category.Id && t.Title == category.Title)), Times.Once);
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
     }
 
     /// <summary>
-    /// Defines the test method CategoryService_DeleteAsync_DeletesCategory.
+    /// Defines the test method CategoryService_Delete_DeletesCategory.
     /// </summary>
     /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(100)]
-    public async Task CategoryService_DeleteAsync_DeletesCategory(int id)
+    public void CategoryService_Delete_DeletesCategory(int id)
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -109,18 +109,18 @@ public class CategoryServiceTest
         var categoryService = new CategoryService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        await categoryService.DeleteAsync(id);
+        categoryService.Delete(id);
 
         //assert
         mockUnitOfWork.Verify(x => x.CategoryRepository.Delete(id), Times.Once());
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once());
     }
 
     /// <summary>
-    /// Defines the test method CategoryService_UpdateAsync_UpdatesCategory.
+    /// Defines the test method CategoryService_Update_UpdatesCategory.
     /// </summary>
     [Test]
-    public async Task CategoryService_UpdateAsync_UpdatesCategory()
+    public void CategoryService_UpdateAsync_UpdatesCategory()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -130,12 +130,12 @@ public class CategoryServiceTest
         var category = GetTestCategoryModels.First();
 
         //act
-        await categoryService.UpdateAsync(category);
+        categoryService.Update(category);
 
         //assert
         mockUnitOfWork.Verify(x => x.CategoryRepository.Update(It.Is<Category>(t =>
             t.Id == category.Id && t.Title == category.Title )), Times.Once);
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
     }
 
 

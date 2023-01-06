@@ -23,16 +23,15 @@ namespace BuisnessLogicLayer.Interfaces;
 public interface ICategoryService : ICrud<CategoryModel>
 {
     /// <summary>
-    /// Adds the category asynchronous.
+    /// Add category
     /// </summary>
-    /// <param name="postId">The post identifier.</param>
-    /// <param name="categoryModel">The category model.</param>
-    /// <returns>Task.</returns>
-    public Task AddCategoryAsync(int postId, CategoryModel categoryModel);
+    /// <param name="postId"></param>
+    /// <param name="categoryModel"></param>
+    public void AddCategory(int postId, CategoryModel categoryModel);
     /// <summary>
-    /// Gets the categories asynchronous.
+    /// Get post's categories
     /// </summary>
-    /// <param name="postId">The post identifier.</param>
-    /// <returns>Task&lt;IEnumerable&lt;CategoryModel&gt;&gt;.</returns>
-    public Task<IEnumerable<CategoryModel>> GetCategoriesAsync(int postId);
+    /// <param name="postId"></param>
+    /// <returns></returns>
+    public IEnumerable<CategoryModel> GetCategories(int postId);
 }

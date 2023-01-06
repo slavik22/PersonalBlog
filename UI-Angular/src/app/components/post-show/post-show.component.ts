@@ -65,7 +65,7 @@ export class PostShowComponent implements OnInit {
           next: (comments: any) => {
             this.comments = comments[0] === null ? [] : comments;
           },
-          error: (error) =>{
+          error: () =>{
             this.toast.error({detail: "ERROR", summary: "Some error occured", duration: 5000});
           }
         })

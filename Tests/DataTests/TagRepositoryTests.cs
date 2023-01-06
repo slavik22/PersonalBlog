@@ -24,78 +24,78 @@ namespace Tests.DataTests;
 public class TagRepositoryTests
 {
     /// <summary>
-    /// Defines the test method TagRepository_GetByIdAsync_ReturnsSingleValue.
+    /// Defines the test method TagRepository_GetById_ReturnsSingleValue.
     /// </summary>
     /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(3)]
-    public async Task TagRepository_GetByIdAsync_ReturnsSingleValue(int id)
+    public void  TagRepository_GetById_ReturnsSingleValue(int id)
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var tagRepository = new GenericRepository<Tag>(context);
 
-        var tag = await tagRepository.GetByIdAsync(id);
+        var tag =  tagRepository.GetById(id);
 
         var expected = ExpectedTags.FirstOrDefault(x => x.Id == id);
 
-        Assert.That(tag, Is.EqualTo(expected).Using(new TagEqualityComparer()), message: "GetByIdAsync method works incorrect");
+        Assert.That(tag, Is.EqualTo(expected).Using(new TagEqualityComparer()), message: "GetById method works incorrect");
     }
 
     /// <summary>
-    /// Defines the test method CategoryRepository_GetAllAsync_ReturnsAllValues.
+    /// Defines the test method CategoryRepository_GetAll_ReturnsAllValues.
     /// </summary>
     [Test]
-    public async Task CategoryRepository_GetAllAsync_ReturnsAllValues()
+    public void  CategoryRepository_GetAll_ReturnsAllValues()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var tagRepository = new GenericRepository<Tag>(context);
 
-        var tags = await tagRepository.GetAllAsync();
+        var tags =  tagRepository.GetAll();
 
-        Assert.That(tags, Is.EqualTo(ExpectedTags).Using(new TagEqualityComparer()), message: "GetAllAsync method works incorrect");
+        Assert.That(tags, Is.EqualTo(ExpectedTags).Using(new TagEqualityComparer()), message: "GetAll method works incorrect");
     }
     /// <summary>
-    /// Defines the test method CategoryRepository_AddAsync_AddsValueToDatabase.
+    /// Defines the test method CategoryRepository_Add_AddsValueToDatabase.
     /// </summary>
     [Test]
-    public async Task CategoryRepository_AddAsync_AddsValueToDatabase()
+    public void  CategoryRepository_Add_AddsValueToDatabase()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var tagRepository = new GenericRepository<Tag>(context);
         var tag = new Tag { Id = 4, Title = "New"};
 
-        await tagRepository.AddAsync(tag);
-        await context.SaveChangesAsync();
+         tagRepository.Add(tag);
+         context.SaveChanges();
 
-        Assert.That(context.Tags.Count(), Is.EqualTo(4), message: "AddAsync method works incorrect");
+        Assert.That(context.Tags.Count(), Is.EqualTo(4), message: "Add method works incorrect");
     }
 
 
     /// <summary>
-    /// Defines the test method CategoryRepository_DeleteByIdAsync_DeletesEntity.
+    /// Defines the test method CategoryRepository_DeleteById_DeletesEntity.
     /// </summary>
     [Test]
-    public async Task CategoryRepository_DeleteByIdAsync_DeletesEntity()
+    public void  CategoryRepository_DeleteById_DeletesEntity()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var tagRepository = new GenericRepository<Tag>(context);
 
-        await tagRepository.Delete(1);
-        await context.SaveChangesAsync();
+         tagRepository.Delete(1);
+         context.SaveChanges();
 
-        Assert.That(context.Tags.Count(), Is.EqualTo(2), message: "DeleteByIdAsync works incorrect");
+        Assert.That(context.Tags.Count(), Is.EqualTo(2), message: "DeleteById works incorrect");
     }
 
     /// <summary>
     /// Defines the test method CategoryRepository_Update_UpdatesEntity.
     /// </summary>
     [Test]
-    public async Task CategoryRepository_Update_UpdatesEntity()
+    public void  CategoryRepository_Update_UpdatesEntity()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
         var tagRepository = new GenericRepository<Tag>(context);
@@ -107,7 +107,7 @@ public class TagRepositoryTests
         };
 
         tagRepository.Update(tag);
-        await context.SaveChangesAsync();
+         context.SaveChanges();
 
         Assert.That(tag, Is.EqualTo(new Tag
         {

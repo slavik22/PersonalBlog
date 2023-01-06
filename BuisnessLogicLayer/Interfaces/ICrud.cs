@@ -20,36 +20,32 @@ namespace BuisnessLogicLayer.Interfaces;
 public interface ICrud<TModel> where TModel : class
 {
     /// <summary>
-    /// Gets all asynchronous.
+    /// Get all models
     /// </summary>
-    /// <returns>Task&lt;IEnumerable&lt;TModel&gt;&gt;.</returns>
-    Task<IEnumerable<TModel>> GetAllAsync();
+    /// <returns></returns>
+    IEnumerable<TModel> GetAll();
 
     /// <summary>
-    /// Gets the by identifier asynchronous.
+    /// Get model by id
     /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>Task&lt;TModel&gt;.</returns>
-    Task<TModel?> GetByIdAsync(int id);
+    /// <param name="id"></param>
+    /// <returns></returns>
+    TModel? GetById(int id);
 
     /// <summary>
-    /// Adds the asynchronous.
+    /// Add model
     /// </summary>
-    /// <param name="model">The model.</param>
-    /// <returns>Task.</returns>
-    Task AddAsync(TModel model);
+    /// <param name="model"></param>
+    void Add(TModel model);
 
     /// <summary>
-    /// Updates the asynchronous.
+    /// Update model
     /// </summary>
-    /// <param name="model">The model.</param>
-    /// <returns>Task.</returns>
-    Task UpdateAsync(TModel model);
-
+    /// <param name="model"></param>
+    void Update(TModel model);
     /// <summary>
-    /// Deletes the asynchronous.
+    /// Delete model
     /// </summary>
-    /// <param name="modelId">The model identifier.</param>
-    /// <returns>Task.</returns>
-    Task DeleteAsync(int modelId);
+    /// <param name="modelId"></param>
+    void Delete(int modelId);
 }

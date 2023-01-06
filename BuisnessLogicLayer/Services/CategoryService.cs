@@ -48,12 +48,12 @@ public class CategoryService : ICategoryService
     }
 
     /// <summary>
-    /// Get all as an asynchronous operation.
+    /// Get all categorymodels
     /// </summary>
-    /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
-    public async Task<IEnumerable<CategoryModel>> GetAllAsync()
+    /// <returns></returns>
+    public  IEnumerable<CategoryModel> GetAll()
     {
-        IEnumerable<Category> categories =  await _unitOfWork.CategoryRepository.GetAllAsync();
+        IEnumerable<Category> categories =   _unitOfWork.CategoryRepository.GetAll();
         List<CategoryModel> categoryModels = new List<CategoryModel>();
 
         foreach (var c in categories)
@@ -64,78 +64,73 @@ public class CategoryService : ICategoryService
         return categoryModels;
 
     }
-
     /// <summary>
-    /// Get by identifier as an asynchronous operation.
+    /// Get categorymodel by id
     /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>A Task&lt;CategoryModel&gt; representing the asynchronous operation.</returns>
-    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Category not found</exception>
-    public async Task<CategoryModel?> GetByIdAsync(int id)
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="PersonalBlogException"></exception>
+
+    public  CategoryModel? GetById(int id)
     {
-        var category = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+        var category =  _unitOfWork.CategoryRepository.GetById(id);
         if (category == null) throw new PersonalBlogException("Category not found");
         return _mapper.Map<CategoryModel>(category);
     }
 
     /// <summary>
-    /// Add as an asynchronous operation.
+    /// Add categorymodel
     /// </summary>
-    /// <param name="model">The model.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task AddAsync(CategoryModel model)
+    /// <param name="model"></param>
+    public void Add(CategoryModel model)
     {
-        await _unitOfWork.CategoryRepository.AddAsync(_mapper.Map<Category>(model));
-        await _unitOfWork.SaveAsync();
+         _unitOfWork.CategoryRepository.Add(_mapper.Map<Category>(model));
+         _unitOfWork.Save();
     }
 
     /// <summary>
-    /// Update as an asynchronous operation.
+    /// Update categorymodel
     /// </summary>
-    /// <param name="model">The model.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task UpdateAsync(CategoryModel model)
+    /// <param name="model"></param>
+    public void Update(CategoryModel model)
     {
         _unitOfWork.CategoryRepository.Update(_mapper.Map<Category>(model));
-        await _unitOfWork.SaveAsync();
+         _unitOfWork.Save();
 
     }
-
     /// <summary>
-    /// Delete as an asynchronous operation.
+    /// Delete categorymodel
     /// </summary>
-    /// <param name="modelId">The model identifier.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task DeleteAsync(int modelId)
+    /// <param name="modelId"></param>
+
+    public void Delete(int modelId)
     {
-       await _unitOfWork.CategoryRepository.Delete(modelId);
-       await _unitOfWork.SaveAsync();
+        _unitOfWork.CategoryRepository.Delete(modelId);
+        _unitOfWork.Save();
 
     }
-
-
     /// <summary>
-    /// Add category as an asynchronous operation.
+    /// Acc category
     /// </summary>
-    /// <param name="postId">The post identifier.</param>
-    /// <param name="categoryModel">The category model.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Post not found</exception>
-    public async Task AddCategoryAsync(int postId, CategoryModel categoryModel)
+    /// <param name="postId"></param>
+    /// <param name="categoryModel"></param>
+    /// <exception cref="PersonalBlogException"></exception>
+    
+    public void AddCategory(int postId, CategoryModel categoryModel)
     {
-        Post? post = await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostCategories");
+        Post? post =  _unitOfWork.PostRepository.GetById(postId, "PostCategories");
         
         if ( post == null)
         {
             throw new PersonalBlogException("Post not found");
         }
         
-        Category? category = (await _unitOfWork.CategoryRepository.GetAllAsync(category => category.Title == categoryModel.Title)).FirstOrDefault();
+        Category? category =  _unitOfWork.CategoryRepository.GetAll(category => category.Title == categoryModel.Title).FirstOrDefault();
         
         if(category == null )
         {
             category = _mapper.Map<Category>(categoryModel);
-            await _unitOfWork.CategoryRepository.AddAsync(category);
+             _unitOfWork.CategoryRepository.Add(category);
         }
 
         post.PostCategories.Add(new PostCategory()
@@ -144,18 +139,18 @@ public class CategoryService : ICategoryService
             Post = post
         });
             
-        await _unitOfWork.SaveAsync();
+         _unitOfWork.Save();
     }
 
     /// <summary>
-    /// Get categories as an asynchronous operation.
+    /// Get post's categories
     /// </summary>
-    /// <param name="postId">The post identifier.</param>
-    /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
-    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Post not found</exception>
-    public async Task<IEnumerable<CategoryModel>> GetCategoriesAsync(int postId)
+    /// <param name="postId"></param>
+    /// <returns></returns>
+    /// <exception cref="PersonalBlogException"></exception>
+    public IEnumerable<CategoryModel> GetCategories(int postId)
     {
-        Post? post = (await _unitOfWork.PostRepository.GetByIdAsync(postId, "PostCategories"));
+        Post? post =  _unitOfWork.PostRepository.GetById(postId, "PostCategories");
 
         if (post == null)
         {

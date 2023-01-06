@@ -32,19 +32,19 @@ public class PostServiceTest
     /// Defines the test method PostService_GetAll_ReturnsAllPosts.
     /// </summary>
     [Test]
-    public async Task PostService_GetAll_ReturnsAllPosts()
+    public void  PostService_GetAll_ReturnsAllPosts()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.PostRepository.GetAllAsync(null, It.IsAny<string>()))
-            .ReturnsAsync(GetTestPosts.AsEnumerable());
+            .Setup(x => x.PostRepository.GetAll(null, It.IsAny<string>()))
+            .Returns(GetTestPosts.AsEnumerable());
         
         var postService = new PostService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await postService.GetAllAsync();
+        var actual =  postService.GetAll();
 
         //assert
         actual.Should().BeEquivalentTo(GetTestPostModels);
@@ -54,63 +54,54 @@ public class PostServiceTest
     /// Defines the test method PostService_GetAllPublished_ReturnsAllPublishedPosts.
     /// </summary>
     [Test]
-    public async Task PostService_GetAllPublished_ReturnsAllPublishedPosts()
+    public  void PostService_GetAllPublished_ReturnsAllPublishedPosts()
     {
         //arrange
         var expected = GetTestPosts.Where(p => p.PostStatus == DataAccessLayer.Enums.PostStatus.Published);
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.PostRepository.GetAllAsync(null, It.IsAny<string>()))
-            .ReturnsAsync(GetTestPosts.Where(p =>  p.PostStatus == DataAccessLayer.Enums.PostStatus.Published));
+            .Setup(x => x.PostRepository.GetAll(null, It.IsAny<string>()))
+            .Returns(GetTestPosts.Where(p =>  p.PostStatus == DataAccessLayer.Enums.PostStatus.Published));
         
         var postService = new PostService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await postService.GetAllAsync();
+        var actual =  postService.GetAll();
 
         //assert
         actual.Should().BeEquivalentTo(expected);
     }
 
-
-    /// <summary>
-    /// Post service get user posts asynchronous returns user posts as an asynchronous operation.
-    /// </summary>
-    /// <param name="userId">The user identifier.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
+    
     [TestCase(1)]
     [TestCase(2)]
-    public async Task PostService_GetUserPostsAsync_ReturnsUserPostsAsync(int userId)
+    public void  PostService_GetUserPosts_ReturnsUserPosts(int userId)
     {
         //arrange
         var expected = GetTestPostModels.Where(p => p.UserId == userId);
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.PostRepository.GetAllAsync( It.IsAny<Expression<Func<Post,bool>>>(), It.IsAny<string>()))
-            .ReturnsAsync(GetTestPosts.Where(p =>  p.UserId == userId));
+            .Setup(x => x.PostRepository.GetAll( It.IsAny<Expression<Func<Post,bool>>>(), It.IsAny<string>()))
+            .Returns(GetTestPosts.Where(p =>  p.UserId == userId));
         
         var postService = new PostService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await postService.GetUserPostsAsync(userId);
+        var actual =  postService.GetUserPosts(userId);
 
         //assert
         actual.Should().BeEquivalentTo(expected);
     }
 
-    /// <summary>
-    /// Post service get posts search returns posts search as an asynchronous operation.
-    /// </summary>
-    /// <param name="text">The text.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
+
     [TestCase("pop")]
     [TestCase("java")]
     [TestCase("music")]
     [TestCase("world")]
     [TestCase("hello")]
-    public async Task PostService_GetPostsSearch_ReturnsPostsSearchAsync(string text)
+    public  void PostService_GetPostsSearch_ReturnsPostsSearch(string text)
     {
         //arrange
         var expected = GetTestPostModels.Where(p => 
@@ -118,14 +109,14 @@ public class PostServiceTest
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.PostRepository.GetAllAsync( It.IsAny<Expression<Func<Post,bool>>>(), It.IsAny<string>()))
-            .ReturnsAsync(GetTestPosts.Where(p => 
+            .Setup(x => x.PostRepository.GetAll( It.IsAny<Expression<Func<Post,bool>>>(), It.IsAny<string>()))
+            .Returns(GetTestPosts.Where(p => 
                 (p.Title.Contains(text) || p.Content.Contains(text)) && p.PostStatus == DataAccessLayer.Enums.PostStatus.Published));
         
         var postService = new PostService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await postService.GetPostsSearch(text);
+        var actual =  postService.GetPostsSearch(text);
 
         //assert
         actual.Should().BeEquivalentTo(expected);
@@ -137,20 +128,20 @@ public class PostServiceTest
     /// Defines the test method PostService_GetById_ReturnsPostModel.
     /// </summary>
     [Test]
-    public async Task PostService_GetById_ReturnsPostModel()
+    public void  PostService_GetById_ReturnsPostModel()
     {
         //arrange
         var expected = GetTestPostModels.First();
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(m => m.PostRepository.GetByIdAsync(It.IsAny<int>(),It.IsAny<string>()))
-            .ReturnsAsync(GetTestPosts.First());
+            .Setup(m => m.PostRepository.GetById(It.IsAny<int>(),It.IsAny<string>()))
+            .Returns(GetTestPosts.First());
 
         var postService = new PostService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await postService.GetByIdAsync(1);
+        var actual =  postService.GetById(1);
 
         //assert
         actual.Should().BeEquivalentTo(expected);
@@ -159,35 +150,35 @@ public class PostServiceTest
 
 
     /// <summary>
-    /// Defines the test method PostService_AddAsync_AddsModel.
+    /// Defines the test method PostService_Add_AddsModel.
     /// </summary>
     [Test]
-    public async Task PostService_AddAsync_AddsModel()
+    public void   PostService_Add_AddsModel()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
-        mockUnitOfWork.Setup(m => m.PostRepository.AddAsync(It.IsAny<Post>()));
+        mockUnitOfWork.Setup(m => m.PostRepository.Add(It.IsAny<Post>()));
 
         var postService = new PostService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
         var post = GetTestPostModels.First();
 
         //act
-        await postService.AddAsync(post);
+         postService.Add(post);
 
         //assert
-        mockUnitOfWork.Verify(x => x.PostRepository.AddAsync(It.Is<Post>(t =>
+        mockUnitOfWork.Verify(x => x.PostRepository.Add(It.Is<Post>(t =>
             t.Id == post.Id && t.Title == post.Title && t.Summary == post.Summary && t.Content == post.Content && t.UserId == post.UserId)), Times.Once);
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
     }
 
     /// <summary>
-    /// Defines the test method PostService_DeleteAsync_DeletesPost.
+    /// Defines the test method PostService_Delete_DeletesPost.
     /// </summary>
     /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(100)]
-    public async Task PostService_DeleteAsync_DeletesPost(int id)
+    public  void PostService_Delete_DeletesPost(int id)
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -195,18 +186,18 @@ public class PostServiceTest
         var postService = new PostService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        await postService.DeleteAsync(id);
+         postService.Delete(id);
 
         //assert
         mockUnitOfWork.Verify(x => x.PostRepository.Delete(id), Times.Once());
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once());
     }
 
     /// <summary>
-    /// Defines the test method PostService_UpdateAsync_UpdatesPost.
+    /// Defines the test method PostService_Update_UpdatesPost.
     /// </summary>
     [Test]
-    public async Task PostService_UpdateAsync_UpdatesPost()
+    public void  PostService_Update_UpdatesPost()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -216,12 +207,12 @@ public class PostServiceTest
         var post = GetTestPostModels.First();
 
         //act
-        await postService.UpdateAsync(post);
+         postService.Update(post);
 
         //assert
         mockUnitOfWork.Verify(x => x.PostRepository.Update(It.Is<Post>(t =>
             t.Id == post.Id && t.Title == post.Title && t.Summary == post.Summary && t.Content == post.Content && t.UserId == post.UserId)), Times.Once);
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
     }
 
 

@@ -48,13 +48,13 @@ public class CommentService : ICommentService
     }
 
     /// <summary>
-    /// Gets the post comments.
+    /// Get post's comments
     /// </summary>
-    /// <param name="postId">The post identifier.</param>
-    /// <returns>IEnumerable&lt;CommentModel&gt;.</returns>
-    public async Task<IEnumerable<CommentModel>> GetPostComments(int postId)
+    /// <param name="postId"></param>
+    /// <returns></returns>
+    public  IEnumerable<CommentModel> GetPostComments(int postId)
     {
-        IEnumerable<Comment> comments =  await _unitOfWork.CommentRepository.GetAllAsync(c => c.PostId == postId);
+        IEnumerable<Comment> comments =   _unitOfWork.CommentRepository.GetAll(c => c.PostId == postId);
 
         var commentModels = new List<CommentModel>();
 
@@ -66,14 +66,13 @@ public class CommentService : ICommentService
         return commentModels;
 
     }
-
     /// <summary>
-    /// Get all as an asynchronous operation.
+    /// Get all comments
     /// </summary>
-    /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
-    public async Task<IEnumerable<CommentModel>> GetAllAsync()
+    /// <returns></returns>
+    public IEnumerable<CommentModel> GetAll()
     {
-        IEnumerable<Comment> comments =  await _unitOfWork.CommentRepository.GetAllAsync();
+        IEnumerable<Comment> comments =   _unitOfWork.CommentRepository.GetAll();
         List<CommentModel> commentModels = new List<CommentModel>();
 
         foreach (var item in comments)
@@ -82,16 +81,15 @@ public class CommentService : ICommentService
         return commentModels;
 
     }
-
     /// <summary>
-    /// Get by identifier as an asynchronous operation.
+    /// Get commentmodel by id
     /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>A Task&lt;CommentModel&gt; representing the asynchronous operation.</returns>
-    /// <exception cref="BuisnessLogicLayer.Validation.PersonalBlogException">Comment not found</exception>
-    public async Task<CommentModel?> GetByIdAsync(int id)
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="PersonalBlogException"></exception>
+    public  CommentModel? GetById(int id)
     {
-        var comment = await _unitOfWork.CommentRepository.GetByIdAsync(id);
+        var comment =  _unitOfWork.CommentRepository.GetById(id);
 
         if (comment == null) throw new PersonalBlogException("Comment not found");
         
@@ -99,37 +97,32 @@ public class CommentService : ICommentService
     }
 
     /// <summary>
-    /// Add as an asynchronous operation.
+    /// Add comment
     /// </summary>
-    /// <param name="model">The model.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task AddAsync(CommentModel model)
+    /// <param name="model"></param>
+    public void Add(CommentModel model)
     {
-        await _unitOfWork.CommentRepository.AddAsync(_mapper.Map<Comment>(model));
-        await _unitOfWork.SaveAsync();
+         _unitOfWork.CommentRepository.Add(_mapper.Map<Comment>(model));
+         _unitOfWork.Save();
     }
-
     /// <summary>
-    /// Update as an asynchronous operation.
+    /// Update comment
     /// </summary>
-    /// <param name="model">The model.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task UpdateAsync(CommentModel model)
+    /// <param name="model"></param>
+    public void Update(CommentModel model)
     {
-        _unitOfWork.CommentRepository.Update(_mapper.Map<Comment>(model));
-        await _unitOfWork.SaveAsync();
+        _unitOfWork.CommentRepository.Update(_mapper.Map<Comment>(model)); 
+        _unitOfWork.Save();
 
     }
-
     /// <summary>
-    /// Delete as an asynchronous operation.
+    /// Delete comment
     /// </summary>
-    /// <param name="modelId">The model identifier.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task DeleteAsync(int modelId)
+    /// <param name="modelId"></param>
+    public void Delete(int modelId)
     {
-        await _unitOfWork.CommentRepository.Delete(modelId);
-        await _unitOfWork.SaveAsync();
+         _unitOfWork.CommentRepository.Delete(modelId);
+         _unitOfWork.Save();
 
     }
 }

@@ -24,77 +24,77 @@ namespace Tests.DataTests;
 public class CategoryRepositoryTests
 {
     /// <summary>
-    /// Defines the test method CategoryRepository_GetByIdAsync_ReturnsSingleValue.
+    /// Defines the test method CategoryRepository_GetById_ReturnsSingleValue.
     /// </summary>
     /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
-    public async Task CategoryRepository_GetByIdAsync_ReturnsSingleValue(int id)
+    public void  CategoryRepository_GetById_ReturnsSingleValue(int id)
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var categoryRepository = new GenericRepository<Category>(context);
 
-        var category = await categoryRepository.GetByIdAsync(id);
+        var category =  categoryRepository.GetById(id);
 
         var expected = ExpectedCategories.FirstOrDefault(x => x.Id == id);
 
-        Assert.That(category, Is.EqualTo(expected).Using(new CategoryEqualityComparer()), message: "GetByIdAsync method works incorrect");
+        Assert.That(category, Is.EqualTo(expected).Using(new CategoryEqualityComparer()), message: "GetById method works incorrect");
     }
 
     /// <summary>
-    /// Defines the test method CategoryRepository_GetAllAsync_ReturnsAllValues.
+    /// Defines the test method CategoryRepository_GetAll_ReturnsAllValues.
     /// </summary>
     [Test]
-    public async Task CategoryRepository_GetAllAsync_ReturnsAllValues()
+    public  void  CategoryRepository_GetAll_ReturnsAllValues()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var categoryRepository = new GenericRepository<Category>(context);
 
-        var categories = await categoryRepository.GetAllAsync();
+        var categories =  categoryRepository.GetAll();
 
-        Assert.That(categories, Is.EqualTo(ExpectedCategories).Using(new CategoryEqualityComparer()), message: "GetAllAsync method works incorrect");
+        Assert.That(categories, Is.EqualTo(ExpectedCategories).Using(new CategoryEqualityComparer()), message: "GetAll method works incorrect");
     }
     /// <summary>
-    /// Defines the test method CategoryRepository_AddAsync_AddsValueToDatabase.
+    /// Defines the test method CategoryRepository_Add_AddsValueToDatabase.
     /// </summary>
     [Test]
-    public async Task CategoryRepository_AddAsync_AddsValueToDatabase()
+    public void  CategoryRepository_Add_AddsValueToDatabase()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var categoryRepository = new GenericRepository<Category>(context);
         var category = new Category { Id = 3, Title = "New"};
 
-        await categoryRepository.AddAsync(category);
-        await context.SaveChangesAsync();
+         categoryRepository.Add(category);
+         context.SaveChanges();
 
-        Assert.That(context.Categories.Count(), Is.EqualTo(3), message: "AddAsync method works incorrect");
+        Assert.That(context.Categories.Count(), Is.EqualTo(3), message: "Add method works incorrect");
     }
 
 
     /// <summary>
-    /// Defines the test method CategoryRepository_DeleteByIdAsync_DeletesEntity.
+    /// Defines the test method CategoryRepository_DeleteById_DeletesEntity.
     /// </summary>
     [Test]
-    public async Task CategoryRepository_DeleteByIdAsync_DeletesEntity()
+    public void  CategoryRepository_DeleteById_DeletesEntity()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
 
         var categoryRepository = new GenericRepository<Category>(context);
 
-        await categoryRepository.Delete(1);
-        await context.SaveChangesAsync();
+         categoryRepository.Delete(1);
+         context.SaveChanges();
 
-        Assert.That(context.Categories.Count(), Is.EqualTo(1), message: "DeleteByIdAsync works incorrect");
+        Assert.That(context.Categories.Count(), Is.EqualTo(1), message: "DeleteById works incorrect");
     }
 
     /// <summary>
     /// Defines the test method CategoryRepository_Update_UpdatesEntity.
     /// </summary>
     [Test]
-    public async Task CategoryRepository_Update_UpdatesEntity()
+    public void  CategoryRepository_Update_UpdatesEntity()
     {
         using var context = new PersonalBlogDbContext(UnitTestHelper.GetUnitTestDbOptions());
         var categoryRepository = new GenericRepository<Category>(context);
@@ -106,7 +106,7 @@ public class CategoryRepositoryTests
         };
 
         categoryRepository.Update(category);
-        await context.SaveChangesAsync();
+         context.SaveChanges();
 
         Assert.That(category, Is.EqualTo(new Category
         {

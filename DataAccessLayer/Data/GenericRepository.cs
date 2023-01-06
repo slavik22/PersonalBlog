@@ -46,12 +46,12 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
     }
 
     /// <summary>
-    /// Get all as an asynchronous operation.
+    /// Get all entities from db
     /// </summary>
-    /// <param name="filter">The filter.</param>
-    /// <param name="includeProperties">The include properties.</param>
-    /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
-    public async Task<IEnumerable<TEntity>> GetAllAsync( Expression<Func<TEntity, bool>>? filter = null,string includeProperties = "")
+    /// <param name="filter"></param>
+    /// <param name="includeProperties"></param>
+    /// <returns></returns>
+    public  IEnumerable<TEntity> GetAll( Expression<Func<TEntity, bool>>? filter = null,string includeProperties = "")
     {
         IQueryable<TEntity> query = _dbSet;
 
@@ -65,16 +65,16 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
             query = query.Include(includeProperty);
         }
 
-        return await query.ToListAsync();
+        return query.ToList();
     }
 
     /// <summary>
-    /// Get by identifier as an asynchronous operation.
+    /// Gets entity by id
     /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <param name="includeProperties">The include properties.</param>
-    /// <returns>A Task&lt;TEntity&gt; representing the asynchronous operation.</returns>
-    public async Task<TEntity?> GetByIdAsync(int id, string includeProperties = "")
+    /// <param name="id"></param>
+    /// <param name="includeProperties"></param>
+    /// <returns></returns>
+    public  TEntity? GetById(int id, string includeProperties = "")
     {
         IQueryable<TEntity> query = _dbSet;
         foreach (var includeProperty in includeProperties.Split( ',', StringSplitOptions.RemoveEmptyEntries))
@@ -82,28 +82,24 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
             query = query.Include(includeProperty);
         }
         
-        return await query.FirstOrDefaultAsync(p => p.Id == id);
+        return query.FirstOrDefault(p => p.Id == id);
     }
-
     /// <summary>
-    /// Add as an asynchronous operation.
+    /// Add entity
     /// </summary>
-    /// <param name="entity">The entity.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
-    public async Task AddAsync(TEntity entity)
+    /// <param name="entity"></param>
+    public void Add(TEntity entity)
     { 
-        await _dbSet.AddAsync(entity);
+         _dbSet.Add(entity);
     }
-
     /// <summary>
-    /// Deletes the specified identifier.
+    /// Delete entity
     /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>Task.</returns>
-    /// <exception cref="System.InvalidOperationException"></exception>
-    public async Task Delete(int id)
+    /// <param name="id"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    public void Delete(int id)
     {
-        TEntity entityToDelete = await _dbSet.FindAsync(id) ?? throw new InvalidOperationException();
+        TEntity entityToDelete = _dbSet.Find(id) ?? throw new InvalidOperationException();
 
         if (_context.Entry(entityToDelete).State == EntityState.Detached)
         {
@@ -112,10 +108,9 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : B
          _dbSet.Remove(entityToDelete);
     }
     /// <summary>
-    /// Updates the specified item.
+    /// Update entity
     /// </summary>
-    /// <param name="entityToUpdate">The item.</param>
-    /// <exception cref="System.NullReferenceException"></exception>
+    /// <param name="entityToUpdate"></param>
     public void Update(TEntity entityToUpdate)
     {
         var entity = _dbSet.Find(entityToUpdate.Id);

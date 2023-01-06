@@ -41,18 +41,17 @@ namespace WebApi.Controllers
             _commentService = commentService;
         }
 
-        // GET: api/comments/post/{id}
         /// <summary>
-        /// Gets the post comments.
+        /// Get post's comments
         /// </summary>
-        /// <param name="postId">The post identifier.</param>
-        /// <returns>ActionResult&lt;IEnumerable&lt;CommentModel&gt;&gt;.</returns>
+        /// <param name="postId"></param>
+        /// <returns></returns>
         [HttpGet("post/{postId:int}")]
-        public async Task<ActionResult<IEnumerable<CommentModel>>> GetPostComments(int postId)
+        public  ActionResult<IEnumerable<CommentModel>> GetPostComments(int postId)
         {
             try
             {
-                return  Ok(await _commentService.GetPostComments(postId));
+                return  Ok( _commentService.GetPostComments(postId));
 
             }
             catch (PersonalBlogException e)
@@ -60,18 +59,17 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
-        // POST: api/comments
         /// <summary>
-        /// Adds the specified value.
+        /// Add comment
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> Add([FromBody] CommentModel value)
+        public  ActionResult Add([FromBody] CommentModel value)
         {
             try
             {
-                await _commentService.AddAsync(value);
+                 _commentService.Add(value);
                 return Ok(value);
             }
             catch (PersonalBlogException e)

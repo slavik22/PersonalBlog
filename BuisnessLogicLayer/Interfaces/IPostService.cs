@@ -23,28 +23,26 @@ namespace BuisnessLogicLayer.Interfaces;
 public interface IPostService : ICrud<PostModel>
 {
     /// <summary>
-    /// Gets the user posts asynchronous.
+    /// Get user's posts
     /// </summary>
-    /// <param name="userId">The user identifier.</param>
-    /// <returns>IEnumerable&lt;PostModel&gt;.</returns>
-    public Task<IEnumerable<PostModel>> GetUserPostsAsync(int userId);
-
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    public IEnumerable<PostModel> GetUserPosts(int userId);
     /// <summary>
-    /// Gets the posts search.
+    /// Get posts by search
     /// </summary>
-    /// <param name="text">The text.</param>
-    /// <returns>Task&lt;IEnumerable&lt;PostModel&gt;&gt;.</returns>
-    public Task<IEnumerable<PostModel>> GetPostsSearch(string text);
-    //public Task AddTagAsync(int postId, TagModel tagModel);
+    /// <param name="text"></param>
+    /// <returns></returns>
+    public IEnumerable<PostModel> GetPostsSearch(string text);
     /// <summary>
-    /// Gets all published asynchronous.
+    /// Get all published posts
     /// </summary>
-    /// <returns>Task&lt;IEnumerable&lt;PostModel&gt;&gt;.</returns>
-    public Task<IEnumerable<PostModel>> GetAllPublishedAsync();
+    /// <returns></returns>
+    public IEnumerable<PostModel> GetAllPublished();
     /// <summary>
-    /// Gets the by category identifier asynchronous.
+    /// Get category's posts
     /// </summary>
-    /// <param name="categoryId">The category identifier.</param>
-    /// <returns>Task&lt;IEnumerable&lt;PostModel&gt;&gt;.</returns>
-    public Task<IEnumerable<PostModel>> GetByCategoryIdAsync(int categoryId);
+    /// <param name="categoryId"></param>
+    /// <returns></returns>
+    public IEnumerable<PostModel>GetByCategoryId(int categoryId);
 }

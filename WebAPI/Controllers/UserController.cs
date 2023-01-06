@@ -46,20 +46,20 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Authenticates the specified user model.
+        /// Authenticate user
         /// </summary>
-        /// <param name="userModel">The user model.</param>
-        /// <returns>IActionResult.</returns>
+        /// <param name="userModel"></param>
+        /// <returns></returns>
         [HttpPost("authenticate")]
         [Obsolete("Obsolete")]
-        public async Task<IActionResult> Authenticate([FromBody] UserModel? userModel)
+        public IActionResult Authenticate([FromBody] UserModel? userModel)
         {
             if (userModel == null)
             {
                 return BadRequest(new {Message = "Data incorrect"});
             }
             
-            UserModel? user = await _userService.GetByEmailAsync(userModel.Email);
+            UserModel? user =  _userService.GetByEmail(userModel.Email);
 
             if (user == null)
             {
@@ -81,19 +81,19 @@ namespace WebApi.Controllers
 
 
         /// <summary>
-        /// Registers the specified user model.
+        /// Register user
         /// </summary>
-        /// <param name="userModel">The user model.</param>
-        /// <returns>IActionResult.</returns>
+        /// <param name="userModel"></param>
+        /// <returns></returns>
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserModel? userModel)
+        public IActionResult Register([FromBody] UserModel? userModel)
         {
             if (userModel == null)
             {
                 return BadRequest(new { Message = "Data are incorrect" });
             }
 
-            if (await _userService.CheckUserEmailExistAsync(userModel.Email))
+            if ( _userService.CheckUserEmailExist(userModel.Email))
             {
                 return BadRequest(new { Message = "User with such email already exists" });
             }
@@ -104,34 +104,33 @@ namespace WebApi.Controllers
                 return BadRequest(new { Message = res });
             }
             
-            await _userService.AddAsync(userModel);
+            _userService.Add(userModel);
             return Ok(new { Message = "User registered successfully" });
         }
 
         /// <summary>
-        /// Gets this instance.
+        /// Get all users
         /// </summary>
-        /// <returns>ActionResult&lt;IEnumerable&lt;UserModel&gt;&gt;.</returns>
+        /// <returns></returns>
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserModel>>> Get()
+        public ActionResult<IEnumerable<UserModel>> Get()
         {
-            return Ok(await _userService.GetAllAsync());
+            return Ok( _userService.GetAll());
         }
 
-        // DELETE: api/user/1
         /// <summary>
-        /// Deletes the specified identifier.
+        /// Delete user
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public ActionResult Delete(int id)
         {
             try
             {
-                await _userService.DeleteAsync(id);
+                 _userService.Delete(id);
                 return Ok();
             }
             catch (Exception e)
@@ -140,17 +139,16 @@ namespace WebApi.Controllers
             }
         }
 
-        // PUT: api/user/1
         /// <summary>
-        /// Updates the specified identifier.
+        /// Update user
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPut("{id:int}")]
         [Obsolete("Obsolete")]
-        public async Task<ActionResult> Update(int id, [FromBody] ChangeUserDataModel? value)
+        public ActionResult Update(int id, [FromBody] ChangeUserDataModel? value)
         {
 
             if (value == null)
@@ -158,7 +156,7 @@ namespace WebApi.Controllers
                 return BadRequest(new { Message = "Data are incorrect" });
             }
             
-            UserModel? user = await _userService.GetByIdAsync(id);
+            UserModel? user =  _userService.GetById(id);
 
             if (user == null)
             {
@@ -171,7 +169,7 @@ namespace WebApi.Controllers
                 return BadRequest(new {Message = "Password is incorrect"});
             }
 
-            if (user.Email != value.Email && await _userService.CheckUserEmailExistAsync(value.Email))
+            if (user.Email != value.Email &&  _userService.CheckUserEmailExist(value.Email))
             {
                 return BadRequest(new {Message = "Email is already used"});
             }
@@ -200,7 +198,7 @@ namespace WebApi.Controllers
                 
             try
             {
-                await _userService.UpdateAsync(userModel);
+                 _userService.Update(userModel);
                 return Ok();
             }
             catch (PersonalBlogException)
@@ -208,23 +206,22 @@ namespace WebApi.Controllers
                 return BadRequest( new {Message ="User not found"});
             }
         }
-
-        // [Authorize]
         /// <summary>
-        /// Updates to admin.
+        /// Update user to admin
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>ActionResult.</returns>
-        [HttpPut("{id:int}/makeAdmin")]
-        public async Task<ActionResult> UpdateToAdmin(int id, [FromBody] UpdateToAdminUserModel? value)
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+         [Authorize]
+         [HttpPut("{id:int}/makeAdmin")]
+        public ActionResult UpdateToAdmin(int id, [FromBody] UpdateToAdminUserModel? value)
         {
             if (value == null)
             {
                 return BadRequest(new { Message = "Data are incorrect" });
             }
             
-            UserModel? user = await _userService.GetByIdAsync(id);
+            UserModel? user = _userService.GetById(id);
 
             if (user == null)
             {
@@ -243,7 +240,7 @@ namespace WebApi.Controllers
             };
             try
             {
-                await _userService.UpdateAsync(um);
+                 _userService.Update(um);
                 return Ok();
             }
             catch (PersonalBlogException)

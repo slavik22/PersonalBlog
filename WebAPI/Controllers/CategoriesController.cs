@@ -49,41 +49,39 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets all.
+        /// Get all categories
         /// </summary>
-        /// <returns>ActionResult&lt;IEnumerable&lt;CategoryModel&gt;&gt;.</returns>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryModel>>> GetAll()
+        public  ActionResult<IEnumerable<CategoryModel>> GetAll()
         {
-            return Ok(await _categoryService.GetAllAsync());
+            return Ok(_categoryService.GetAll());
         }
 
-        // GET: api/categories
         /// <summary>
-        /// Gets the by identifier.
+        /// GEt category by id
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>ActionResult&lt;CategoryModel&gt;.</returns>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ActionResult<CategoryModel>> GetById([FromRoute] int id)
+        public  ActionResult<CategoryModel> GetById([FromRoute] int id)
         {
-            return Ok(await _categoryService.GetByIdAsync(id));
+            return Ok( _categoryService.GetById(id));
         }
 
-        // POST: api/categories/post/postId
         /// <summary>
-        /// Adds the category.
+        /// Add category
         /// </summary>
-        /// <param name="postId">The post identifier.</param>
-        /// <param name="categoryModel">The category model.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="postId"></param>
+        /// <param name="categoryModel"></param>
+        /// <returns></returns>
         [HttpPost("post/{postId:int}/")]
-        public async Task<ActionResult> AddCategory([FromRoute] int postId, [FromBody] CategoryModel categoryModel)
+        public  ActionResult AddCategory([FromRoute] int postId, [FromBody] CategoryModel categoryModel)
         {
             try
             { 
-                await _categoryService.AddCategoryAsync(postId, categoryModel); 
+                 _categoryService.AddCategory(postId, categoryModel); 
                 return Ok();
             }
             catch (PersonalBlogException e)
@@ -92,32 +90,30 @@ namespace WebApi.Controllers
             }
         }
 
-
-        // GET: api/categories/post/postId
         /// <summary>
-        /// Gets the post categories.
+        /// Get post's categories
         /// </summary>
-        /// <param name="postId">The post identifier.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="postId"></param>
+        /// <returns></returns>
+
         [HttpGet("post/{postId:int}")]
-        public async Task<ActionResult> GetPostCategories([FromRoute] int postId)
+        public  ActionResult GetPostCategories([FromRoute] int postId)
         {
-                return Ok(await _categoryService.GetCategoriesAsync(postId));
+                return Ok( _categoryService.GetCategories(postId));
         }
 
-        // PUT: api/categories/1
         /// <summary>
-        /// Updates the specified identifier.
+        /// Update post
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>ActionResult.</returns>
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] PostModel value)
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [HttpPut("{id:int}")]
+        public ActionResult Update(int id, [FromBody] PostModel value)
         {
             try
             {
-                await _postService.UpdateAsync(value);
+                 _postService.Update(value);
                 return Ok();
             }
             catch (PersonalBlogException e)
@@ -126,18 +122,17 @@ namespace WebApi.Controllers
             }
         }
 
-        // DELETE: api/categories/1
         /// <summary>
-        /// Deletes the specified identifier.
+        /// Delete category
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>ActionResult.</returns>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        [HttpDelete("{id:int}")]
+        public  ActionResult Delete(int id)
         { 
             try{
-                await _categoryService.DeleteAsync(id);
+                 _categoryService.Delete(id);
                 return Ok();
             }
             catch (PersonalBlogException e)

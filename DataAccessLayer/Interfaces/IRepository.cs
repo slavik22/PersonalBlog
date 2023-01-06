@@ -24,37 +24,33 @@ public interface IRepository<TEntity> where TEntity : BaseEntity
 
 
 {
-
     /// <summary>
-    /// Gets all asynchronous.
+    /// Get all entities
     /// </summary>
-    /// <param name="filter">The filter.</param>
-    /// <param name="includeProperties">The include properties.</param>
-    /// <returns>Task&lt;IEnumerable&lt;TEntity&gt;&gt;.</returns>
-    public Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null,
+    /// <param name="filter"></param>
+    /// <param name="includeProperties"></param>
+    /// <returns></returns>
+    public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>>? filter = null,
         string includeProperties = "");
 
     /// <summary>
-    /// Gets the by identifier asynchronous.
+    /// Get entity by id
     /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <param name="includeProperties">The include properties.</param>
-    /// <returns>Task&lt;TEntity&gt;.</returns>
-    Task<TEntity?> GetByIdAsync(int id,string includeProperties = "");
+    /// <param name="id"></param>
+    /// <param name="includeProperties"></param>
+    /// <returns></returns>
+    TEntity? GetById(int id,string includeProperties = "");
+    /// <summary>
+    /// Add entity
+    /// </summary>
+    /// <param name="entity"></param>
+    void Add(TEntity entity);
 
     /// <summary>
-    /// Adds the asynchronous.
+    /// Delete entity
     /// </summary>
-    /// <param name="entity">The entity.</param>
-    /// <returns>Task.</returns>
-    Task AddAsync(TEntity entity);
-
-    /// <summary>
-    /// Deletes the specified identifier.
-    /// </summary>
-    /// <param name="id">The identifier.</param>
-    /// <returns>Task.</returns>
-    Task Delete(int id);
+    /// <param name="id"></param>
+    void Delete(int id);
     /// <summary>
     /// Updates the specified entity to update.
     /// </summary>

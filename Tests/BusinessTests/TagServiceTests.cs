@@ -30,19 +30,19 @@ public class TagServiceTest
     /// Defines the test method TagService_GetAll_ReturnsAllCustomers.
     /// </summary>
     [Test]
-    public async Task TagService_GetAll_ReturnsAllCustomers()
+    public void  TagService_GetAll_ReturnsAllCustomers()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(x => x.TagRepository.GetAllAsync(null,""))
-            .ReturnsAsync(GetTestTags.AsEnumerable());
+            .Setup(x => x.TagRepository.GetAll(null,""))
+            .Returns(GetTestTags.AsEnumerable());
         
         var tagService = new TagService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await tagService.GetAllAsync();
+        var actual =  tagService.GetAll();
 
         //assert
         actual.Should().BeEquivalentTo(GetTestTagModels);
@@ -53,55 +53,55 @@ public class TagServiceTest
     /// Defines the test method TagService_GetById_ReturnsCustomerModel.
     /// </summary>
     [Test]
-    public async Task TagService_GetById_ReturnsCustomerModel()
+    public  void TagService_GetById_ReturnsCustomerModel()
     {
         //arrange
         var expected = GetTestTagModels.First();
         var mockUnitOfWork = new Mock<IUnitOfWork>();
 
         mockUnitOfWork
-            .Setup(m => m.TagRepository.GetByIdAsync(It.IsAny<int>(),""))
-            .ReturnsAsync(GetTestTags.First());
+            .Setup(m => m.TagRepository.GetById(It.IsAny<int>(),""))
+            .Returns(GetTestTags.First());
 
         var tagService = new TagService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        var actual = await tagService.GetByIdAsync(1);
+        var actual =  tagService.GetById(1);
 
         //assert
         actual.Should().BeEquivalentTo(expected);
     }
 
     /// <summary>
-    /// Defines the test method TagService_AddAsync_AddsModel.
+    /// Defines the test method TagService_Add_AddsModel.
     /// </summary>
     [Test]
-    public async Task TagService_AddAsync_AddsModel()
+    public void  TagService_Add_AddsModel()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
-        mockUnitOfWork.Setup(m => m.TagRepository.AddAsync(It.IsAny<Tag>()));
+        mockUnitOfWork.Setup(m => m.TagRepository.Add(It.IsAny<Tag>()));
 
         var tagService = new TagService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
         var tag = GetTestTagModels.First();
 
         //act
-        await tagService.AddAsync(tag);
+         tagService.Add(tag);
 
         //assert
-        mockUnitOfWork.Verify(x => x.TagRepository.AddAsync(It.Is<Tag>(t =>
+        mockUnitOfWork.Verify(x => x.TagRepository.Add(It.Is<Tag>(t =>
             t.Id == tag.Id && t.Title == tag.Title)), Times.Once);
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
     }
 
     /// <summary>
-    /// Defines the test method TagService_DeleteAsync_DeletesTag.
+    /// Defines the test method TagService_Delete_DeletesTag.
     /// </summary>
     /// <param name="id">The identifier.</param>
     [TestCase(1)]
     [TestCase(2)]
     [TestCase(100)]
-    public async Task TagService_DeleteAsync_DeletesTag(int id)
+    public void  TagService_Delete_DeletesTag(int id)
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -109,18 +109,18 @@ public class TagServiceTest
         var tagService = new TagService(mockUnitOfWork.Object, UnitTestHelper.CreateMapperProfile());
 
         //act
-        await tagService.DeleteAsync(id);
+         tagService.Delete(id);
 
         //assert
         mockUnitOfWork.Verify(x => x.TagRepository.Delete(id), Times.Once());
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once());
     }
 
     /// <summary>
-    /// Defines the test method TagService_UpdateAsync_UpdatesTag.
+    /// Defines the test method TagService_Update_UpdatesTag.
     /// </summary>
     [Test]
-    public async Task TagService_UpdateAsync_UpdatesTag()
+    public  void TagService_Update_UpdatesTag()
     {
         //arrange
         var mockUnitOfWork = new Mock<IUnitOfWork>();
@@ -130,12 +130,12 @@ public class TagServiceTest
         var tag = GetTestTagModels.First();
 
         //act
-        await tagService.UpdateAsync(tag);
+         tagService.Update(tag);
 
         //assert
         mockUnitOfWork.Verify(x => x.TagRepository.Update(It.Is<Tag>(t =>
             t.Id == tag.Id && t.Title == tag.Title )), Times.Once);
-        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
+        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
     }
 
 
