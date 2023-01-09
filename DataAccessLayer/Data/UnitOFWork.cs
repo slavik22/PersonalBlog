@@ -28,7 +28,7 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     /// <summary>
     /// The context
     /// </summary>
-    private readonly PersonalBlogDbContext _context = new PersonalBlogDbContext();
+    private readonly PersonalBlogDbContext _context;
 
     /// <summary>
     /// The user repository
@@ -51,6 +51,11 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     /// The category repository
     /// </summary>
     private IRepository<Category>? _categoryRepository;
+
+    public UnitOfWork(PersonalBlogDbContext personalBlogDbContext)
+    {
+        _context = personalBlogDbContext;
+    }
 
     /// <summary>
     /// Gets the user repository.
