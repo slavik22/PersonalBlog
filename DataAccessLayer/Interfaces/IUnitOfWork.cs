@@ -49,6 +49,6 @@ public interface IUnitOfWork
     /// Saves.
     /// </summary>
     /// <returns>Task.</returns>
-    void Save();
+    Task SaveAsync();
 
 }

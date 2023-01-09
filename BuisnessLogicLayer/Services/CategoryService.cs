@@ -85,7 +85,7 @@ public class CategoryService : ICategoryService
     public void Add(CategoryModel model)
     {
          _unitOfWork.CategoryRepository.Add(_mapper.Map<Category>(model));
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
     }
 
     /// <summary>
@@ -95,7 +95,7 @@ public class CategoryService : ICategoryService
     public void Update(CategoryModel model)
     {
         _unitOfWork.CategoryRepository.Update(_mapper.Map<Category>(model));
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
 
     }
     /// <summary>
@@ -106,7 +106,7 @@ public class CategoryService : ICategoryService
     public void Delete(int modelId)
     {
         _unitOfWork.CategoryRepository.Delete(modelId);
-        _unitOfWork.Save();
+        _unitOfWork.SaveAsync();
 
     }
     /// <summary>
@@ -139,7 +139,7 @@ public class CategoryService : ICategoryService
             Post = post
         });
             
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
     }
 
     /// <summary>

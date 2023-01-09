@@ -86,7 +86,7 @@ public class TagService : ITagService
     public void Add(TagModel model)
     {
          _unitOfWork.TagRepository.Add(_mapper.Map<Tag>(model));
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ public class TagService : ITagService
     public void Update(TagModel model)
     {
         _unitOfWork.TagRepository.Update(_mapper.Map<Tag>(model));
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
 
     }
     /// <summary>
@@ -106,7 +106,7 @@ public class TagService : ITagService
     public void Delete(int modelId)
     {
         _unitOfWork.TagRepository.Delete(modelId);
-        _unitOfWork.Save();
+        _unitOfWork.SaveAsync();
 
     }
 
@@ -140,7 +140,7 @@ public class TagService : ITagService
             Post = post
         });
             
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
 
     }
 

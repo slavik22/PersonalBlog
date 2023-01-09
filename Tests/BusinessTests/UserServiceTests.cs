@@ -163,7 +163,7 @@ public class UserServiceTest
         mockUnitOfWork.Verify(x => x.UserRepository.Add(It.Is<User>(t =>
             t.Id == user.Id && t.Name == user.Name && t.Surname == user.Surname && t.Email == user.Email && t.Mobile == user.Mobile
             && t.Password == user.Password && t.BirthDate == user.BirthDate)), Times.Once);
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
     /// <summary>
@@ -185,7 +185,7 @@ public class UserServiceTest
 
         //assert
         mockUnitOfWork.Verify(x => x.UserRepository.Delete(id), Times.Once());
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once());
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
     }
 
     /// <summary>
@@ -208,7 +208,7 @@ public class UserServiceTest
         mockUnitOfWork.Verify(x => x.UserRepository.Update(It.Is<User>(t =>
             t.Id == user.Id && t.Name == user.Name && t.Surname == user.Surname && t.Email == user.Email && t.Mobile == user.Mobile
             && t.Password == user.Password && t.BirthDate == user.BirthDate )), Times.Once);
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
 

@@ -91,7 +91,7 @@ public class CategoryServiceTest
         //assert
         mockUnitOfWork.Verify(x => x.CategoryRepository.Add(It.Is<Category>(t =>
             t.Id == category.Id && t.Title == category.Title)), Times.Once);
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public class CategoryServiceTest
 
         //assert
         mockUnitOfWork.Verify(x => x.CategoryRepository.Delete(id), Times.Once());
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once());
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
     }
 
     /// <summary>
@@ -135,7 +135,7 @@ public class CategoryServiceTest
         //assert
         mockUnitOfWork.Verify(x => x.CategoryRepository.Update(It.Is<Category>(t =>
             t.Id == category.Id && t.Title == category.Title )), Times.Once);
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
 

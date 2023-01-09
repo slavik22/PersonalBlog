@@ -96,7 +96,7 @@ public class UserService : IUserService
         model.Token = "";
         
          _unitOfWork.UserRepository.Add(_mapper.Map<User>(model));
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
     }
     /// <summary>
     /// Update user
@@ -105,7 +105,7 @@ public class UserService : IUserService
     public void Update(UserModel model)
     {
         _unitOfWork.UserRepository.Update(_mapper.Map<User>(model));
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
 
     }
     /// <summary>
@@ -115,7 +115,7 @@ public class UserService : IUserService
     public void Delete(int modelId)
     {
          _unitOfWork.UserRepository.Delete(modelId);
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
     }
     /// <summary>
     /// Get user by email

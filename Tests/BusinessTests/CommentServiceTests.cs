@@ -118,7 +118,7 @@ public class CommentServiceTest
         //assert
         mockUnitOfWork.Verify(x => x.CommentRepository.Add(It.Is<Comment>(t =>
             t.Id == comment.Id && t.Title == comment.Title && t.Content == comment.Content && t.PostId == comment.PostId)), Times.Once);
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
     /// <summary>
@@ -140,7 +140,7 @@ public class CommentServiceTest
 
         //assert
         mockUnitOfWork.Verify(x => x.CommentRepository.Delete(id), Times.Once());
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once());
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
     }
 
     /// <summary>
@@ -162,7 +162,7 @@ public class CommentServiceTest
         //assert
         mockUnitOfWork.Verify(x => x.CommentRepository.Update(It.Is<Comment>(t =>
             t.Id == comment.Id && t.Title == comment.Title && t.Content == comment.Content && t.PostId == comment.PostId )), Times.Once);
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
 

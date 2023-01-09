@@ -122,9 +122,9 @@ public class UnitOfWork : IDisposable, IUnitOfWork
     /// Save as an asynchronous operation.
     /// </summary>
     /// <returns>A Task representing the asynchronous operation.</returns>
-    public void Save()
+    public async Task SaveAsync()
     {
-         _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
     /// <summary>

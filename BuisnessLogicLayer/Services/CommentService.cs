@@ -103,7 +103,7 @@ public class CommentService : ICommentService
     public void Add(CommentModel model)
     {
          _unitOfWork.CommentRepository.Add(_mapper.Map<Comment>(model));
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
     }
     /// <summary>
     /// Update comment
@@ -112,7 +112,7 @@ public class CommentService : ICommentService
     public void Update(CommentModel model)
     {
         _unitOfWork.CommentRepository.Update(_mapper.Map<Comment>(model)); 
-        _unitOfWork.Save();
+        _unitOfWork.SaveAsync();
 
     }
     /// <summary>
@@ -122,7 +122,7 @@ public class CommentService : ICommentService
     public void Delete(int modelId)
     {
          _unitOfWork.CommentRepository.Delete(modelId);
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
 
     }
 }

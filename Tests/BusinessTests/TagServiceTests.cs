@@ -91,7 +91,7 @@ public class TagServiceTest
         //assert
         mockUnitOfWork.Verify(x => x.TagRepository.Add(It.Is<Tag>(t =>
             t.Id == tag.Id && t.Title == tag.Title)), Times.Once);
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public class TagServiceTest
 
         //assert
         mockUnitOfWork.Verify(x => x.TagRepository.Delete(id), Times.Once());
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once());
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
     }
 
     /// <summary>
@@ -135,7 +135,7 @@ public class TagServiceTest
         //assert
         mockUnitOfWork.Verify(x => x.TagRepository.Update(It.Is<Tag>(t =>
             t.Id == tag.Id && t.Title == tag.Title )), Times.Once);
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
 

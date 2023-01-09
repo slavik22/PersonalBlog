@@ -168,7 +168,7 @@ public class PostServiceTest
         //assert
         mockUnitOfWork.Verify(x => x.PostRepository.Add(It.Is<Post>(t =>
             t.Id == post.Id && t.Title == post.Title && t.Summary == post.Summary && t.Content == post.Content && t.UserId == post.UserId)), Times.Once);
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
     /// <summary>
@@ -190,7 +190,7 @@ public class PostServiceTest
 
         //assert
         mockUnitOfWork.Verify(x => x.PostRepository.Delete(id), Times.Once());
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once());
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once());
     }
 
     /// <summary>
@@ -212,7 +212,7 @@ public class PostServiceTest
         //assert
         mockUnitOfWork.Verify(x => x.PostRepository.Update(It.Is<Post>(t =>
             t.Id == post.Id && t.Title == post.Title && t.Summary == post.Summary && t.Content == post.Content && t.UserId == post.UserId)), Times.Once);
-        mockUnitOfWork.Verify(x => x.Save(), Times.Once);
+        mockUnitOfWork.Verify(x => x.SaveAsync(), Times.Once);
     }
 
 

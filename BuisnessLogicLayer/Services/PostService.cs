@@ -118,7 +118,7 @@ public class PostService : IPostService
         model.UpdatedAt = DateTime.Now;
         
          _unitOfWork.PostRepository.Add(_mapper.Map<Post>(model));
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
     }
 
     /// <summary>
@@ -130,7 +130,7 @@ public class PostService : IPostService
         model.UpdatedAt = DateTime.Now;
         
         _unitOfWork.PostRepository.Update(_mapper.Map<Post>(model));
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
 
     }
     /// <summary>
@@ -140,7 +140,7 @@ public class PostService : IPostService
     public void Delete(int modelId)
     {
          _unitOfWork.PostRepository.Delete(modelId);
-         _unitOfWork.Save();
+         _unitOfWork.SaveAsync();
 
     }
     /// <summary>
