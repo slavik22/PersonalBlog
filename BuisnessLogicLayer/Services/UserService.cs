@@ -196,7 +196,7 @@ public class UserService : IUserService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = identity,
-            Expires = DateTime.Now.AddDays(10),
+            Expires = DateTime.Now.AddDays(1),
             SigningCredentials = credentials
         };
         var token = jwtTokenHandler.CreateToken(tokenDescriptor);
